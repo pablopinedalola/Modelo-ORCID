@@ -1,0 +1,45 @@
+{
+  "timestamp": "2026-05-12T13:39:20.995110",
+  "archivo_fuente": "N/A",
+  "pipeline": {
+    "total_registros_cargados": 15,
+    "total_perfiles_generados": 15,
+    "tiempo_ejecucion_segundos": 0.02
+  },
+  "distribucion_nivel": {
+    "1": 5,
+    "2": 4,
+    "C": 3,
+    "3": 2,
+    "E": 1
+  },
+  "distribucion_area": {
+    "I": 7,
+    "II": 4,
+    "VII": 3,
+    "V": 1
+  },
+  "top_10_instituciones": {
+    "UNIVERSIDAD NACIONAL AUTÓNOMA DE MÉXICO": 2,
+    "INSTITUTO POLITÉCNICO NACIONAL": 2,
+    "CENTRO DE INVESTIGACIÓN Y DE ESTUDIOS AVANZADOS DEL IPN": 1,
+    "UNIVERSIDAD AUTÓNOMA METROPOLITANA": 1,
+    "UNIVERSIDAD DE GUADALAJARA": 1,
+    "BENEMÉRITA UNIVERSIDAD AUTÓNOMA DE PUEBLA": 1,
+    "UNIVERSIDAD AUTÓNOMA DE NUEVO LEÓN": 1,
+    "UNIVERSIDAD AUTÓNOMA DEL ESTADO DE MORELOS": 1,
+    "CENTRO DE INVESTIGACIÓN CIENTÍFICA Y DE EDUCACIÓN SUPERIOR DE ENSENADA": 1,
+    "UNIVERSIDAD AUTÓNOMA DE SAN LUIS POTOSÍ": 1
+  },
+  "columnas_mapeadas": {
+    "nombre": "NOMBRE",
+    "paterno": "PATERNO",
+    "materno": "MATERNO",
+    "institucion": "INSTITUCIÓN",
+    "dependencia": "DEPENDENCIA",
+    "subdependencia": "SUBDEPENDENCIA",
+    "area": "ÁREA",
+    "disciplina": "DISCIPLINA",
+    "nivel": "NIVEL"
+  }
+}

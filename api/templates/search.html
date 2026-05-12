@@ -5,18 +5,29 @@
 {% block content %}
 <div class="container">
     <h1 class="section-title" style="margin-top:16px;">Buscar Investigadores</h1>
-    <p class="section-sub">Busca por nombre, institución, disciplina u ORCID</p>
+    <p class="section-sub">Búsqueda semántica por nombre, institución, disciplina o tema de investigación</p>
 
     <form class="search-box" action="/search" method="get" style="max-width:100%; margin-bottom:32px;">
         <span class="search-icon">⌕</span>
         <input type="text" name="q" value="{{ query }}"
-               placeholder="Ejemplo: García, UNAM, Matemáticas, 0000-0002..." autofocus>
+               placeholder="Ejemplo: física de partículas, redes complejas, UNAM matemáticas..." autofocus>
     </form>
 
     {% if query %}
-    <p style="color:var(--text-3); margin-bottom:20px;">
-        {{ total }} resultado{{ 's' if total != 1 else '' }} para "<strong style="color:var(--text)">{{ query }}</strong>"
-    </p>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <p style="color:var(--text-3);">
+            {{ total }} resultado{{ 's' if total != 1 else '' }} para "<strong style="color:var(--text)">{{ query }}</strong>"
+        </p>
+        {% if search_method == "semantic" %}
+        <span style="background:rgba(99,102,241,0.12); color:#818cf8; padding:3px 10px; border-radius:12px; font-size:11px; font-weight:600; letter-spacing:0.5px;">
+            🧠 Búsqueda Semántica
+        </span>
+        {% elif search_method == "fallback_substring" %}
+        <span style="background:rgba(251,191,36,0.12); color:#fbbf24; padding:3px 10px; border-radius:12px; font-size:11px; font-weight:600; letter-spacing:0.5px;">
+            📝 Búsqueda por Texto
+        </span>
+        {% endif %}
+    </div>
     {% endif %}
 
     {% if results %}
@@ -24,22 +35,36 @@
         {% for p in results %}
         <a href="/researcher/{{ p.id }}" class="profile-card" style="text-decoration:none;">
             <div style="display:flex; justify-content:space-between; align-items:start;">
-                <div class="name">{{ p.full_name }}</div>
+                <div class="name">{{ p.full_name or p.nombre_completo }}</div>
                 <span class="badge {% if p.confidence >= 0.5 %}badge-green{% elif p.confidence >= 0.3 %}badge-orange{% else %}badge-red{% endif %}">
-                    {{ "%.0f"|format(p.confidence * 100) }}%
+                    {% if search_method == "semantic" or search_method == "fallback_substring" %}
+                        {{ "%.0f"|format(p.score * 100) if p.score is defined else "%.0f"|format(p.confidence * 100) }}%
+                    {% else %}
+                        {{ "%.0f"|format(p.confidence * 100) }}%
+                    {% endif %}
                 </span>
             </div>
             <div class="meta">
-                <span>🏛 {{ p.institution }}</span>
-                <span>📚 {{ p.discipline or p.area }}</span>
+                <span>🏛 {{ p.institution or p.institucion }}</span>
+                <span>📚 {{ p.discipline or p.disciplina or p.area }}</span>
+                {% if p.nivel_nombre %}
+                <span style="color:var(--accent);">🎓 {{ p.nivel_nombre }}</span>
+                {% endif %}
                 {% if p.orcid_id %}
                 <span style="color:var(--green)">✓ ORCID: {{ p.orcid_id }}</span>
                 {% endif %}
             </div>
+            {% if p.score is defined %}
+            <div class="conf-bar" style="height:6px;">
+                <div class="conf-fill {% if p.score >= 0.5 %}conf-high{% elif p.score >= 0.3 %}conf-med{% else %}conf-low{% endif %}"
+                     style="width:{{ (p.score * 100)|int }}%"></div>
+            </div>
+            {% else %}
             <div class="conf-bar" style="height:6px;">
                 <div class="conf-fill {% if p.confidence >= 0.5 %}conf-high{% elif p.confidence >= 0.3 %}conf-med{% else %}conf-low{% endif %}"
                      style="width:{{ (p.confidence * 100)|int }}%"></div>
             </div>
+            {% endif %}
         </a>
         {% endfor %}
     </div>

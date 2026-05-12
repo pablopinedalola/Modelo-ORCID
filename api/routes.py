@@ -34,6 +34,9 @@ _profiles_cache: dict[str, dict] = {}
 _graph_cache: Optional[dict] = None
 _refinement_cache: list[dict] = []
 
+# Retriever semántico (FAISS)
+_retriever = None
+
 
 def _load_profiles() -> dict[str, dict]:
     """Carga todos los perfiles JSON a memoria."""
@@ -83,6 +86,21 @@ def _load_refinement() -> list[dict]:
     return _refinement_cache
 
 
+def _load_retriever():
+    """Carga el retriever semántico (FAISS)."""
+    global _retriever
+    try:
+        from src.rag.basic_retriever import BasicRetriever
+        _retriever = BasicRetriever()
+        if _retriever.load():
+            logger.info(f"Retriever semántico cargado: {_retriever.stats()}")
+        else:
+            logger.info("Retriever en modo fallback (sin FAISS)")
+    except Exception as e:
+        logger.warning(f"No se pudo cargar retriever semántico: {e}")
+        _retriever = None
+
+
 def reload_data():
     """Fuerza recarga de todos los datos."""
     global _profiles_cache, _graph_cache, _refinement_cache
@@ -92,6 +110,7 @@ def reload_data():
     _load_profiles()
     _load_graph()
     _load_refinement()
+    _load_retriever()
 
 
 def _render(request: Request, template: str, ctx: dict, status_code: int = 200):
@@ -158,28 +177,37 @@ async def home(request: Request):
 
 @app.get("/search", response_class=HTMLResponse)
 async def search_page(request: Request, q: str = Query("", min_length=0)):
-    """Pagina de busqueda."""
-    profiles = _load_profiles()
+    """Pagina de busqueda con retrieval semántico."""
     results = []
+    search_method = "none"
 
     if q:
-        q_lower = q.lower()
-        for p in profiles.values():
-            name = p.get("full_name", "").lower()
-            inst = p.get("institution", "").lower()
-            disc = p.get("discipline", "").lower()
-            orcid = (p.get("orcid_id") or "").lower()
+        # Intentar búsqueda semántica con FAISS
+        if _retriever is not None:
+            results = _retriever.search(q, top_k=20)
+            search_method = _retriever.stats().get("search_method", "unknown")
+        else:
+            # Fallback a búsqueda por substring en profiles_cache
+            profiles = _load_profiles()
+            q_lower = q.lower()
+            for p in profiles.values():
+                name = p.get("full_name", "").lower()
+                inst = p.get("institution", "").lower()
+                disc = p.get("discipline", "").lower()
+                orcid = (p.get("orcid_id") or "").lower()
 
-            if (q_lower in name or q_lower in inst
-                    or q_lower in disc or q_lower in orcid):
-                results.append(p)
+                if (q_lower in name or q_lower in inst
+                        or q_lower in disc or q_lower in orcid):
+                    results.append(p)
 
-        results.sort(key=lambda p: p.get("confidence", 0), reverse=True)
+            results.sort(key=lambda p: p.get("confidence", 0), reverse=True)
+            search_method = "legacy_substring"
 
     return _render(request, "search.html", {
         "query": q,
         "results": results,
         "total": len(results),
+        "search_method": search_method,
     })
 
 
@@ -317,17 +345,34 @@ async def api_researcher(researcher_id: str):
 
 
 @app.get("/api/search")
-async def api_search(q: str = Query("", min_length=1)):
-    """Busqueda JSON."""
-    profiles = _load_profiles()
+async def api_search(
+    q: str = Query("", min_length=1),
+    top_k: int = Query(10, ge=1, le=50),
+):
+    """Busqueda JSON con retrieval semántico."""
     results = []
-    q_lower = q.lower()
-    for p in profiles.values():
-        name = p.get("full_name", "").lower()
-        inst = p.get("institution", "").lower()
-        if q_lower in name or q_lower in inst:
-            results.append(p)
-    return {"query": q, "results": results, "total": len(results)}
+    search_method = "none"
+
+    if _retriever is not None:
+        results = _retriever.search(q, top_k=top_k)
+        search_method = _retriever.stats().get("search_method", "unknown")
+    else:
+        # Fallback
+        profiles = _load_profiles()
+        q_lower = q.lower()
+        for p in profiles.values():
+            name = p.get("full_name", "").lower()
+            inst = p.get("institution", "").lower()
+            if q_lower in name or q_lower in inst:
+                results.append(p)
+        search_method = "legacy_substring"
+
+    return {
+        "query": q,
+        "results": results,
+        "total": len(results),
+        "search_method": search_method,
+    }
 
 
 @app.get("/api/graph/{researcher_id}")

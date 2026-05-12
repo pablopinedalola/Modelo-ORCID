@@ -1,0 +1,190 @@
+{
+  "profile_ids": [
+    "b2d620c6",
+    "2877ef6f",
+    "0b6eaf2b",
+    "63ac5f4f",
+    "ea4d30a7",
+    "3f680253",
+    "882eb3ba",
+    "a971eee2",
+    "4ed9c964",
+    "dacd7cd4",
+    "5a6b3efb",
+    "ae4491c4",
+    "0060c43f",
+    "b18f61ec",
+    "ffd73bc5"
+  ],
+  "metadata": [
+    {
+      "id": "b2d620c6",
+      "nombre_completo": "CARLOS ALBERTO GARCÍA LÓPEZ",
+      "institucion": "UNIVERSIDAD NACIONAL AUTÓNOMA DE MÉXICO",
+      "area": "I",
+      "area_nombre": "Físico-Matemáticas y Ciencias de la Tierra",
+      "disciplina": "FÍSICA DE PARTÍCULAS",
+      "nivel": "2",
+      "nivel_nombre": "SNI II",
+      "dependencia": "INSTITUTO DE FÍSICA"
+    },
+    {
+      "id": "2877ef6f",
+      "nombre_completo": "MARÍA FERNANDA HERNÁNDEZ SÁNCHEZ",
+      "institucion": "INSTITUTO POLITÉCNICO NACIONAL",
+      "area": "VII",
+      "area_nombre": "Ingenierías",
+      "disciplina": "INGENIERÍA ELÉCTRICA",
+      "nivel": "C",
+      "nivel_nombre": "Candidato",
+      "dependencia": "ESCUELA SUPERIOR DE INGENIERÍA MECÁNICA Y ELÉCTRICA"
+    },
+    {
+      "id": "0b6eaf2b",
+      "nombre_completo": "JUAN PABLO LÓPEZ MARTÍNEZ",
+      "institucion": "CENTRO DE INVESTIGACIÓN Y DE ESTUDIOS AVANZADOS DEL IPN",
+      "area": "I",
+      "area_nombre": "Físico-Matemáticas y Ciencias de la Tierra",
+      "disciplina": "MATEMÁTICAS APLICADAS",
+      "nivel": "3",
+      "nivel_nombre": "SNI III",
+      "dependencia": "DEPARTAMENTO DE MATEMÁTICAS"
+    },
+    {
+      "id": "63ac5f4f",
+      "nombre_completo": "ANA LUCÍA MARTÍNEZ GONZÁLEZ",
+      "institucion": "UNIVERSIDAD AUTÓNOMA METROPOLITANA",
+      "area": "I",
+      "area_nombre": "Físico-Matemáticas y Ciencias de la Tierra",
+      "disciplina": "CIENCIAS DE LA COMPUTACIÓN",
+      "nivel": "1",
+      "nivel_nombre": "SNI I",
+      "dependencia": "CIENCIAS BÁSICAS E INGENIERÍA"
+    },
+    {
+      "id": "ea4d30a7",
+      "nombre_completo": "ROBERTO RODRÍGUEZ PÉREZ",
+      "institucion": "UNIVERSIDAD DE GUADALAJARA",
+      "area": "II",
+      "area_nombre": "Biología y Química",
+      "disciplina": "BIOQUÍMICA",
+      "nivel": "1",
+      "nivel_nombre": "SNI I",
+      "dependencia": "CENTRO UNIVERSITARIO DE CIENCIAS EXACTAS"
+    },
+    {
+      "id": "3f680253",
+      "nombre_completo": "DIANA PATRICIA SÁNCHEZ RAMÍREZ",
+      "institucion": "BENEMÉRITA UNIVERSIDAD AUTÓNOMA DE PUEBLA",
+      "area": "I",
+      "area_nombre": "Físico-Matemáticas y Ciencias de la Tierra",
+      "disciplina": "FÍSICA TEÓRICA",
+      "nivel": "2",
+      "nivel_nombre": "SNI II",
+      "dependencia": "FACULTAD DE CIENCIAS FÍSICO MATEMÁTICAS"
+    },
+    {
+      "id": "882eb3ba",
+      "nombre_completo": "ALEJANDRO RAMÍREZ CRUZ",
+      "institucion": "UNIVERSIDAD AUTÓNOMA DE NUEVO LEÓN",
+      "area": "VII",
+      "area_nombre": "Ingenierías",
+      "disciplina": "INGENIERÍA MECATRÓNICA",
+      "nivel": "C",
+      "nivel_nombre": "Candidato",
+      "dependencia": "FACULTAD DE INGENIERÍA MECÁNICA Y ELÉCTRICA"
+    },
+    {
+      "id": "a971eee2",
+      "nombre_completo": "GABRIELA TORRES MORALES",
+      "institucion": "UNIVERSIDAD AUTÓNOMA DEL ESTADO DE MORELOS",
+      "area": "VII",
+      "area_nombre": "Ingenierías",
+      "disciplina": "NANOTECNOLOGÍA",
+      "nivel": "1",
+      "nivel_nombre": "SNI I",
+      "dependencia": "CENTRO DE INVESTIGACIÓN EN INGENIERÍA Y CIENCIAS APLICADAS"
+    },
+    {
+      "id": "4ed9c964",
+      "nombre_completo": "FRANCISCO JAVIER FLORES VARGAS",
+      "institucion": "UNIVERSIDAD NACIONAL AUTÓNOMA DE MÉXICO",
+      "area": "I",
+      "area_nombre": "Físico-Matemáticas y Ciencias de la Tierra",
+      "disciplina": "CIENCIA DE MATERIALES",
+      "nivel": "E",
+      "nivel_nombre": "Emérito",
+      "dependencia": "INSTITUTO DE INVESTIGACIONES EN MATERIALES"
+    },
+    {
+      "id": "dacd7cd4",
+      "nombre_completo": "PATRICIA ELENA GÓMEZ CASTILLO",
+      "institucion": "INSTITUTO POLITÉCNICO NACIONAL",
+      "area": "II",
+      "area_nombre": "Biología y Química",
+      "disciplina": "MICROBIOLOGÍA",
+      "nivel": "2",
+      "nivel_nombre": "SNI II",
+      "dependencia": "ESCUELA NACIONAL DE CIENCIAS BIOLÓGICAS"
+    },
+    {
+      "id": "5a6b3efb",
+      "nombre_completo": "LUIS ENRIQUE DÍAZ HERRERA",
+      "institucion": "CENTRO DE INVESTIGACIÓN CIENTÍFICA Y DE EDUCACIÓN SUPERIOR DE ENSENADA",
+      "area": "I",
+      "area_nombre": "Físico-Matemáticas y Ciencias de la Tierra",
+      "disciplina": "ÓPTICA CUÁNTICA",
+      "nivel": "3",
+      "nivel_nombre": "SNI III",
+      "dependencia": "DEPARTAMENTO DE ÓPTICA"
+    },
+    {
+      "id": "ae4491c4",
+      "nombre_completo": "CLAUDIA MARCELA VÁZQUEZ MEDINA",
+      "institucion": "UNIVERSIDAD AUTÓNOMA DE SAN LUIS POTOSÍ",
+      "area": "I",
+      "area_nombre": "Físico-Matemáticas y Ciencias de la Tierra",
+      "disciplina": "ASTROFÍSICA",
+      "nivel": "1",
+      "nivel_nombre": "SNI I",
+      "dependencia": "FACULTAD DE CIENCIAS"
+    },
+    {
+      "id": "0060c43f",
+      "nombre_completo": "MIGUEL ÁNGEL RUIZ JIMÉNEZ",
+      "institucion": "UNIVERSIDAD VERACRUZANA",
+      "area": "II",
+      "area_nombre": "Biología y Química",
+      "disciplina": "ECOLOGÍA",
+      "nivel": "2",
+      "nivel_nombre": "SNI II",
+      "dependencia": "INSTITUTO DE INVESTIGACIONES BIOLÓGICAS"
+    },
+    {
+      "id": "b18f61ec",
+      "nombre_completo": "VERÓNICA MORALES SILVA",
+      "institucion": "EL COLEGIO DE MÉXICO",
+      "area": "V",
+      "area_nombre": "Ciencias Sociales",
+      "disciplina": "RELACIONES INTERNACIONALES",
+      "nivel": "1",
+      "nivel_nombre": "SNI I",
+      "dependencia": "CENTRO DE ESTUDIOS INTERNACIONALES"
+    },
+    {
+      "id": "ffd73bc5",
+      "nombre_completo": "JORGE ANTONIO ORTIZ AGUIRRE",
+      "institucion": "UNIVERSIDAD AUTÓNOMA DE QUERÉTARO",
+      "area": "II",
+      "area_nombre": "Biología y Química",
+      "disciplina": "QUÍMICA ORGÁNICA",
+      "nivel": "C",
+      "nivel_nombre": "Candidato",
+      "dependencia": "FACULTAD DE QUÍMICA"
+    }
+  ],
+  "field": "searchable_text",
+  "dimension": 384,
+  "total": 15,
+  "model": "all-MiniLM-L6-v2"
+}
