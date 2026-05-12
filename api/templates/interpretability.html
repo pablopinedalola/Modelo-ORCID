@@ -1,0 +1,340 @@
+{% extends "base.html" %}
+
+{% block title %}Interpretability - {{ profile.full_name }} | Modelo-ORCID{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h1 class="display-5 text-gradient"><i class="fas fa-microscope me-2"></i>Análisis de Interpretabilidad</h1>
+        <p class="lead text-muted">{{ profile.full_name }}</p>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="/profile/{{ profile.id }}" class="btn btn-outline-primary shadow-sm rounded-pill">
+            <i class="fas fa-arrow-left me-2"></i>Volver al Perfil
+        </a>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <!-- Explicación -->
+    <div class="col-12">
+        <div class="card shadow-sm border-0 glass-card">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <h5 class="card-title fw-bold text-primary mb-0">Explicación de Decisión</h5>
+                    {% if explanation %}
+                        {% if explanation.decision == 'accepted' %}
+                            <span class="badge bg-success rounded-pill px-3 py-2">Match Aceptado ({{ (explanation.confidence * 100)|round(1) }}%)</span>
+                        {% elif explanation.decision == 'ambiguous' %}
+                            <span class="badge bg-warning text-dark rounded-pill px-3 py-2">Ambiguo ({{ (explanation.confidence * 100)|round(1) }}%)</span>
+                        {% else %}
+                            <span class="badge bg-danger rounded-pill px-3 py-2">Rechazado ({{ (explanation.confidence * 100)|round(1) }}%)</span>
+                        {% endif %}
+                    {% else %}
+                        <span class="badge bg-secondary rounded-pill px-3 py-2">Sin Explicación</span>
+                    {% endif %}
+                </div>
+                
+                {% if explanation %}
+                    <p class="fs-5">{{ explanation.summary }}</p>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <h6 class="text-success fw-bold"><i class="fas fa-check-circle me-2"></i>Factores Principales</h6>
+                            <ul class="list-unstyled">
+                                {% for factor in explanation.key_factors %}
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>{{ factor }}</li>
+                                {% endfor %}
+                            </ul>
+                            
+                            <h6 class="text-info fw-bold mt-3"><i class="fas fa-info-circle me-2"></i>Evidencia de Soporte</h6>
+                            <ul class="list-unstyled text-muted small">
+                                {% for ev in explanation.supporting_evidence[:5] %}
+                                    <li class="mb-1">- {{ ev }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-danger fw-bold"><i class="fas fa-exclamation-circle me-2"></i>Limitaciones</h6>
+                            <ul class="list-unstyled">
+                                {% for weak in explanation.weaknesses %}
+                                    <li class="mb-2"><i class="fas fa-times text-danger me-2"></i>{{ weak }}</li>
+                                {% else %}
+                                    <li class="mb-2 text-muted">No se detectaron limitaciones significativas.</li>
+                                {% endfor %}
+                            </ul>
+                            
+                            <div class="alert alert-light border mt-3">
+                                <i class="fas fa-route me-2"></i>{{ explanation.convergence_note }}
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <p class="text-muted">No se generó una explicación para este investigador.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <!-- Métricas de Ambigüedad -->
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-header bg-white border-0 pt-4 pb-0">
+                <h6 class="card-title fw-bold mb-0 text-secondary"><i class="fas fa-balance-scale me-2"></i>Análisis de Ambigüedad</h6>
+            </div>
+            <div class="card-body">
+                {% if ambiguity %}
+                    <div class="text-center mb-4">
+                        <div class="display-4 fw-bold {% if ambiguity.risk_level == 'high' %}text-danger{% elif ambiguity.risk_level == 'medium' %}text-warning{% else %}text-success{% endif %}">
+                            {{ ambiguity.ambiguity_score|round(2) }}
+                        </div>
+                        <span class="text-muted small text-uppercase fw-bold">Ambiguity Score</span>
+                    </div>
+                    
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                            Entropía (H)
+                            <span class="badge bg-light text-dark">{{ ambiguity.entropy|round(3) }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                            Confidence Gap
+                            <span class="badge bg-light text-dark">{{ ambiguity.confidence_gap|round(3) }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                            Dominancia
+                            <span class="badge bg-light text-dark">{{ (ambiguity.dominant_candidate_ratio * 100)|round(1) }}%</span>
+                        </li>
+                    </ul>
+                    
+                    <p class="small text-muted">{{ ambiguity.details }}</p>
+                {% else %}
+                    <p class="text-muted">No hay datos de ambigüedad.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Dinámica del Refinamiento -->
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-header bg-white border-0 pt-4 pb-0">
+                <h6 class="card-title fw-bold mb-0 text-secondary"><i class="fas fa-project-diagram me-2"></i>Dinámica del Refinamiento</h6>
+            </div>
+            <div class="card-body">
+                {% if dynamics %}
+                    <div class="row text-center mb-4">
+                        <div class="col">
+                            <div class="fs-4 fw-bold">{{ dynamics.convergence.total_iterations }}</div>
+                            <div class="text-muted small">Iteraciones</div>
+                        </div>
+                        <div class="col">
+                            <div class="fs-4 fw-bold text-capitalize">{{ dynamics.attractor_type.replace('_', ' ') }}</div>
+                            <div class="text-muted small">Atractor</div>
+                        </div>
+                        <div class="col">
+                            <div class="fs-4 fw-bold">{{ dynamics.stability_score|round(2) }}</div>
+                            <div class="text-muted small">Estabilidad</div>
+                        </div>
+                        <div class="col">
+                            <div class="fs-4 fw-bold text-capitalize">{{ dynamics.dominant_dimension }}</div>
+                            <div class="text-muted small">Dim. Dominante</div>
+                        </div>
+                    </div>
+                    
+                    <h6 class="fw-bold text-muted small text-uppercase">Dinámica por Dimensión (Mejor Candidato)</h6>
+                    <div class="table-responsive mt-3">
+                        <table class="table table-sm align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Dimensión</th>
+                                    <th>Inicial</th>
+                                    <th>Final</th>
+                                    <th>Ganancia</th>
+                                    <th>Saturación</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for dim in dynamics.dimension_dynamics|sort(attribute='total_gain', reverse=True) %}
+                                <tr>
+                                    <td class="text-capitalize">{{ dim.dimension }}</td>
+                                    <td>{{ dim.initial_value|round(3) }}</td>
+                                    <td><span class="badge bg-light text-dark">{{ dim.final_value|round(3) }}</span></td>
+                                    <td class="{% if dim.total_gain > 0 %}text-success{% endif %}">+{{ dim.total_gain|round(3) }}</td>
+                                    <td>Iter {{ dim.saturation_iteration }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted">No hay datos de dinámica.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <!-- Visualizations -->
+    <div class="col-12">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white border-0 pt-4 pb-0 d-flex justify-content-between">
+                <h6 class="card-title fw-bold mb-0 text-secondary"><i class="fas fa-chart-line me-2"></i>Evolución del Estado</h6>
+                <ul class="nav nav-pills card-header-pills" id="vizTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active btn-sm" id="traj-tab" data-bs-toggle="tab" data-bs-target="#traj" type="button" role="tab">Confidence</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link btn-sm" id="radar-tab" data-bs-toggle="tab" data-bs-target="#radar" type="button" role="tab">Dimensiones</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link btn-sm" id="conv-tab" data-bs-toggle="tab" data-bs-target="#conv" type="button" role="tab">Convergencia</button>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body">
+                <div class="tab-content" id="vizTabsContent">
+                    <div class="tab-pane fade show active" id="traj" role="tabpanel">
+                        <div style="height: 400px; width: 100%;">
+                            <canvas id="trajChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="radar" role="tabpanel">
+                        <div style="height: 400px; width: 100%; display: flex; justify-content: center;">
+                            <canvas id="radarChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="conv" role="tabpanel">
+                        <div style="height: 400px; width: 100%;">
+                            <canvas id="convChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Raw Trace JSON -->
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white border-0 pt-4 pb-0 d-flex justify-content-between align-items-center">
+                <h6 class="card-title fw-bold mb-0 text-secondary"><i class="fas fa-code me-2"></i>Evidence Trace Raw</h6>
+                <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#traceJson">
+                    Mostrar JSON
+                </button>
+            </div>
+            <div class="card-body collapse" id="traceJson">
+                <pre class="bg-light p-3 rounded" style="max-height: 500px; overflow-y: auto;"><code id="traceContent" class="json"></code></pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const vizData = {{ viz_data|safe }};
+        const traceData = {{ trace|safe }};
+        
+        // Render JSON
+        if (traceData) {
+            document.getElementById('traceContent').textContent = JSON.stringify(traceData, null, 2);
+        }
+        
+        if (!vizData) return;
+        
+        // 1. Trajectory Chart
+        const trajCtx = document.getElementById('trajChart');
+        if (trajCtx && vizData.confidence_trajectory) {
+            new Chart(trajCtx, {
+                type: 'line',
+                data: vizData.confidence_trajectory,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 1.0,
+                            title: { display: true, text: 'Confidence Score' }
+                        },
+                        x: {
+                            title: { display: true, text: 'Iteración' }
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'right' }
+                    }
+                }
+            });
+        }
+        
+        // 2. Radar Chart
+        const radarCtx = document.getElementById('radarChart');
+        if (radarCtx && vizData.dimension_evolution) {
+            new Chart(radarCtx, {
+                type: 'radar',
+                data: vizData.dimension_evolution,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 1.0,
+                            ticks: { stepSize: 0.2 }
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'right' }
+                    }
+                }
+            });
+        }
+        
+        // 3. Convergence Chart
+        const convCtx = document.getElementById('convChart');
+        if (convCtx && vizData.convergence) {
+            new Chart(convCtx, {
+                type: 'line',
+                data: vizData.convergence,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Max Delta' }
+                        },
+                        x: {
+                            title: { display: true, text: 'Iteración' }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+        
+        // Re-render charts when tabs are shown (fixes canvas sizing issues in hidden tabs)
+        const tabEls = document.querySelectorAll('button[data-bs-toggle="tab"]');
+        tabEls.forEach(el => {
+            el.addEventListener('shown.bs.tab', event => {
+                const targetId = event.target.getAttribute('data-bs-target');
+                if(targetId === '#radar') {
+                    // Trigger resize to fix chart dimensions
+                    window.dispatchEvent(new Event('resize'));
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

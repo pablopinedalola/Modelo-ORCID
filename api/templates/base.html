@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Modelo-ORCID{% endblock %} — Academic Explorer</title>
+    <meta name="description" content="{% block description %}Explorador de identidades académicas de investigadores SNII de México{% endblock %}">
+    <link rel="stylesheet" href="/static/css/style.css">
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="/" class="nav-brand">
+                <div class="logo">M</div>
+                <span>Modelo-ORCID</span>
+            </a>
+            <div class="nav-links">
+                <a href="/" class="{% if active_page == 'home' %}active{% endif %}">⌂ <span>Inicio</span></a>
+                <a href="/search" class="{% if active_page == 'search' %}active{% endif %}">⌕ <span>Buscar</span></a>
+                <a href="/graph" class="{% if active_page == 'graph' %}active{% endif %}">◉ <span>Grafo</span></a>
+                <a href="/dashboard" class="{% if active_page == 'dashboard' %}active{% endif %}">▦ <span>Dashboard</span></a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    {% block content %}{% endblock %}
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Modelo-ORCID — Sistema de Desambiguación de Identidad Académica</p>
+        <p style="margin-top:4px;">Investigadores del SNII · ORCID · OpenAlex · ROR</p>
+    </footer>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

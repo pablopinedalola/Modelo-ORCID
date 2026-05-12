@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% set active_page = "home" %}
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>Academic Identity Explorer</h1>
+    <p class="subtitle">
+        Desambiguación de identidad para investigadores del SNII de México
+        mediante ORCID, OpenAlex y análisis semántico
+    </p>
+
+    <form class="search-box" action="/search" method="get">
+        <span class="search-icon">⌕</span>
+        <input type="text" name="q" placeholder="Buscar investigador, institución, disciplina..."
+               autocomplete="off" autofocus>
+    </form>
+</div>
+
+<div class="container">
+    <!-- Stats -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="num">{{ stats.researchers }}</div>
+            <div class="label">Investigadores</div>
+        </div>
+        <div class="stat-card">
+            <div class="num">{{ stats.with_orcid }}</div>
+            <div class="label">ORCID Resueltos</div>
+        </div>
+        <div class="stat-card">
+            <div class="num">{{ stats.graph_nodes }}</div>
+            <div class="label">Nodos en Grafo</div>
+        </div>
+        <div class="stat-card">
+            <div class="num">{{ stats.graph_edges }}</div>
+            <div class="label">Relaciones</div>
+        </div>
+    </div>
+
+    <!-- Recent Profiles -->
+    {% if profiles %}
+    <h2 class="section-title">Investigadores</h2>
+    <p class="section-sub">Perfiles enriquecidos con identidad resuelta</p>
+
+    <div class="profiles-grid">
+        {% for p in profiles %}
+        <a href="/researcher/{{ p.id }}" class="profile-card" style="text-decoration:none;">
+            <div style="display:flex; justify-content:space-between; align-items:start;">
+                <div class="name">{{ p.full_name }}</div>
+                <span class="badge {% if p.confidence >= 0.5 %}badge-green{% elif p.confidence >= 0.3 %}badge-orange{% else %}badge-red{% endif %}">
+                    {{ "%.0f"|format(p.confidence * 100) }}%
+                </span>
+            </div>
+            <div class="meta">
+                <span>🏛 {{ p.institution or 'Sin institución' }}</span>
+                <span>📚 {{ p.discipline or p.area or 'Sin área' }}</span>
+                {% if p.orcid_id %}
+                <span style="color:var(--green)">✓ ORCID: {{ p.orcid_id }}</span>
+                {% endif %}
+            </div>
+            <div class="conf-bar" style="height:6px;">
+                <div class="conf-fill {% if p.confidence >= 0.5 %}conf-high{% elif p.confidence >= 0.3 %}conf-med{% else %}conf-low{% endif %}"
+                     style="width:{{ (p.confidence * 100)|int }}%"></div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div style="text-align:center; padding:60px; color:var(--text-3);">
+        <p style="font-size:18px;">No hay perfiles disponibles</p>
+        <p style="margin-top:8px;">Ejecuta el pipeline: <code>python main.py --save</code></p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

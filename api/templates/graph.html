@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% set active_page = "graph" %}
+{% block title %}Knowledge Graph{% endblock %}
+
+{% block head %}
+<script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="section-title" style="margin-top:16px;">Knowledge Graph Explorer</h1>
+    <p class="section-sub">
+        {{ stats.get('total_nodes', 0) }} nodos · {{ stats.get('total_edges', 0) }} relaciones
+    </p>
+
+    <div class="graph-container">
+        <div class="graph-legend">
+            <div class="legend-item"><div class="legend-dot" style="background:#2196F3"></div> Investigador</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#FF9800"></div> Candidato</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#4CAF50"></div> Publicación</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#9C27B0"></div> Institución</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#F44336"></div> Disciplina</div>
+        </div>
+        <div id="full-graph" class="graph-canvas" style="height:650px;"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const graphData = {{ graph_data|safe }};
+
+const colorMap = {
+    'researcher':  '#2196F3',
+    'candidate':   '#FF9800',
+    'paper':       '#4CAF50',
+    'institution': '#9C27B0',
+    'discipline':  '#F44336',
+    'orcid':       '#A5D6A7',
+};
+const shapeMap = {
+    'researcher': 'star',
+    'candidate':  'dot',
+    'paper':      'square',
+    'institution':'triangle',
+    'discipline': 'diamond',
+};
+
+const nodes = new vis.DataSet(graphData.nodes.map(n => ({
+    id: n.id,
+    label: (n.label || n.id).substring(0, 20),
+    color: { background: colorMap[n.type] || '#fff', border: colorMap[n.type] || '#ccc',
+             highlight: { background: '#f8f9fa', border: colorMap[n.type] || '#333' }},
+    shape: shapeMap[n.type] || 'dot',
+    size: n.type === 'researcher' ? 30 : (n.type === 'candidate' ? 18 : 10),
+    font: { color: '#333', size: n.type === 'researcher' ? 13 : 10, face: 'Arial' },
+    title: `${n.type}: ${n.label || n.id}`,
+})));
+
+const edges = new vis.DataSet(graphData.edges.map(e => ({
+    from: e.source,
+    to: e.target,
+    color: { color: '#2a2f45', highlight: '#818cf8' },
+    arrows: { to: { scaleFactor: 0.6 }},
+    width: 1,
+    title: e.type,
+})));
+
+const container = document.getElementById('full-graph');
+const network = new vis.Network(container, { nodes, edges }, {
+    physics: {
+        solver: 'forceAtlas2Based',
+        forceAtlas2Based: { gravitationalConstant: -30, springLength: 120 },
+        stabilization: { iterations: 150 },
+    },
+    interaction: { hover: true, zoomView: true, dragView: true, tooltipDelay: 200 },
+    layout: { improvedLayout: true },
+});
+
+// Click on researcher node -> navigate to profile
+network.on('doubleClick', function(params) {
+    if (params.nodes.length > 0) {
+        const nodeId = params.nodes[0];
+        if (nodeId.startsWith('snii:')) {
+            const id = nodeId.replace('snii:', '');
+            window.location.href = '/researcher/' + id;
+        }
+    }
+});
+</script>
+{% endblock %}

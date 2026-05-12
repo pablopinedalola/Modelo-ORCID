@@ -1,0 +1,269 @@
+{% extends "base.html" %}
+{% set active_page = "profile" %}
+{% block title %}{{ profile.full_name }}{% endblock %}
+{% block description %}Perfil académico de {{ profile.full_name }}, investigador SNII nivel {{ profile.snii_level }}{% endblock %}
+
+{% block head %}
+<script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    <!-- Header -->
+    <div class="profile-header">
+        <div class="profile-badges">
+            <span class="badge badge-accent">SNII Nivel {{ profile.snii_level }}</span>
+            {% if profile.validated %}
+            <span class="badge badge-green">✓ Identidad Verificada</span>
+            {% else %}
+            <span class="badge badge-orange">⧖ Identidad Pendiente</span>
+            {% endif %}
+        </div>
+        <h1>{{ profile.full_name }}</h1>
+        <div class="inst">{{ profile.institution }} — {{ profile.discipline }}</div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px,1fr)); gap:10px; margin-top:16px;">
+            <div><span style="color:var(--text-3); font-size:12px; text-transform:uppercase; letter-spacing:0.5px;">Área</span>
+                <div style="font-weight:500; margin-top:2px; font-size:14px;">{{ profile.area }}</div></div>
+            {% if profile.department %}
+            <div><span style="color:var(--text-3); font-size:12px; text-transform:uppercase; letter-spacing:0.5px;">Departamento</span>
+                <div style="font-weight:500; margin-top:2px; font-size:14px;">{{ profile.department }}</div></div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="profile-layout">
+        
+        <!-- Sidebar (Infobox style) -->
+        <div class="profile-sidebar">
+            <!-- Confidence -->
+            <div class="card" style="background: var(--bg-alt); border-top: 3px solid var(--accent);">
+                <div class="card-title" style="font-size: 14px; text-transform: uppercase;"><span class="icon">◎</span> Nivel de Confianza</div>
+                {% set conf = profile.confidence %}
+                {% set pct = (conf * 100)|int %}
+                <div style="font-size:32px; font-weight:700; margin-bottom:8px;
+                            color:{% if conf >= 0.7 %}var(--green){% elif conf >= 0.4 %}var(--orange){% else %}var(--red){% endif %};">
+                    {{ "%.1f"|format(conf * 100) }}%
+                </div>
+                <div class="conf-bar">
+                    <div class="conf-fill {% if conf >= 0.7 %}conf-high{% elif conf >= 0.4 %}conf-med{% else %}conf-low{% endif %}"
+                         style="width:{{ pct }}%">{{ pct }}%</div>
+                </div>
+                <p style="color:var(--text-3); font-size:13px; margin-top:10px;">
+                    {% if conf >= 0.7 %}Alta confianza en la resolución de identidad
+                    {% elif conf >= 0.4 %}Confianza moderada — se requiere más evidencia
+                    {% else %}Baja confianza — identidad no confirmada
+                    {% endif %}
+                </p>
+                <div style="margin-top: 15px; border-top: 1px solid var(--border); padding-top: 15px;">
+                    <a href="/interpretability/{{ profile.id }}" class="btn" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; background: white; border: 1px solid var(--border); color: var(--text);">
+                        <i class="fas fa-microscope"></i> Ver Análisis de Interpretabilidad
+                    </a>
+                </div>
+            </div>
+
+            <!-- Identifiers -->
+            <div class="card">
+            <div class="card-title"><span class="icon">⎔</span> Identificadores</div>
+            {% if profile.orcid_id %}
+            <div style="display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--border);">
+                <span class="badge badge-green" style="min-width:70px; justify-content:center;">ORCID</span>
+                <a href="https://orcid.org/{{ profile.orcid_id }}" target="_blank">{{ profile.orcid_id }}</a>
+            </div>
+            {% endif %}
+            {% if profile.openalex_id %}
+            <div style="display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--border);">
+                <span class="badge badge-accent" style="min-width:70px; justify-content:center;">OpenAlex</span>
+                {% set oa_short = profile.openalex_id.split('/')[-1] if '/' in profile.openalex_id else profile.openalex_id %}
+                <a href="https://openalex.org/authors/{{ oa_short }}" target="_blank">{{ oa_short }}</a>
+            </div>
+            {% endif %}
+            {% if profile.ror_id %}
+            <div style="display:flex; align-items:center; gap:10px; padding:10px 0;">
+                <span class="badge badge-orange" style="min-width:70px; justify-content:center;">ROR</span>
+                <a href="{{ profile.ror_id }}" target="_blank">{{ profile.ror_id.split('/')[-1] }}</a>
+            </div>
+            {% endif %}
+            {% if not profile.orcid_id and not profile.openalex_id and not profile.ror_id %}
+            <p style="color:var(--text-3);">Sin identificadores externos resueltos</p>
+            {% endif %}
+        </div>
+
+        <!-- Metrics -->
+        <div class="card">
+            <div class="card-title"><span class="icon">▤</span> Métricas</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
+                <div style="text-align:center; padding:12px; background:var(--surface2); border-radius:8px;">
+                    <div style="font-size:24px; font-weight:700; color:var(--accent);">{{ profile.works_count }}</div>
+                    <div style="font-size:11px; color:var(--text-3); margin-top:2px;">PUBLICACIONES</div>
+                </div>
+                <div style="text-align:center; padding:12px; background:var(--surface2); border-radius:8px;">
+                    <div style="font-size:24px; font-weight:700; color:var(--cyan);">{{ profile.cited_by_count }}</div>
+                    <div style="font-size:11px; color:var(--text-3); margin-top:2px;">CITAS</div>
+                </div>
+                <div style="text-align:center; padding:12px; background:var(--surface2); border-radius:8px;">
+                    <div style="font-size:24px; font-weight:700; color:var(--purple);">{{ profile.h_index }}</div>
+                    <div style="font-size:11px; color:var(--text-3); margin-top:2px;">H-INDEX</div>
+                </div>
+            </div>
+        </div>
+        
+        </div> <!-- End Sidebar -->
+
+        <!-- Main Content -->
+        <div class="profile-main">
+
+        <!-- Evidence Dimensions -->
+        <div class="card full">
+            <div class="card-title"><span class="icon">▥</span> Dimensiones de Evidencia</div>
+            {% if history and history.best_candidate %}
+            {% set ev = history.best_candidate.evidence %}
+            <div class="evidence-grid">
+                {% set dims = [
+                    ("Nombre", ev.name_score),
+                    ("Institución", ev.institution_score),
+                    ("Área", ev.area_score),
+                    ("Publicaciones", ev.publication_score),
+                    ("Coautores", ev.coauthor_score),
+                    ("Temporal", ev.temporal_score),
+                    ("Semántico", ev.semantic_score)
+                ] %}
+                {% for label, val in dims %}
+                <div class="evidence-item">
+                    <span class="dim-label">{{ label }}</span>
+                    <div class="dim-bar"><div class="dim-fill" style="width:{{ (val * 100)|int }}%"></div></div>
+                    <span class="dim-val">{{ "%.2f"|format(val) }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="evidence-grid">
+                <p style="color:var(--text-3);">Ejecuta el pipeline con --save para ver evidencia detallada</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Concepts/Topics -->
+        {% if profile.concepts %}
+        <div class="card">
+            <div class="card-title"><span class="icon">◈</span> Temas de Investigación</div>
+            <div class="tags">
+                {% for c in profile.concepts[:12] %}
+                <span class="tag">{{ c }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Publications -->
+        {% if profile.publications %}
+        <div class="card full">
+            <div class="card-title"><span class="icon">📄</span> Publicaciones</div>
+            <table class="data-table">
+                <thead><tr><th>Título</th><th>Año</th><th>Citas</th><th>Link</th></tr></thead>
+                <tbody>
+                {% for p in profile.publications[:10] %}
+                <tr>
+                    <td class="title-cell">{{ p.title or 'Sin título' }}</td>
+                    <td>{{ p.publication_year or '' }}</td>
+                    <td>{{ p.cited_by_count or 0 }}</td>
+                    <td>{% if p.doi %}<a href="{{ p.doi }}" target="_blank">DOI</a>{% endif %}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+
+        <!-- Knowledge Graph -->
+        <div class="card full">
+            <div class="card-title"><span class="icon">◉</span> Knowledge Graph</div>
+            <div class="graph-container">
+                <div class="graph-legend">
+                    <div class="legend-item"><div class="legend-dot" style="background:#2196F3"></div> Investigador</div>
+                    <div class="legend-item"><div class="legend-dot" style="background:#FF9800"></div> Candidato</div>
+                    <div class="legend-item"><div class="legend-dot" style="background:#4CAF50"></div> Publicación</div>
+                    <div class="legend-item"><div class="legend-dot" style="background:#9C27B0"></div> Institución</div>
+                    <div class="legend-item"><div class="legend-dot" style="background:#F44336"></div> Disciplina</div>
+                </div>
+                <div id="profile-graph" class="graph-canvas"></div>
+            </div>
+        </div>
+
+        <!-- Refinement History -->
+        {% if history and history.history %}
+        <div class="card full">
+            <div class="card-title"><span class="icon">↻</span> Historial de Refinamiento</div>
+            <table class="data-table">
+                <thead><tr><th>Iteración</th><th>Max Delta</th><th>Estado</th></tr></thead>
+                <tbody>
+                {% for h in history.history %}
+                <tr>
+                    <td>{{ h.iteration }}</td>
+                    <td style="font-family:'JetBrains Mono',monospace;">{{ "%.6f"|format(h.max_delta) }}</td>
+                    <td>{% if h.converged %}<span class="badge badge-green">Convergió</span>{% else %}En proceso{% endif %}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <p style="color:var(--text-3); font-size:13px; margin-top:10px;">
+                {{ history.iterations }} iteraciones — {{ 'Convergió' if history.converged else 'No convergió' }}
+            </p>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Render Knowledge Graph with vis.js
+const graphData = {{ subgraph|safe }};
+
+const colorMap = {
+    'researcher':  '#2196F3',
+    'candidate':   '#FF9800',
+    'paper':       '#4CAF50',
+    'institution': '#9C27B0',
+    'discipline':  '#F44336',
+    'orcid':       '#A5D6A7',
+};
+
+const shapeMap = {
+    'researcher':  'star',
+    'candidate':   'dot',
+    'paper':       'square',
+    'institution': 'triangle',
+    'discipline':  'diamond',
+};
+
+    if (graphData.nodes && graphData.nodes.length > 0) {
+        const nodes = new vis.DataSet(graphData.nodes.map(n => ({
+            id: n.id,
+            label: (n.label || n.id).substring(0, 22),
+            color: { background: colorMap[n.type] || '#fff', border: colorMap[n.type] || '#ccc',
+                     highlight: { background: '#f8f9fa', border: colorMap[n.type] || '#333' }},
+            shape: shapeMap[n.type] || 'dot',
+            size: n.type === 'researcher' ? 28 : (n.type === 'candidate' ? 18 : 12),
+            font: { color: '#333', size: 11, face: 'Arial' },
+        })));
+
+        const edges = new vis.DataSet(graphData.edges.map(e => ({
+            from: e.source,
+            to: e.target,
+            color: { color: '#ccc', highlight: '#3366cc' },
+            arrows: 'to',
+            width: 1,
+        })));
+
+        const container = document.getElementById('profile-graph');
+        new vis.Network(container, { nodes, edges }, {
+            physics: { solver: 'forceAtlas2Based', forceAtlas2Based: { gravitationalConstant: -40 }},
+            interaction: { hover: true, zoomView: true, dragView: true },
+            layout: { improvedLayout: true },
+    });
+}
+</script>
+{% endblock %}
