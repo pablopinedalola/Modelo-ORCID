@@ -16,7 +16,7 @@ import numpy as np
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 
-from src.rag.query_understanding import QueryAnalyzer
+from src.rag.query_interpreter import QueryInterpreter
 from src.rag.embedding_pipeline import EmbeddingPipeline
 from src.rag.faiss_store import FAISSStore
 from src.rag.bm25_retriever import BM25Retriever
@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 class MultiVectorRetriever:
     def __init__(self, store_dir: Path):
         self.store_dir = store_dir
-        self.analyzer = QueryAnalyzer()
+        self.interpreter = QueryInterpreter()
         self.faiss_store = FAISSStore(store_dir=self.store_dir)
         self.embedding_pipeline = EmbeddingPipeline(store_dir=self.store_dir)
         self.bm25_retriever = BM25Retriever(store_dir=self.store_dir)
@@ -65,36 +65,41 @@ class MultiVectorRetriever:
             logger.warning("MultiVectorRetriever no está listo. Ejecuta load() primero.")
             return []
 
-        # 1. Query Understanding
-        q_analysis = self.analyzer.analyze(query)
-        expanded_query = q_analysis["search_string"]
-        logger.info(f"Query expansion: '{query}' -> '{expanded_query}'")
+        # 1. Query Interpretation
+        interpretation = self.interpreter.interpret(query)
+        rewritten_query = interpretation["rewritten_query"]
+        intent = interpretation["intent"]
+        target_institutions = interpretation["institutions"]
+        expanded_concepts = interpretation["expanded_concepts"]
+        
+        logger.info(f"Natural Language Query: '{query}'")
+        logger.info(f" -> Intent: {intent}")
+        logger.info(f" -> Institutions: {target_institutions}")
+        logger.info(f" -> Rewritten for Dense: '{rewritten_query}'")
 
         # 2. Semantic Search (Dense)
-        query_vector = self.embedding_pipeline.encode_query(expanded_query)
+        query_vector = self.embedding_pipeline.encode_query(rewritten_query)
         semantic_results = {}
         if self.faiss_store.index is not None:
-            sem_res = self.faiss_store.search(query_vector, top_k=top_k * 3)
-            # FAISS results use profile_id. Assuming profile_id corresponds to author slug or works.
+            sem_res = self.faiss_store.search(query_vector, top_k=top_k * 4)
             semantic_results = {r["profile_id"]: r["score"] for r in sem_res}
 
         # 3. Lexical Search (Sparse BM25)
         lexical_results = {}
-        if self.bm25_retriever.corpus:
-            lex_res = self.bm25_retriever.search(expanded_query, top_k=top_k * 3)
+        if self.bm25_retriever.bm25 is not None:
+            lex_res = self.bm25_retriever.search(rewritten_query, top_k=top_k * 4)
             lexical_results = {r["profile_id"]: r["score"] for r in lex_res}
 
-        # 4. OpenAlex Topic Overlap & Synthesis
+        # 4. Synthesize Candidates
         fused_scores = {}
         all_candidate_ids = set(semantic_results.keys()) | set(lexical_results.keys())
         
-        # Add matches based purely on OpenAlex explicit topics matching the query
-        for t in q_analysis["detected_topics"]:
-            topics = search_topics(t)
-            # Find authors that have these topics
+        # Add matches based on OpenAlex explicit topics matching the expanded concepts
+        for concept in expanded_concepts:
+            topics = search_topics(concept)
             for a in self.authors:
                 a_topics = [at.get("display_name", "").lower() for at in a.get("topics", [])]
-                if any(t.lower() in at for at in a_topics):
+                if any(concept in at for at in a_topics):
                     all_candidate_ids.add(a.get("_slug"))
 
         results = []
@@ -103,30 +108,68 @@ class MultiVectorRetriever:
             
             s_score = semantic_results.get(cid, 0.0)
             l_score = lexical_results.get(cid, 0.0)
-            
-            # Normalize BM25 score roughly
             l_score_norm = min(l_score / 15.0, 1.0)
             
-            author_data = self._authors_by_id.get(cid, {})
+            # Determine if it's an author or a work
+            is_work = cid.startswith("work_")
             
+            if is_work:
+                # Basic work mock scoring
+                final_score = (s_score * 0.5) + (l_score_norm * 0.5)
+                if final_score < 0.1: continue
+                
+                reasons = []
+                match_types = []
+                if s_score > 0.4:
+                    reasons.append(f"Paper: Match Semántico ({s_score:.2f})")
+                    match_types.append("semantic")
+                if l_score > 0:
+                    reasons.append("Paper: Match Léxico BM25")
+                    match_types.append("lexical")
+                    
+                # Reranking boost based on intent
+                if intent == "paper":
+                    final_score += 0.2
+                    reasons.append("Boost: Intención de búsqueda de papers")
+
+                results.append({
+                    "profile_id": cid,
+                    "slug": cid,
+                    "display_name": f"Paper ID {cid.split('_')[-1]}", # Simplified
+                    "institution": "",
+                    "score": final_score,
+                    "match_types": match_types,
+                    "explanation": " | ".join(reasons),
+                    "topics": []
+                })
+                continue
+                
+            # It's an author
+            author_data = self._authors_by_id.get(cid, {})
+            if not author_data: continue
+            
+            # 5. Institution Filtering
+            inst_name = author_data.get("last_known_institutions", [{}])[0].get("display_name", "").lower()
+            inst_pass = True
+            if target_institutions:
+                inst_pass = False
+                for target_inst in target_institutions:
+                    if target_inst in inst_name or target_inst == "unam" and "autonoma de mexico" in inst_name:
+                        inst_pass = True
+                        break
+                        
+            if not inst_pass:
+                continue # Skip if it doesn't match the requested institution
+
             # Feature: Topic Overlap
             topic_overlap_score = 0.0
             matched_topics = []
             a_topics = [at.get("display_name", "").lower() for at in author_data.get("topics", [])]
-            for ext in q_analysis["expanded_terms"]:
+            for ext in expanded_concepts:
                 for at in a_topics:
                     if ext in at or at in ext:
                         topic_overlap_score += 0.2
                         matched_topics.append(at)
-
-            # Feature: Concept Overlap
-            matched_concepts = []
-            a_concepts = [c.get("display_name", "").lower() for c in author_data.get("x_concepts", [])]
-            for ext in q_analysis["expanded_terms"]:
-                for ac in a_concepts:
-                    if ext in ac or ac in ext:
-                        topic_overlap_score += 0.1
-                        matched_concepts.append(ac)
 
             # Final Score Fusion
             final_score = (s_score * 0.4) + (l_score_norm * 0.3) + min(topic_overlap_score, 0.3)
@@ -147,9 +190,15 @@ class MultiVectorRetriever:
             if matched_topics:
                 reasons.append(f"Match en temas OpenAlex: {', '.join(set(matched_topics))}")
                 match_types.append("topic")
-            if matched_concepts:
-                reasons.append(f"Match en conceptos: {', '.join(set(matched_concepts))}")
-                match_types.append("concept")
+            if target_institutions and inst_pass:
+                reasons.append(f"Filtro institucional aplicado: {target_institutions[0].upper()}")
+                match_types.append("institution")
+                final_score += 0.15 # Reranking boost
+                
+            # Reranking boost based on intent
+            if intent == "author":
+                final_score += 0.1
+                reasons.append("Boost: Intención de búsqueda de autores")
                 
             results.append({
                 "profile_id": cid,

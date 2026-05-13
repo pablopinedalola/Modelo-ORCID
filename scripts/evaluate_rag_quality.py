@@ -17,7 +17,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 from config import DATA_DIR
 from src.rag.multi_vector_retriever import MultiVectorRetriever
-from src.rag.query_understanding import QueryAnalyzer
+from src.rag.query_interpreter import QueryInterpreter
 
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 logger = logging.getLogger("eval")
@@ -28,23 +28,24 @@ def run_evaluation():
     logger.info("=" * 80)
 
     # 1. Test Query Understanding Isolated
-    analyzer = QueryAnalyzer()
+    interpreter = QueryInterpreter()
     test_queries = [
-        "teoria de graficas",
-        "inteligencia artificial para medicina",
-        "investigadores que trabajen en superconductividad",
-        "papers sobre covid y redes neuronales",
-        "quantum optics"
+        "expertos en ia de la unam",
+        "teoria de graficas en mexico",
+        "investigadores de superconductividad",
+        "papers sobre complejidad y redes",
+        "expertos en machine learning del ipn"
     ]
     
-    logger.info("\n1. 🔍 PRUEBA DE QUERY UNDERSTANDING & EXPANSION")
+    logger.info("\n1. 🔍 PRUEBA DE QUERY INTERPRETER")
     logger.info("-" * 80)
     for q in test_queries:
-        res = analyzer.analyze(q)
+        res = interpreter.interpret(q)
         logger.info(f"Query original: '{q}'")
         logger.info(f"  Intención: {res['intent']}")
-        logger.info(f"  Términos detectados: {', '.join(res['expanded_terms'])}")
-        logger.info(f"  Temas detectados: {', '.join(res['detected_topics']) if res['detected_topics'] else 'Ninguno'}")
+        logger.info(f"  Instituciones detectadas: {', '.join(res['institutions']) if res['institutions'] else 'Ninguna'}")
+        logger.info(f"  Conceptos expandidos: {', '.join(res['expanded_concepts'])}")
+        logger.info(f"  Query reescrita: '{res['rewritten_query']}'")
         logger.info("")
 
     # 2. Test Multi-Vector Retrieval
