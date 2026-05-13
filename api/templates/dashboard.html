@@ -8,109 +8,156 @@
 
 {% block content %}
 <div class="container">
-    <h1 class="section-title" style="margin-top:16px;">Pipeline Dashboard</h1>
-    <p class="section-sub">Métricas del sistema de desambiguación de identidad</p>
+    <h1 class="section-title" style="margin-top:16px;">Dashboard — Datos Reales OpenAlex</h1>
+    <p class="section-sub">Métricas calculadas desde datos locales descargados de OpenAlex</p>
 
     <!-- Stats -->
     <div class="stats-grid">
         <div class="stat-card">
-            <div class="num">{{ total_profiles }}</div>
-            <div class="label">Investigadores</div>
+            <div class="num">{{ stats.total_authors }}</div>
+            <div class="label">Autores</div>
         </div>
         <div class="stat-card">
-            <div class="num">{{ with_orcid }}</div>
-            <div class="label">ORCID Resueltos</div>
+            <div class="num">{{ stats.total_works }}</div>
+            <div class="label">Papers Cargados</div>
         </div>
         <div class="stat-card">
-            <div class="num">{{ "%.1f"|format(avg_confidence * 100) }}%</div>
-            <div class="label">Confidence Prom.</div>
+            <div class="num">{{ stats.total_topics }}</div>
+            <div class="label">Topics</div>
         </div>
         <div class="stat-card">
-            <div class="num">{{ "%.1f"|format(avg_iterations) }}</div>
-            <div class="label">Iteraciones Prom.</div>
+            <div class="num">{{ stats.total_institutions }}</div>
+            <div class="label">Instituciones</div>
+        </div>
+        <div class="stat-card">
+            <div class="num">{{ "{:,}".format(stats.total_citations) }}</div>
+            <div class="label">Citas Totales</div>
+        </div>
+        <div class="stat-card">
+            <div class="num">{{ "{:,}".format(stats.total_works_count) }}</div>
+            <div class="label">Works (OpenAlex)</div>
         </div>
     </div>
 
     <!-- Charts -->
     <div class="chart-grid">
         <div class="chart-container">
-            <h3>Distribución de Confidence</h3>
-            <canvas id="confChart"></canvas>
+            <h3>📊 Papers por Año</h3>
+            <canvas id="yearChart"></canvas>
         </div>
         <div class="chart-container">
-            <h3>Investigadores por Institución</h3>
+            <h3>🏛 Top Instituciones</h3>
             <canvas id="instChart"></canvas>
         </div>
         <div class="chart-container">
-            <h3>Áreas de Conocimiento</h3>
-            <canvas id="areaChart"></canvas>
+            <h3>🔬 Top Topics</h3>
+            <canvas id="topicChart"></canvas>
         </div>
         <div class="chart-container">
-            <h3>Knowledge Graph</h3>
-            <div style="padding:20px;">
-                {% for key, val in graph_stats.items() %}
-                <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border);">
-                    <span style="color:var(--text-3); font-size:13px;">{{ key }}</span>
-                    <span style="font-weight:600; font-family:'JetBrains Mono',monospace;">{{ val }}</span>
+            <h3>📄 Top Papers Citados</h3>
+            <div style="padding:4px; max-height:280px; overflow-y:auto;">
+                {% for p in stats.top_cited_papers[:8] %}
+                <div style="display:flex; justify-content:space-between; align-items:start; padding:8px 0; border-bottom:1px solid var(--border);">
+                    <div style="flex:1; min-width:0;">
+                        <div style="font-size:12px; font-weight:500; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ p.title }}</div>
+                        <div style="font-size:11px; color:var(--text-3);">{{ p.author }} · {{ p.year }}</div>
+                    </div>
+                    <div style="font-weight:700; font-family:'JetBrains Mono',monospace; color:var(--accent); margin-left:12px; white-space:nowrap;">
+                        {{ "{:,}".format(p.citations) }}
+                    </div>
                 </div>
                 {% endfor %}
             </div>
         </div>
+    </div>
+
+    <!-- Authors Table -->
+    <h2 class="section-title" style="margin-top:40px;">Autores en el Sistema</h2>
+    <div class="card" style="overflow-x:auto;">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Institución</th>
+                    <th>Publicaciones</th>
+                    <th>Citas</th>
+                    <th>H-Index</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for a in authors %}
+            <tr>
+                <td><a href="/researcher/{{ a.slug }}" style="font-weight:500;">{{ a.name }}</a></td>
+                <td style="font-size:13px; color:var(--text-2);">{{ a.institution }}</td>
+                <td style="font-family:'JetBrains Mono',monospace;">{{ a.works }}</td>
+                <td style="font-weight:700; color:var(--accent); font-family:'JetBrains Mono',monospace;">{{ "{:,}".format(a.cited) }}</td>
+                <td style="font-family:'JetBrains Mono',monospace;">{{ a.h_index }}</td>
+                <td><a href="/researcher/{{ a.slug }}" class="badge badge-accent" style="text-decoration:none;">Ver perfil →</a></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
 <script>
-Chart.defaults.color = '#7b80a0';
-Chart.defaults.borderColor = '#2a2f45';
+Chart.defaults.color = '#667085';
+Chart.defaults.borderColor = '#eaecf0';
 
-// Confidence distribution
-const confData = {{ conf_buckets|safe }};
-new Chart(document.getElementById('confChart'), {
+// Papers by Year
+const yearData = {{ papers_by_year_json|safe }};
+new Chart(document.getElementById('yearChart'), {
     type: 'bar',
     data: {
-        labels: Object.keys(confData),
+        labels: Object.keys(yearData),
         datasets: [{
-            data: Object.values(confData),
-            backgroundColor: ['#f87171', '#fb923c', '#fbbf24', '#4ade80'],
-            borderRadius: 6,
+            data: Object.values(yearData),
+            backgroundColor: 'rgba(51,102,204,0.7)',
+            borderRadius: 4,
         }]
     },
     options: { plugins: { legend: { display: false }}, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 }}}}
 });
 
-// Institutions
-const instData = {{ inst_counts|safe }};
+// Top Institutions
+const instData = {{ top_institutions_json|safe }};
+const instLabels = instData.map(d => d.name.length > 30 ? d.name.substring(0, 30) + '...' : d.name);
+const instValues = instData.map(d => d.count);
 new Chart(document.getElementById('instChart'), {
     type: 'bar',
     data: {
-        labels: Object.keys(instData),
+        labels: instLabels,
         datasets: [{
-            data: Object.values(instData),
-            backgroundColor: '#818cf8',
-            borderRadius: 6,
+            data: instValues,
+            backgroundColor: '#8b5cf6',
+            borderRadius: 4,
         }]
     },
     options: {
         indexAxis: 'y',
         plugins: { legend: { display: false }},
-        scales: { x: { beginAtZero: true, ticks: { stepSize: 1 }}}
+        scales: { x: { beginAtZero: true }}
     }
 });
 
-// Areas
-const areaData = {{ area_counts|safe }};
-new Chart(document.getElementById('areaChart'), {
+// Top Topics
+const topicData = {{ top_topics_json|safe }};
+const topicLabels = topicData.map(d => d.name.length > 35 ? d.name.substring(0, 35) + '...' : d.name);
+const topicValues = topicData.map(d => d.count);
+const topicColors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#ec4899', '#14b8a6', '#f97316', '#6366f1', '#84cc16', '#e11d48', '#0ea5e9', '#a855f7', '#22c55e'];
+new Chart(document.getElementById('topicChart'), {
     type: 'doughnut',
     data: {
-        labels: Object.keys(areaData),
+        labels: topicLabels,
         datasets: [{
-            data: Object.values(areaData),
-            backgroundColor: ['#818cf8', '#4ade80', '#fb923c', '#f87171', '#22d3ee', '#c084fc', '#fbbf24'],
+            data: topicValues,
+            backgroundColor: topicColors.slice(0, topicLabels.length),
         }]
     },
-    options: { plugins: { legend: { position: 'right', labels: { boxWidth: 10, font: { size: 11 }}}}}
+    options: { plugins: { legend: { position: 'right', labels: { boxWidth: 10, font: { size: 10 }}}}}
 });
 </script>
 {% endblock %}

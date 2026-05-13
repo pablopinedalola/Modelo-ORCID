@@ -1,0 +1,17 @@
+{
+  "total_nodes": 47,
+  "total_edges": 100,
+  "nodes_by_type": {
+    "researcher": 15,
+    "institution": 13,
+    "discipline": 15,
+    "area": 4
+  },
+  "edges_by_type": {
+    "affiliated_with": 15,
+    "belongs_to_discipline": 15,
+    "belongs_to_area": 15,
+    "has_researcher": 45,
+    "similar_to": 10
+  }
+}

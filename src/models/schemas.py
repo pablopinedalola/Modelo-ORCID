@@ -88,6 +88,10 @@ class NodeType(str, Enum):
     INSTITUTION = "institution"
     DISCIPLINE = "discipline"
     ORCID = "orcid"
+    TOPIC = "topic"
+    CONCEPT = "concept"
+    VENUE = "venue"
+    CITATION = "citation"
 
 
 class EdgeType(str, Enum):
@@ -98,6 +102,9 @@ class EdgeType(str, Enum):
     BELONGS_TO_AREA = "belongs_to_area"
     HAS_ORCID = "has_orcid"
     CANDIDATE_FOR = "candidate_for"
+    CITES = "cites"
+    RELATED_TO_TOPIC = "related_to_topic"
+    PUBLISHED_IN = "published_in"
 
 
 # ═══════════════════════════════════════════════════════════════════════════════

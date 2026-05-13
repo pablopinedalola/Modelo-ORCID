@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% set active_page = "profile" %}
-{% block title %}{{ profile.full_name }}{% endblock %}
-{% block description %}Perfil académico de {{ profile.full_name }}, investigador SNII nivel {{ profile.snii_level }}{% endblock %}
+{% block title %}{{ author.display_name }}{% endblock %}
+{% block description %}Perfil académico de {{ author.display_name }} — datos reales OpenAlex{% endblock %}
 
 {% block head %}
-<script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
 {% endblock %}
 
 {% block content %}
@@ -13,256 +13,227 @@
     <!-- Header -->
     <div class="profile-header">
         <div class="profile-badges">
-            <span class="badge badge-accent">SNII Nivel {{ profile.snii_level }}</span>
-            {% if profile.validated %}
-            <span class="badge badge-green">✓ Identidad Verificada</span>
-            {% else %}
-            <span class="badge badge-orange">⧖ Identidad Pendiente</span>
+            <span class="badge badge-accent">OpenAlex</span>
+            {% if author.orcid %}
+            <span class="badge badge-green">✓ ORCID Verificado</span>
             {% endif %}
         </div>
-        <h1>{{ profile.full_name }}</h1>
-        <div class="inst">{{ profile.institution }} — {{ profile.discipline }}</div>
+        <h1>{{ author.display_name }}</h1>
+        <div class="inst">{{ last_institution }}</div>
 
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px,1fr)); gap:10px; margin-top:16px;">
-            <div><span style="color:var(--text-3); font-size:12px; text-transform:uppercase; letter-spacing:0.5px;">Área</span>
-                <div style="font-weight:500; margin-top:2px; font-size:14px;">{{ profile.area }}</div></div>
-            {% if profile.department %}
-            <div><span style="color:var(--text-3); font-size:12px; text-transform:uppercase; letter-spacing:0.5px;">Departamento</span>
-                <div style="font-weight:500; margin-top:2px; font-size:14px;">{{ profile.department }}</div></div>
-            {% endif %}
+        {% if author.orcid %}
+        <div style="margin-top:8px; font-size:13px;">
+            <a href="{{ author.orcid }}" target="_blank" style="color:var(--green);">ORCID: {{ author.orcid.split('/')[-1] }}</a>
+            &nbsp;·&nbsp;
+            <a href="https://openalex.org/authors/{{ author.id.split('/')[-1] }}" target="_blank" style="color:var(--accent);">OpenAlex: {{ author.id.split('/')[-1] }}</a>
         </div>
+        {% endif %}
     </div>
 
     <div class="profile-layout">
-        
-        <!-- Sidebar (Infobox style) -->
+
+        <!-- Sidebar -->
         <div class="profile-sidebar">
-            <!-- Confidence -->
-            <div class="card" style="background: var(--bg-alt); border-top: 3px solid var(--accent);">
-                <div class="card-title" style="font-size: 14px; text-transform: uppercase;"><span class="icon">◎</span> Nivel de Confianza</div>
-                {% set conf = profile.confidence %}
-                {% set pct = (conf * 100)|int %}
-                <div style="font-size:32px; font-weight:700; margin-bottom:8px;
-                            color:{% if conf >= 0.7 %}var(--green){% elif conf >= 0.4 %}var(--orange){% else %}var(--red){% endif %};">
-                    {{ "%.1f"|format(conf * 100) }}%
+            <!-- Metrics -->
+            <div class="card" style="background:var(--bg-alt); border-top:3px solid var(--accent);">
+                <div class="card-title" style="font-size:14px; text-transform:uppercase;">▤ Métricas</div>
+                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
+                    <div style="text-align:center; padding:12px; background:var(--surface2); border-radius:8px;">
+                        <div style="font-size:28px; font-weight:700; color:var(--accent);">{{ author.works_count }}</div>
+                        <div style="font-size:10px; color:var(--text-3); margin-top:2px;">PUBLICACIONES</div>
+                    </div>
+                    <div style="text-align:center; padding:12px; background:var(--surface2); border-radius:8px;">
+                        <div style="font-size:28px; font-weight:700; color:var(--cyan);">{{ "{:,}".format(author.cited_by_count) }}</div>
+                        <div style="font-size:10px; color:var(--text-3); margin-top:2px;">CITAS</div>
+                    </div>
+                    <div style="text-align:center; padding:12px; background:var(--surface2); border-radius:8px;">
+                        <div style="font-size:28px; font-weight:700; color:var(--purple);">{{ author.summary_stats.h_index }}</div>
+                        <div style="font-size:10px; color:var(--text-3); margin-top:2px;">H-INDEX</div>
+                    </div>
                 </div>
-                <div class="conf-bar">
-                    <div class="conf-fill {% if conf >= 0.7 %}conf-high{% elif conf >= 0.4 %}conf-med{% else %}conf-low{% endif %}"
-                         style="width:{{ pct }}%">{{ pct }}%</div>
-                </div>
-                <p style="color:var(--text-3); font-size:13px; margin-top:10px;">
-                    {% if conf >= 0.7 %}Alta confianza en la resolución de identidad
-                    {% elif conf >= 0.4 %}Confianza moderada — se requiere más evidencia
-                    {% else %}Baja confianza — identidad no confirmada
-                    {% endif %}
-                </p>
-                <div style="margin-top: 15px; border-top: 1px solid var(--border); padding-top: 15px;">
-                    <a href="/interpretability/{{ profile.id }}" class="btn" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; background: white; border: 1px solid var(--border); color: var(--text);">
-                        <i class="fas fa-microscope"></i> Ver Análisis de Interpretabilidad
-                    </a>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px;">
+                    <div style="text-align:center; padding:10px; background:var(--surface2); border-radius:8px;">
+                        <div style="font-size:22px; font-weight:700; color:var(--orange);">{{ author.summary_stats.i10_index }}</div>
+                        <div style="font-size:10px; color:var(--text-3); margin-top:2px;">i10-INDEX</div>
+                    </div>
+                    <div style="text-align:center; padding:10px; background:var(--surface2); border-radius:8px;">
+                        <div style="font-size:22px; font-weight:700; color:var(--green);">{{ "%.2f"|format(author.summary_stats.get('2yr_mean_citedness', 0)) }}</div>
+                        <div style="font-size:10px; color:var(--text-3); margin-top:2px;">2YR MEAN CIT.</div>
+                    </div>
                 </div>
             </div>
 
             <!-- Identifiers -->
             <div class="card">
-            <div class="card-title"><span class="icon">⎔</span> Identificadores</div>
-            {% if profile.orcid_id %}
-            <div style="display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--border);">
-                <span class="badge badge-green" style="min-width:70px; justify-content:center;">ORCID</span>
-                <a href="https://orcid.org/{{ profile.orcid_id }}" target="_blank">{{ profile.orcid_id }}</a>
+                <div class="card-title">⎔ Identificadores</div>
+                {% if author.orcid %}
+                <div style="display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--border);">
+                    <span class="badge badge-green" style="min-width:70px; justify-content:center;">ORCID</span>
+                    <a href="{{ author.orcid }}" target="_blank">{{ author.orcid.split('/')[-1] }}</a>
+                </div>
+                {% endif %}
+                <div style="display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--border);">
+                    <span class="badge badge-accent" style="min-width:70px; justify-content:center;">OpenAlex</span>
+                    <a href="https://openalex.org/authors/{{ author.id.split('/')[-1] }}" target="_blank">{{ author.id.split('/')[-1] }}</a>
+                </div>
             </div>
-            {% endif %}
-            {% if profile.openalex_id %}
-            <div style="display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--border);">
-                <span class="badge badge-accent" style="min-width:70px; justify-content:center;">OpenAlex</span>
-                {% set oa_short = profile.openalex_id.split('/')[-1] if '/' in profile.openalex_id else profile.openalex_id %}
-                <a href="https://openalex.org/authors/{{ oa_short }}" target="_blank">{{ oa_short }}</a>
-            </div>
-            {% endif %}
-            {% if profile.ror_id %}
-            <div style="display:flex; align-items:center; gap:10px; padding:10px 0;">
-                <span class="badge badge-orange" style="min-width:70px; justify-content:center;">ROR</span>
-                <a href="{{ profile.ror_id }}" target="_blank">{{ profile.ror_id.split('/')[-1] }}</a>
-            </div>
-            {% endif %}
-            {% if not profile.orcid_id and not profile.openalex_id and not profile.ror_id %}
-            <p style="color:var(--text-3);">Sin identificadores externos resueltos</p>
-            {% endif %}
-        </div>
 
-        <!-- Metrics -->
-        <div class="card">
-            <div class="card-title"><span class="icon">▤</span> Métricas</div>
-            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
-                <div style="text-align:center; padding:12px; background:var(--surface2); border-radius:8px;">
-                    <div style="font-size:24px; font-weight:700; color:var(--accent);">{{ profile.works_count }}</div>
-                    <div style="font-size:11px; color:var(--text-3); margin-top:2px;">PUBLICACIONES</div>
+            <!-- Affiliations -->
+            <div class="card">
+                <div class="card-title">🏛 Afiliaciones</div>
+                {% for aff in affiliations[:6] %}
+                <div style="padding:8px 0; border-bottom:1px solid var(--border); font-size:13px;">
+                    <div style="font-weight:500;">{{ aff.name }}</div>
+                    <div style="color:var(--text-3); font-size:11px; margin-top:2px;">
+                        {{ aff.country }} · {{ aff.type }}
+                        {% if aff.years %}· {{ aff.years[0] }}{% if aff.years|length > 1 %}-{{ aff.years[-1] }}{% endif %}{% endif %}
+                    </div>
                 </div>
-                <div style="text-align:center; padding:12px; background:var(--surface2); border-radius:8px;">
-                    <div style="font-size:24px; font-weight:700; color:var(--cyan);">{{ profile.cited_by_count }}</div>
-                    <div style="font-size:11px; color:var(--text-3); margin-top:2px;">CITAS</div>
-                </div>
-                <div style="text-align:center; padding:12px; background:var(--surface2); border-radius:8px;">
-                    <div style="font-size:24px; font-weight:700; color:var(--purple);">{{ profile.h_index }}</div>
-                    <div style="font-size:11px; color:var(--text-3); margin-top:2px;">H-INDEX</div>
-                </div>
+                {% endfor %}
             </div>
         </div>
-        
-        </div> <!-- End Sidebar -->
 
         <!-- Main Content -->
         <div class="profile-main">
 
-        <!-- Evidence Dimensions -->
-        <div class="card full">
-            <div class="card-title"><span class="icon">▥</span> Dimensiones de Evidencia</div>
-            {% if history and history.best_candidate %}
-            {% set ev = history.best_candidate.evidence %}
-            <div class="evidence-grid">
-                {% set dims = [
-                    ("Nombre", ev.name_score),
-                    ("Institución", ev.institution_score),
-                    ("Área", ev.area_score),
-                    ("Publicaciones", ev.publication_score),
-                    ("Coautores", ev.coauthor_score),
-                    ("Temporal", ev.temporal_score),
-                    ("Semántico", ev.semantic_score)
-                ] %}
-                {% for label, val in dims %}
-                <div class="evidence-item">
-                    <span class="dim-label">{{ label }}</span>
-                    <div class="dim-bar"><div class="dim-fill" style="width:{{ (val * 100)|int }}%"></div></div>
-                    <span class="dim-val">{{ "%.2f"|format(val) }}</span>
+            <!-- Topics from author -->
+            {% if author.topics %}
+            <div class="card full">
+                <div class="card-title">🔬 Temas de Investigación (OpenAlex Topics)</div>
+                <div style="display:flex; flex-direction:column; gap:8px;">
+                    {% for t in author.topics %}
+                    <div style="display:flex; align-items:center; gap:12px; padding:10px; background:var(--surface2); border-radius:6px;">
+                        <div style="flex:1;">
+                            <div style="font-weight:600; font-size:14px;">{{ t.display_name }}</div>
+                            <div style="font-size:11px; color:var(--text-3); margin-top:2px;">
+                                {{ t.subfield.display_name if t.subfield else '' }} · {{ t.field.display_name if t.field else '' }}
+                            </div>
+                        </div>
+                        <div style="font-weight:700; font-size:18px; color:var(--accent); font-family:'JetBrains Mono',monospace;">{{ t.count }}</div>
+                        <div style="font-size:10px; color:var(--text-3);">papers</div>
+                    </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
-            </div>
-            {% else %}
-            <div class="evidence-grid">
-                <p style="color:var(--text-3);">Ejecuta el pipeline con --save para ver evidencia detallada</p>
             </div>
             {% endif %}
-        </div>
 
-        <!-- Concepts/Topics -->
-        {% if profile.concepts %}
-        <div class="card">
-            <div class="card-title"><span class="icon">◈</span> Temas de Investigación</div>
-            <div class="tags">
-                {% for c in profile.concepts[:12] %}
-                <span class="tag">{{ c }}</span>
-                {% endfor %}
-            </div>
-        </div>
-        {% endif %}
-
-        <!-- Publications -->
-        {% if profile.publications %}
-        <div class="card full">
-            <div class="card-title"><span class="icon">📄</span> Publicaciones</div>
-            <table class="data-table">
-                <thead><tr><th>Título</th><th>Año</th><th>Citas</th><th>Link</th></tr></thead>
-                <tbody>
-                {% for p in profile.publications[:10] %}
-                <tr>
-                    <td class="title-cell">{{ p.title or 'Sin título' }}</td>
-                    <td>{{ p.publication_year or '' }}</td>
-                    <td>{{ p.cited_by_count or 0 }}</td>
-                    <td>{% if p.doi %}<a href="{{ p.doi }}" target="_blank">DOI</a>{% endif %}</td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% endif %}
-
-        <!-- Knowledge Graph -->
-        <div class="card full">
-            <div class="card-title"><span class="icon">◉</span> Knowledge Graph</div>
-            <div class="graph-container">
-                <div class="graph-legend">
-                    <div class="legend-item"><div class="legend-dot" style="background:#2196F3"></div> Investigador</div>
-                    <div class="legend-item"><div class="legend-dot" style="background:#FF9800"></div> Candidato</div>
-                    <div class="legend-item"><div class="legend-dot" style="background:#4CAF50"></div> Publicación</div>
-                    <div class="legend-item"><div class="legend-dot" style="background:#9C27B0"></div> Institución</div>
-                    <div class="legend-item"><div class="legend-dot" style="background:#F44336"></div> Disciplina</div>
+            <!-- Concepts from works -->
+            {% if top_concepts %}
+            <div class="card full">
+                <div class="card-title">◈ Conceptos (de publicaciones)</div>
+                <div class="tags">
+                    {% for name, count in top_concepts %}
+                    <span class="tag">{{ name }} <span style="color:var(--accent); font-weight:600; margin-left:4px;">({{ count }})</span></span>
+                    {% endfor %}
                 </div>
-                <div id="profile-graph" class="graph-canvas"></div>
             </div>
-        </div>
+            {% endif %}
 
-        <!-- Refinement History -->
-        {% if history and history.history %}
-        <div class="card full">
-            <div class="card-title"><span class="icon">↻</span> Historial de Refinamiento</div>
-            <table class="data-table">
-                <thead><tr><th>Iteración</th><th>Max Delta</th><th>Estado</th></tr></thead>
-                <tbody>
-                {% for h in history.history %}
-                <tr>
-                    <td>{{ h.iteration }}</td>
-                    <td style="font-family:'JetBrains Mono',monospace;">{{ "%.6f"|format(h.max_delta) }}</td>
-                    <td>{% if h.converged %}<span class="badge badge-green">Convergió</span>{% else %}En proceso{% endif %}</td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-            <p style="color:var(--text-3); font-size:13px; margin-top:10px;">
-                {{ history.iterations }} iteraciones — {{ 'Convergió' if history.converged else 'No convergió' }}
-            </p>
-        </div>
-        {% endif %}
+            <!-- Publications -->
+            {% if works %}
+            <div class="card full">
+                <div class="card-title">📄 Publicaciones ({{ total_works_loaded }} cargadas)</div>
+                <table class="data-table">
+                    <thead><tr><th>Título</th><th>Año</th><th>Citas</th><th>Topics</th><th>DOI</th></tr></thead>
+                    <tbody>
+                    {% for w in works[:20] %}
+                    <tr>
+                        <td class="title-cell" style="max-width:350px;">
+                            <div style="font-weight:500;">{{ w.title or 'Sin título' }}</div>
+                            {% if w.venue %}
+                            <div style="font-size:11px; color:var(--text-3); margin-top:2px;">{{ w.venue[:60] }}</div>
+                            {% endif %}
+                            {% if w.institutions %}
+                            <div style="font-size:10px; color:var(--text-3); margin-top:2px;">
+                                🏛 {{ w.institutions[:3]|join(', ') }}
+                            </div>
+                            {% endif %}
+                        </td>
+                        <td style="font-family:'JetBrains Mono',monospace;">{{ w.publication_year or '' }}</td>
+                        <td style="font-weight:700; color:var(--accent); font-family:'JetBrains Mono',monospace;">{{ "{:,}".format(w.cited_by_count or 0) }}</td>
+                        <td style="font-size:11px;">
+                            {% for t in (w.topics or [])[:2] %}
+                            <span class="tag" style="font-size:9px; padding:1px 6px;">{{ t.name }}</span>
+                            {% endfor %}
+                        </td>
+                        <td>{% if w.doi %}<a href="{{ w.doi }}" target="_blank">DOI↗</a>{% endif %}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
 
+            <!-- Publication timeline -->
+            <div class="card full">
+                <div class="card-title">📊 Publicaciones por Año</div>
+                <canvas id="yearChart" style="max-height:300px;"></canvas>
+            </div>
+
+            <!-- Work Topics treemap -->
+            {% if work_topics %}
+            <div class="card full">
+                <div class="card-title">🗂 Topics en Publicaciones</div>
+                <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                    {% for name, count in work_topics %}
+                    <div style="background:var(--accent-bg); border:1px solid rgba(51,102,204,0.2); border-radius:6px; padding:6px 12px; font-size:13px;">
+                        <span style="font-weight:600;">{{ name }}</span>
+                        <span style="color:var(--accent); font-family:'JetBrains Mono',monospace; font-size:11px; margin-left:6px;">×{{ count }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+        </div>
     </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
 <script>
-// Render Knowledge Graph with vis.js
-const graphData = {{ subgraph|safe }};
+Chart.defaults.color = '#667085';
+Chart.defaults.borderColor = '#eaecf0';
 
-const colorMap = {
-    'researcher':  '#2196F3',
-    'candidate':   '#FF9800',
-    'paper':       '#4CAF50',
-    'institution': '#9C27B0',
-    'discipline':  '#F44336',
-    'orcid':       '#A5D6A7',
-};
+const countsData = {{ counts_by_year|safe }};
+if (countsData && countsData.length > 0) {
+    const years = countsData.map(d => d.year);
+    const works = countsData.map(d => d.works_count);
+    const citations = countsData.map(d => d.cited_by_count);
 
-const shapeMap = {
-    'researcher':  'star',
-    'candidate':   'dot',
-    'paper':       'square',
-    'institution': 'triangle',
-    'discipline':  'diamond',
-};
-
-    if (graphData.nodes && graphData.nodes.length > 0) {
-        const nodes = new vis.DataSet(graphData.nodes.map(n => ({
-            id: n.id,
-            label: (n.label || n.id).substring(0, 22),
-            color: { background: colorMap[n.type] || '#fff', border: colorMap[n.type] || '#ccc',
-                     highlight: { background: '#f8f9fa', border: colorMap[n.type] || '#333' }},
-            shape: shapeMap[n.type] || 'dot',
-            size: n.type === 'researcher' ? 28 : (n.type === 'candidate' ? 18 : 12),
-            font: { color: '#333', size: 11, face: 'Arial' },
-        })));
-
-        const edges = new vis.DataSet(graphData.edges.map(e => ({
-            from: e.source,
-            to: e.target,
-            color: { color: '#ccc', highlight: '#3366cc' },
-            arrows: 'to',
-            width: 1,
-        })));
-
-        const container = document.getElementById('profile-graph');
-        new vis.Network(container, { nodes, edges }, {
-            physics: { solver: 'forceAtlas2Based', forceAtlas2Based: { gravitationalConstant: -40 }},
-            interaction: { hover: true, zoomView: true, dragView: true },
-            layout: { improvedLayout: true },
+    new Chart(document.getElementById('yearChart'), {
+        type: 'bar',
+        data: {
+            labels: years,
+            datasets: [
+                {
+                    label: 'Publicaciones',
+                    data: works,
+                    backgroundColor: 'rgba(51,102,204,0.7)',
+                    borderRadius: 4,
+                    yAxisID: 'y',
+                },
+                {
+                    label: 'Citas',
+                    data: citations,
+                    type: 'line',
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16,185,129,0.1)',
+                    fill: true,
+                    tension: 0.3,
+                    yAxisID: 'y1',
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            interaction: { mode: 'index', intersect: false },
+            scales: {
+                y: { beginAtZero: true, position: 'left', title: { display: true, text: 'Publicaciones' }},
+                y1: { beginAtZero: true, position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: 'Citas' }},
+            },
+            plugins: { legend: { position: 'top' }},
+        }
     });
 }
 </script>

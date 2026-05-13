@@ -8,84 +8,175 @@
 
 {% block content %}
 <div class="container">
-    <h1 class="section-title" style="margin-top:16px;">Knowledge Graph Explorer</h1>
+    <h1 class="section-title" style="margin-top:16px;">Knowledge Graph — Datos Reales</h1>
     <p class="section-sub">
-        {{ stats.get('total_nodes', 0) }} nodos · {{ stats.get('total_edges', 0) }} relaciones
+        {{ stats.get('total_nodes', 0) }} nodos ·
+        {{ stats.get('total_edges', 0) }} relaciones ·
+        {{ stats.get('authors', 0) }} autores ·
+        {{ stats.get('papers', 0) }} papers ·
+        {{ stats.get('institutions', 0) }} instituciones ·
+        {{ stats.get('topics', 0) }} topics
     </p>
+
+    <!-- Filter controls -->
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px;">
+        <button class="filter-btn active" onclick="filterNodes('all')" id="btn-all">Todos</button>
+        <button class="filter-btn" onclick="filterNodes('author')" id="btn-author">👤 Autores</button>
+        <button class="filter-btn" onclick="filterNodes('paper')" id="btn-paper">📄 Papers</button>
+        <button class="filter-btn" onclick="filterNodes('institution')" id="btn-institution">🏛 Instituciones</button>
+        <button class="filter-btn" onclick="filterNodes('topic')" id="btn-topic">🔬 Topics</button>
+    </div>
 
     <div class="graph-container">
         <div class="graph-legend">
-            <div class="legend-item"><div class="legend-dot" style="background:#2196F3"></div> Investigador</div>
-            <div class="legend-item"><div class="legend-dot" style="background:#FF9800"></div> Candidato</div>
-            <div class="legend-item"><div class="legend-dot" style="background:#4CAF50"></div> Publicación</div>
-            <div class="legend-item"><div class="legend-dot" style="background:#9C27B0"></div> Institución</div>
-            <div class="legend-item"><div class="legend-dot" style="background:#F44336"></div> Disciplina</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div> Autor</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#10b981"></div> Paper</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#8b5cf6"></div> Institución</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div> Topic</div>
         </div>
-        <div id="full-graph" class="graph-canvas" style="height:650px;"></div>
+        <div id="full-graph" class="graph-canvas" style="height:700px;"></div>
+    </div>
+
+    <!-- Node info panel -->
+    <div id="node-info" class="card" style="margin-top:16px; display:none;">
+        <div class="card-title" id="node-info-title">Información del nodo</div>
+        <div id="node-info-content"></div>
     </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
+<style>
+.filter-btn {
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-2);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+.filter-btn.active { background: var(--accent-bg); border-color: var(--accent); color: var(--accent); }
+</style>
 <script>
 const graphData = {{ graph_data|safe }};
 
 const colorMap = {
-    'researcher':  '#2196F3',
-    'candidate':   '#FF9800',
-    'paper':       '#4CAF50',
-    'institution': '#9C27B0',
-    'discipline':  '#F44336',
-    'orcid':       '#A5D6A7',
+    'author':      '#3b82f6',
+    'paper':       '#10b981',
+    'institution': '#8b5cf6',
+    'topic':       '#f59e0b',
 };
 const shapeMap = {
-    'researcher': 'star',
-    'candidate':  'dot',
-    'paper':      'square',
-    'institution':'triangle',
-    'discipline': 'diamond',
+    'author':      'star',
+    'paper':       'square',
+    'institution': 'triangle',
+    'topic':       'diamond',
 };
 
-const nodes = new vis.DataSet(graphData.nodes.map(n => ({
+const allNodes = graphData.nodes.map(n => ({
     id: n.id,
-    label: (n.label || n.id).substring(0, 20),
-    color: { background: colorMap[n.type] || '#fff', border: colorMap[n.type] || '#ccc',
+    label: (n.label || n.id).substring(0, 25),
+    color: { background: colorMap[n.type] || '#999', border: colorMap[n.type] || '#ccc',
              highlight: { background: '#f8f9fa', border: colorMap[n.type] || '#333' }},
     shape: shapeMap[n.type] || 'dot',
-    size: n.type === 'researcher' ? 30 : (n.type === 'candidate' ? 18 : 10),
-    font: { color: '#333', size: n.type === 'researcher' ? 13 : 10, face: 'Arial' },
-    title: `${n.type}: ${n.label || n.id}`,
-})));
+    size: n.size || (n.type === 'author' ? 30 : (n.type === 'paper' ? 12 : 15)),
+    font: { color: '#333', size: n.type === 'author' ? 14 : 10, face: 'Arial' },
+    title: `[${n.type}] ${n.label || n.id}`,
+    _type: n.type,
+    _data: n,
+}));
 
-const edges = new vis.DataSet(graphData.edges.map(e => ({
+const allEdges = graphData.edges.map((e, i) => ({
+    id: 'e' + i,
     from: e.source,
     to: e.target,
-    color: { color: '#2a2f45', highlight: '#818cf8' },
-    arrows: { to: { scaleFactor: 0.6 }},
-    width: 1,
+    color: { color: e.type === 'cites' ? '#ef4444' : '#ccd5e0', highlight: '#3b82f6' },
+    arrows: { to: { scaleFactor: 0.5 }},
+    width: e.type === 'cites' ? 2 : 1,
     title: e.type,
-})));
+    dashes: e.type === 'cites',
+    _type: e.type,
+}));
+
+const nodes = new vis.DataSet(allNodes);
+const edges = new vis.DataSet(allEdges);
 
 const container = document.getElementById('full-graph');
 const network = new vis.Network(container, { nodes, edges }, {
     physics: {
         solver: 'forceAtlas2Based',
-        forceAtlas2Based: { gravitationalConstant: -30, springLength: 120 },
-        stabilization: { iterations: 150 },
+        forceAtlas2Based: { gravitationalConstant: -40, springLength: 140, damping: 0.5 },
+        stabilization: { iterations: 200 },
     },
     interaction: { hover: true, zoomView: true, dragView: true, tooltipDelay: 200 },
     layout: { improvedLayout: true },
 });
 
-// Click on researcher node -> navigate to profile
+// Click on node -> show info
+network.on('click', function(params) {
+    if (params.nodes.length > 0) {
+        const nodeId = params.nodes[0];
+        const node = nodes.get(nodeId);
+        const infoDiv = document.getElementById('node-info');
+        const titleDiv = document.getElementById('node-info-title');
+        const contentDiv = document.getElementById('node-info-content');
+
+        infoDiv.style.display = 'block';
+        titleDiv.innerHTML = `<span class="icon">◎</span> ${node._data.label || node.id}`;
+
+        let html = `<div style="font-size:13px; color:var(--text-2);">`;
+        html += `<strong>Tipo:</strong> ${node._type}<br>`;
+
+        if (node._data.works_count) html += `<strong>Publicaciones:</strong> ${node._data.works_count}<br>`;
+        if (node._data.cited_by_count) html += `<strong>Citas:</strong> ${node._data.cited_by_count.toLocaleString()}<br>`;
+        if (node._data.year) html += `<strong>Año:</strong> ${node._data.year}<br>`;
+        if (node._data.citations) html += `<strong>Citas:</strong> ${node._data.citations.toLocaleString()}<br>`;
+        if (node._data.country) html += `<strong>País:</strong> ${node._data.country}<br>`;
+        html += `</div>`;
+
+        if (nodeId.startsWith('author:')) {
+            const slug = nodeId.replace('author:', '');
+            html += `<a href="/researcher/${slug}" style="display:inline-block; margin-top:10px; padding:6px 14px; background:var(--accent-bg); border:1px solid var(--accent); border-radius:6px; font-size:13px; font-weight:500;">Ver perfil →</a>`;
+        }
+
+        contentDiv.innerHTML = html;
+    }
+});
+
+// Double click on author -> navigate
 network.on('doubleClick', function(params) {
     if (params.nodes.length > 0) {
         const nodeId = params.nodes[0];
-        if (nodeId.startsWith('snii:')) {
-            const id = nodeId.replace('snii:', '');
-            window.location.href = '/researcher/' + id;
+        if (nodeId.startsWith('author:')) {
+            const slug = nodeId.replace('author:', '');
+            window.location.href = '/researcher/' + slug;
         }
     }
 });
+
+// Filter function
+function filterNodes(type) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('btn-' + type).classList.add('active');
+
+    if (type === 'all') {
+        nodes.update(allNodes.map(n => ({ id: n.id, hidden: false })));
+    } else {
+        const visibleIds = new Set();
+        allNodes.forEach(n => {
+            if (n._type === type) visibleIds.add(n.id);
+        });
+        // Also show connected nodes
+        allEdges.forEach(e => {
+            if (visibleIds.has(e.from)) visibleIds.add(e.to);
+            if (visibleIds.has(e.to)) visibleIds.add(e.from);
+        });
+        nodes.update(allNodes.map(n => ({ id: n.id, hidden: !visibleIds.has(n.id) })));
+    }
+}
 </script>
 {% endblock %}

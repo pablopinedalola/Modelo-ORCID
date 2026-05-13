@@ -43,7 +43,7 @@ ROR_API_BASE = "https://api.ror.org/v2/organizations"
 # MODELO DE EMBEDDINGS
 # ═══════════════════════════════════════════════════════════════════════════════
 
-EMBEDDING_MODEL = "all-MiniLM-L6-v2"
+EMBEDDING_MODEL = "sentence-transformers/paraphrase-multilingual-mpnet-base-v2"
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # PARÁMETROS DEL REFINEMENT ENGINE
@@ -65,8 +65,12 @@ EVIDENCE_WEIGHTS = {
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# PARÁMETROS DE BÚSQUEDA
+# PARÁMETROS DE BÚSQUEDA Y RETRIEVAL HÍBRIDO
 # ═══════════════════════════════════════════════════════════════════════════════
+
+# Pesos para la búsqueda híbrida (dense vs sparse)
+HYBRID_SEMANTIC_WEIGHT = 0.65
+HYBRID_LEXICAL_WEIGHT = 0.35
 
 # Máximo de candidatos a recuperar por fuente
 MAX_CANDIDATES_PER_SOURCE = 10

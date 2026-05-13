@@ -1,0 +1,472 @@
+{
+  "id": "https://openalex.org/A5086963403",
+  "orcid": "https://orcid.org/0000-0001-5041-6467",
+  "display_name": "Alejandro Germán Frank",
+  "raw_author_names": [
+    "A. G. Frank",
+    "A.G. Frank",
+    "ALEJANDRO GERMÁN FRANK",
+    "Alejando Germán Frank",
+    "Alejandro  G. Frank",
+    "Alejandro Frank",
+    "Alejandro G. Frank",
+    "Alejandro German Frank",
+    "Alejandro Germán Frank",
+    "Alejandro Gérman Frank",
+    "Frank, A. G.,",
+    "Frank, A.G.",
+    "Frank, Alejandro",
+    "Frank, Alejandro G.",
+    "Frank, Alejandro Germán",
+    "G. Frank, Alejandro",
+    "Germán Frank, Alejandro"
+  ],
+  "full_name": "ALEJANDRO GERMÁN FRANK",
+  "relevance_score": 13107.568,
+  "works_count": 156,
+  "cited_by_count": 11600,
+  "summary_stats": {
+    "2yr_mean_citedness": 12.352941176470589,
+    "h_index": 45,
+    "i10_index": 67
+  },
+  "ids": {
+    "openalex": "https://openalex.org/A5086963403",
+    "orcid": "https://orcid.org/0000-0001-5041-6467"
+  },
+  "affiliations": [
+    {
+      "institution": {
+        "id": "https://openalex.org/I126460647",
+        "ror": "https://ror.org/05hpfkn88",
+        "display_name": "Universidade Federal do Rio Grande",
+        "country_code": "BR",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I126460647"
+        ]
+      },
+      "years": [
+        2022,
+        2014,
+        2012
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I130442723",
+        "ror": "https://ror.org/041yk2d64",
+        "display_name": "Universidade Federal do Rio Grande do Sul",
+        "country_code": "BR",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I130442723"
+        ]
+      },
+      "years": [
+        2025,
+        2024,
+        2023,
+        2022,
+        2021,
+        2020,
+        2019,
+        2018,
+        2017,
+        2016,
+        2015,
+        2014,
+        2013,
+        2012,
+        2011
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210115756",
+        "ror": "https://ror.org/01z6y6z64",
+        "display_name": "657 Oslo",
+        "country_code": "NO",
+        "type": "other",
+        "lineage": [
+          "https://openalex.org/I4210115756"
+        ]
+      },
+      "years": [
+        2025
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I94328231",
+        "ror": "https://ror.org/02sghbs34",
+        "display_name": "University of Rio Grande and Rio Grande Community College",
+        "country_code": "US",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I94328231"
+        ]
+      },
+      "years": [
+        2022,
+        2019,
+        2012
+      ]
+    }
+  ],
+  "last_known_institutions": [
+    {
+      "id": "https://openalex.org/I130442723",
+      "ror": "https://ror.org/041yk2d64",
+      "display_name": "Universidade Federal do Rio Grande do Sul",
+      "country_code": "BR",
+      "type": "education",
+      "lineage": [
+        "https://openalex.org/I130442723"
+      ]
+    },
+    {
+      "id": "https://openalex.org/I4210115756",
+      "ror": "https://ror.org/01z6y6z64",
+      "display_name": "657 Oslo",
+      "country_code": "NO",
+      "type": "other",
+      "lineage": [
+        "https://openalex.org/I4210115756"
+      ]
+    }
+  ],
+  "topics": [
+    {
+      "id": "https://openalex.org/T10763",
+      "display_name": "Digital Transformation in Industry",
+      "count": 43,
+      "subfield": {
+        "id": "https://openalex.org/subfields/2209",
+        "display_name": "Industrial and Manufacturing Engineering"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/22",
+        "display_name": "Engineering"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/3",
+        "display_name": "Physical Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T10164",
+      "display_name": "Quality and Supply Management",
+      "count": 35,
+      "subfield": {
+        "id": "https://openalex.org/subfields/1404",
+        "display_name": "Management Information Systems"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/14",
+        "display_name": "Business, Management and Accounting"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/2",
+        "display_name": "Social Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T11114",
+      "display_name": "Service and Product Innovation",
+      "count": 29,
+      "subfield": {
+        "id": "https://openalex.org/subfields/1406",
+        "display_name": "Marketing"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/14",
+        "display_name": "Business, Management and Accounting"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/2",
+        "display_name": "Social Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T10003",
+      "display_name": "Innovation and Knowledge Management",
+      "count": 28,
+      "subfield": {
+        "id": "https://openalex.org/subfields/1408",
+        "display_name": "Strategy and Management"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/14",
+        "display_name": "Business, Management and Accounting"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/2",
+        "display_name": "Social Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T11530",
+      "display_name": "Business and Management Studies",
+      "count": 21,
+      "subfield": {
+        "id": "https://openalex.org/subfields/1802",
+        "display_name": "Information Systems and Management"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/18",
+        "display_name": "Decision Sciences"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/2",
+        "display_name": "Social Sciences"
+      }
+    }
+  ],
+  "topic_share": [
+    {
+      "id": "https://openalex.org/T11114",
+      "display_name": "Service and Product Innovation",
+      "value": 0.0004014,
+      "subfield": {
+        "id": "https://openalex.org/subfields/1406",
+        "display_name": "Marketing"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/14",
+        "display_name": "Business, Management and Accounting"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/2",
+        "display_name": "Social Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T10763",
+      "display_name": "Digital Transformation in Industry",
+      "value": 0.0003382,
+      "subfield": {
+        "id": "https://openalex.org/subfields/2209",
+        "display_name": "Industrial and Manufacturing Engineering"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/22",
+        "display_name": "Engineering"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/3",
+        "display_name": "Physical Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T13676",
+      "display_name": "Educational and Technological Research",
+      "value": 0.0002653,
+      "subfield": {
+        "id": "https://openalex.org/subfields/1710",
+        "display_name": "Information Systems"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/17",
+        "display_name": "Computer Science"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/3",
+        "display_name": "Physical Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T10164",
+      "display_name": "Quality and Supply Management",
+      "value": 0.0001541,
+      "subfield": {
+        "id": "https://openalex.org/subfields/1404",
+        "display_name": "Management Information Systems"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/14",
+        "display_name": "Business, Management and Accounting"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/2",
+        "display_name": "Social Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T13696",
+      "display_name": "Technology's Impact on Media",
+      "value": 0.0001443,
+      "subfield": {
+        "id": "https://openalex.org/subfields/1802",
+        "display_name": "Information Systems and Management"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/18",
+        "display_name": "Decision Sciences"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/2",
+        "display_name": "Social Sciences"
+      }
+    }
+  ],
+  "x_concepts": [
+    {
+      "id": "144133560",
+      "wikidata": "https://www.wikidata.org/wiki/Q4830453",
+      "display_name": "Business",
+      "score": 0.815686821937561
+    },
+    {
+      "id": "56739046",
+      "wikidata": "https://www.wikidata.org/wiki/Q192060",
+      "display_name": "Knowledge management",
+      "score": 0.7158117294311523
+    },
+    {
+      "id": "41008148",
+      "wikidata": "https://www.wikidata.org/wiki/Q21198",
+      "display_name": "Computer science",
+      "score": 0.6202952861785889
+    },
+    {
+      "id": "195094911",
+      "wikidata": "https://www.wikidata.org/wiki/Q14167904",
+      "display_name": "Process management",
+      "score": 0.6122301816940308
+    },
+    {
+      "id": "162853370",
+      "wikidata": "https://www.wikidata.org/wiki/Q39809",
+      "display_name": "Marketing",
+      "score": 0.558892011642456
+    }
+  ],
+  "counts_by_year": [
+    {
+      "year": 2002,
+      "works_count": 2,
+      "oa_works_count": 0,
+      "cited_by_count": 0
+    },
+    {
+      "year": 2009,
+      "works_count": 1,
+      "oa_works_count": 1,
+      "cited_by_count": 0
+    },
+    {
+      "year": 2011,
+      "works_count": 5,
+      "oa_works_count": 4,
+      "cited_by_count": 6
+    },
+    {
+      "year": 2012,
+      "works_count": 10,
+      "oa_works_count": 5,
+      "cited_by_count": 89
+    },
+    {
+      "year": 2013,
+      "works_count": 11,
+      "oa_works_count": 9,
+      "cited_by_count": 50
+    },
+    {
+      "year": 2014,
+      "works_count": 9,
+      "oa_works_count": 4,
+      "cited_by_count": 314
+    },
+    {
+      "year": 2015,
+      "works_count": 7,
+      "oa_works_count": 5,
+      "cited_by_count": 392
+    },
+    {
+      "year": 2016,
+      "works_count": 7,
+      "oa_works_count": 4,
+      "cited_by_count": 230
+    },
+    {
+      "year": 2017,
+      "works_count": 13,
+      "oa_works_count": 6,
+      "cited_by_count": 489
+    },
+    {
+      "year": 2018,
+      "works_count": 14,
+      "oa_works_count": 6,
+      "cited_by_count": 2628
+    },
+    {
+      "year": 2019,
+      "works_count": 13,
+      "oa_works_count": 7,
+      "cited_by_count": 3886
+    },
+    {
+      "year": 2020,
+      "works_count": 9,
+      "oa_works_count": 4,
+      "cited_by_count": 1038
+    },
+    {
+      "year": 2021,
+      "works_count": 16,
+      "oa_works_count": 7,
+      "cited_by_count": 1065
+    },
+    {
+      "year": 2022,
+      "works_count": 12,
+      "oa_works_count": 3,
+      "cited_by_count": 981
+    },
+    {
+      "year": 2023,
+      "works_count": 10,
+      "oa_works_count": 4,
+      "cited_by_count": 222
+    },
+    {
+      "year": 2024,
+      "works_count": 10,
+      "oa_works_count": 4,
+      "cited_by_count": 171
+    },
+    {
+      "year": 2025,
+      "works_count": 7,
+      "oa_works_count": 3,
+      "cited_by_count": 39
+    }
+  ],
+  "display_name_alternatives": [
+    "A. G. Frank",
+    "A.G. Frank",
+    "ALEJANDRO GERMÁN FRANK",
+    "Alejando Germán Frank",
+    "Alejandro  G. Frank",
+    "Alejandro Frank",
+    "Alejandro G. Frank",
+    "Alejandro German Frank",
+    "Alejandro Germán Frank",
+    "Alejandro Gérman Frank",
+    "Frank, A. G.,",
+    "Frank, A.G.",
+    "Frank, Alejandro",
+    "Frank, Alejandro G.",
+    "Frank, Alejandro Germán",
+    "G. Frank, Alejandro",
+    "Germán Frank, Alejandro"
+  ],
+  "block_key": "a frank",
+  "works_api_url": "https://api.openalex.org/works?filter=author.id:A5086963403",
+  "updated_date": "2026-05-12T12:20:58",
+  "created_date": "2016-06-24T00:00:00"
+}

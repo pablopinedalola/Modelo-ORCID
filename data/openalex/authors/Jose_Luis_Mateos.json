@@ -1,0 +1,1382 @@
+{
+  "id": "https://openalex.org/A5079988139",
+  "orcid": "https://orcid.org/0000-0002-7544-826X",
+  "display_name": "José Luís Ayuso‐Mateos",
+  "raw_author_names": [
+    "Ayuso-Mateos, J. L.",
+    "Ayuso-Mateos, Jose Luis",
+    "J AYUSOMATEOS",
+    "J Ayuso-Mateos",
+    "J L Ayuso-Mateos",
+    "J. Ayuso-Mateos",
+    "J. L. AYUSO-MATEOS",
+    "J. L. Ayuso-Mateos",
+    "J. L. Ayuso‐Mateos",
+    "J.-L. Ayuso-Mateos",
+    "J.L Ayuso-Mateos",
+    "J.L. Ayuso-Mateos",
+    "J.L. AyusoMateos",
+    "J.L. Ayuso‐Mateos",
+    "JL Ayuso-Mateos",
+    "JL Ayuso‐Mateos",
+    "JOSE' L. AYUSO‐MATEOS",
+    "Jl Ayuso-Mateos",
+    "Jose  Luis Ayuso-Mateos",
+    "Jose Ayuso-Mateos",
+    "Jose L Ayuso Mateos",
+    "Jose L Ayuso-Mateos",
+    "Jose L. Ayuso Mateos",
+    "Jose L. Ayuso-Mateos",
+    "Jose L. Ayuso‐Mateos",
+    "Jose Luis Ayuso Mateos",
+    "Jose Luis Ayuso-Mateos",
+    "Jose Luis Ayuso‐Mateos",
+    "Jose-Luis Ayuso-Mateos",
+    "Josè Luis Ayuso‐Mateos",
+    "José Ayuso-Mateos",
+    "José L Ayuso-Mateos",
+    "José L Ayuso‐Mateos",
+    "José L. Ayuso-Mateos",
+    "José L. Ayuso‐Mateos",
+    "José L. Mateos",
+    "José Luis Ayuso Mateos",
+    "José Luis Ayuso-Mateos",
+    "José Luis Ayuso-Mateos PhD MD",
+    "José Luis Ayuso‐Mateos",
+    "José Luis Mateos",
+    "José Luís Ayuso-Mateos",
+    "José Luís Ayuso‐Mateos",
+    "José-Luis Ayuso-Mateos",
+    "Josó L. Ayuso-Mateos"
+  ],
+  "full_name": "José Luís Ayuso‐Mateos",
+  "relevance_score": 32340.201,
+  "works_count": 520,
+  "cited_by_count": 43084,
+  "summary_stats": {
+    "2yr_mean_citedness": 189.79310344827587,
+    "h_index": 86,
+    "i10_index": 284
+  },
+  "ids": {
+    "openalex": "https://openalex.org/A5079988139",
+    "orcid": "https://orcid.org/0000-0002-7544-826X"
+  },
+  "affiliations": [
+    {
+      "institution": {
+        "id": "https://openalex.org/I103320735",
+        "ror": "https://ror.org/03h7r5v07",
+        "display_name": "Università Cattolica del Sacro Cuore",
+        "country_code": "IT",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I103320735"
+        ]
+      },
+      "years": [
+        2011
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I118091203",
+        "ror": "https://ror.org/00tvate34",
+        "display_name": "Universidad San Pablo CEU",
+        "country_code": "ES",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I118091203",
+          "https://openalex.org/I2801318690"
+        ]
+      },
+      "years": [
+        2000
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I121748325",
+        "ror": "https://ror.org/02p0gd045",
+        "display_name": "Universidad Complutense de Madrid",
+        "country_code": "ES",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I121748325"
+        ]
+      },
+      "years": [
+        2024,
+        2023,
+        2011
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I13134134",
+        "ror": "https://ror.org/046ffzj20",
+        "display_name": "Universidad de Cantabria",
+        "country_code": "ES",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I13134134"
+        ]
+      },
+      "years": [
+        2001,
+        2000,
+        1999,
+        1998,
+        1997,
+        1996
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I1320481043",
+        "ror": "https://ror.org/019w4f821",
+        "display_name": "European Union",
+        "country_code": "BE",
+        "type": "government",
+        "lineage": [
+          "https://openalex.org/I1320481043"
+        ]
+      },
+      "years": [
+        2011
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I1342911587",
+        "ror": "https://ror.org/006c77m33",
+        "display_name": "Oracle (United States)",
+        "country_code": "US",
+        "type": "company",
+        "lineage": [
+          "https://openalex.org/I1342911587"
+        ]
+      },
+      "years": [
+        2004
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I161941770",
+        "ror": "https://ror.org/00kgrkn83",
+        "display_name": "University of Lucerne",
+        "country_code": "CH",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I161941770"
+        ]
+      },
+      "years": [
+        2011
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I169381384",
+        "ror": "https://ror.org/012p63287",
+        "display_name": "University of Groningen",
+        "country_code": "NL",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I169381384"
+        ]
+      },
+      "years": [
+        2021
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I184942183",
+        "ror": "https://ror.org/01xtthb56",
+        "display_name": "University of Oslo",
+        "country_code": "NO",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I184942183"
+        ]
+      },
+      "years": [
+        2003
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I193662353",
+        "ror": "https://ror.org/04pp8hn57",
+        "display_name": "Utrecht University",
+        "country_code": "NL",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I193662353"
+        ]
+      },
+      "years": [
+        2023
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I201448701",
+        "ror": "https://ror.org/00cvxb145",
+        "display_name": "University of Washington",
+        "country_code": "US",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I201448701"
+        ]
+      },
+      "years": [
+        2024,
+        2022
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I2801357902",
+        "ror": "https://ror.org/00ca2c886",
+        "display_name": "Instituto de Salud Carlos III",
+        "country_code": "ES",
+        "type": "funder",
+        "lineage": [
+          "https://openalex.org/I2801357902",
+          "https://openalex.org/I4387152914"
+        ]
+      },
+      "years": [
+        2025,
+        2024,
+        2023,
+        2022,
+        2021,
+        2020,
+        2019,
+        2018,
+        2017,
+        2016,
+        2015,
+        2014,
+        2013,
+        2012,
+        2011,
+        2010,
+        2009,
+        2008
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I2960094004",
+        "ror": "https://ror.org/0111es613",
+        "display_name": "Hospital General Universitario Gregorio Marañón",
+        "country_code": "ES",
+        "type": "healthcare",
+        "lineage": [
+          "https://openalex.org/I2960094004",
+          "https://openalex.org/I4210139293"
+        ]
+      },
+      "years": [
+        2015
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I2961216182",
+        "ror": "https://ror.org/04d0ybj29",
+        "display_name": "Hospital Clínico San Carlos",
+        "country_code": "ES",
+        "type": "healthcare",
+        "lineage": [
+          "https://openalex.org/I2961216182",
+          "https://openalex.org/I4210139293"
+        ]
+      },
+      "years": [
+        1994
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I3018483916",
+        "ror": "https://ror.org/0575yy874",
+        "display_name": "University Medical Center Utrecht",
+        "country_code": "NL",
+        "type": "healthcare",
+        "lineage": [
+          "https://openalex.org/I3018483916"
+        ]
+      },
+      "years": [
+        2023
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I3143470655",
+        "ror": "https://ror.org/02684h094",
+        "display_name": "Institute for Health Metrics and Evaluation",
+        "country_code": "US",
+        "type": "facility",
+        "lineage": [
+          "https://openalex.org/I3143470655"
+        ]
+      },
+      "years": [
+        2024,
+        2022
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210088538",
+        "ror": "https://ror.org/003xj6z62",
+        "display_name": "Escuela Nacional de Sanidad",
+        "country_code": "ES",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I2801357902",
+          "https://openalex.org/I4210088538",
+          "https://openalex.org/I4387152914"
+        ]
+      },
+      "years": [
+        2014
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210090703",
+        "ror": "https://ror.org/009byq155",
+        "display_name": "Centro de Investigación Biomédica en Red de Salud Mental",
+        "country_code": "ES",
+        "type": "facility",
+        "lineage": [
+          "https://openalex.org/I2801357902",
+          "https://openalex.org/I4210090703",
+          "https://openalex.org/I4387152914"
+        ]
+      },
+      "years": [
+        2025,
+        2024,
+        2023,
+        2022,
+        2021,
+        2020,
+        2019,
+        2018,
+        2017,
+        2016,
+        2015,
+        2014,
+        2013,
+        2012,
+        2011,
+        2010,
+        2009,
+        2008
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210097295",
+        "ror": "https://ror.org/00svqj211",
+        "display_name": "Vital Research",
+        "country_code": "US",
+        "type": "facility",
+        "lineage": [
+          "https://openalex.org/I4210097295"
+        ]
+      },
+      "years": [
+        2021
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210099858",
+        "ror": "https://ror.org/01w4yqf75",
+        "display_name": "Marqués de Valdecilla University Hospital",
+        "country_code": "ES",
+        "type": "healthcare",
+        "lineage": [
+          "https://openalex.org/I4210099858"
+        ]
+      },
+      "years": [
+        2003,
+        2001,
+        2000,
+        1998,
+        1997
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210103237",
+        "ror": "https://ror.org/019ytz097",
+        "display_name": "Centro Nacional de Microbiologia",
+        "country_code": "ES",
+        "type": "facility",
+        "lineage": [
+          "https://openalex.org/I2801357902",
+          "https://openalex.org/I4210103237",
+          "https://openalex.org/I4387152914"
+        ]
+      },
+      "years": [
+        2023
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210105637",
+        "ror": "https://ror.org/01e57nb43",
+        "display_name": "Hospital Universitario Puerta de Hierro Majadahonda",
+        "country_code": "ES",
+        "type": "healthcare",
+        "lineage": [
+          "https://openalex.org/I4210105637",
+          "https://openalex.org/I4210139293"
+        ]
+      },
+      "years": [
+        2008
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210105654",
+        "ror": "https://ror.org/01f80g185",
+        "display_name": "World Health Organization",
+        "country_code": "CH",
+        "type": "funder",
+        "lineage": [
+          "https://openalex.org/I4210105654"
+        ]
+      },
+      "years": [
+        2003
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210111366",
+        "ror": "https://ror.org/01ygm5w19",
+        "display_name": "Centre for Biomedical Network Research on Rare Diseases",
+        "country_code": "ES",
+        "type": "facility",
+        "lineage": [
+          "https://openalex.org/I4210111366"
+        ]
+      },
+      "years": [
+        2022
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210111868",
+        "ror": "https://ror.org/01awgk221",
+        "display_name": "Zurich University of Teacher Education",
+        "country_code": "CH",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I4210111868"
+        ]
+      },
+      "years": [
+        2011
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210114530",
+        "ror": "https://ror.org/01r13mt55",
+        "display_name": "Hospital Universitario Miguel Servet",
+        "country_code": "ES",
+        "type": "healthcare",
+        "lineage": [
+          "https://openalex.org/I4210114530"
+        ]
+      },
+      "years": [
+        2008
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210115082",
+        "ror": "https://ror.org/02g87qh62",
+        "display_name": "Centro de Investigación Biomédica en Red",
+        "country_code": "ES",
+        "type": "facility",
+        "lineage": [
+          "https://openalex.org/I2801357902",
+          "https://openalex.org/I4210115082",
+          "https://openalex.org/I4387152914"
+        ]
+      },
+      "years": [
+        2021,
+        2018,
+        2017,
+        2016,
+        2015,
+        2014
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210119633",
+        "ror": "https://ror.org/02hrw4545",
+        "display_name": "Fundación Para la Gestión de la Investigación Biomédica de Cádiz",
+        "country_code": "ES",
+        "type": "nonprofit",
+        "lineage": [
+          "https://openalex.org/I4210119633"
+        ]
+      },
+      "years": [
+        2022
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210120124",
+        "ror": "https://ror.org/02tjbfx21",
+        "display_name": "Kasturba Hospital",
+        "country_code": "IN",
+        "type": "healthcare",
+        "lineage": [
+          "https://openalex.org/I4210120124"
+        ]
+      },
+      "years": [
+        2018
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210122962",
+        "ror": "https://ror.org/023cbtv31",
+        "display_name": "Madrid Health Service",
+        "country_code": "ES",
+        "type": "healthcare",
+        "lineage": [
+          "https://openalex.org/I4210122962",
+          "https://openalex.org/I4210139293"
+        ]
+      },
+      "years": [
+        2009
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210128228",
+        "ror": "https://ror.org/033911096",
+        "display_name": "Eli Lilly (Spain)",
+        "country_code": "ES",
+        "type": "company",
+        "lineage": [
+          "https://openalex.org/I168537998",
+          "https://openalex.org/I4210128228"
+        ]
+      },
+      "years": [
+        2008
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210128981",
+        "ror": "https://ror.org/02f3ts956",
+        "display_name": "Parc Sanitari Sant Joan de Déu",
+        "country_code": "ES",
+        "type": "healthcare",
+        "lineage": [
+          "https://openalex.org/I4210128981"
+        ]
+      },
+      "years": [
+        2021
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210130498",
+        "ror": "https://ror.org/03cg5md32",
+        "display_name": "Hospital Universitario de La Princesa",
+        "country_code": "ES",
+        "type": "healthcare",
+        "lineage": [
+          "https://openalex.org/I4210130498",
+          "https://openalex.org/I4210139293"
+        ]
+      },
+      "years": [
+        2025,
+        2024,
+        2023,
+        2022,
+        2021,
+        2020,
+        2019,
+        2018,
+        2017,
+        2016,
+        2015,
+        2014,
+        2013,
+        2012,
+        2011,
+        2010,
+        2009,
+        2008,
+        2007,
+        2006,
+        2005,
+        2004
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210130783",
+        "ror": "https://ror.org/03vfdas15",
+        "display_name": "Maine Library Association",
+        "country_code": "US",
+        "type": "archive",
+        "lineage": [
+          "https://openalex.org/I4210130783"
+        ]
+      },
+      "years": [
+        2011
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210136512",
+        "ror": "https://ror.org/03njn4610",
+        "display_name": "Instituto de Investigación Sanitaria Aragón",
+        "country_code": "ES",
+        "type": "other",
+        "lineage": [
+          "https://openalex.org/I4210136512"
+        ]
+      },
+      "years": [
+        2021
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210139202",
+        "ror": "https://ror.org/042m3ve83",
+        "display_name": "GGZ inGeest",
+        "country_code": "NL",
+        "type": "funder",
+        "lineage": [
+          "https://openalex.org/I4210139202"
+        ]
+      },
+      "years": [
+        2021
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210142598",
+        "ror": "https://ror.org/04ex4j806",
+        "display_name": "Civil Service",
+        "country_code": "GB",
+        "type": "government",
+        "lineage": [
+          "https://openalex.org/I2802373619",
+          "https://openalex.org/I4210142598"
+        ]
+      },
+      "years": [
+        2006
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210148332",
+        "ror": "https://ror.org/03hjgt059",
+        "display_name": "Barcelona Institute for Global Health",
+        "country_code": "ES",
+        "type": "healthcare",
+        "lineage": [
+          "https://openalex.org/I4210148332",
+          "https://openalex.org/I4387153040"
+        ]
+      },
+      "years": [
+        2022
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210148771",
+        "ror": "https://ror.org/05n7xcf53",
+        "display_name": "Instituto de Investigación Sanitaria de Santiago",
+        "country_code": "ES",
+        "type": "facility",
+        "lineage": [
+          "https://openalex.org/I4210148771"
+        ]
+      },
+      "years": [
+        2025
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210155534",
+        "ror": "https://ror.org/04jk2jb97",
+        "display_name": "Swiss Paraplegic Research",
+        "country_code": "CH",
+        "type": "facility",
+        "lineage": [
+          "https://openalex.org/I4210155534"
+        ]
+      },
+      "years": [
+        2011
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210155931",
+        "ror": "https://ror.org/04tqrbk66",
+        "display_name": "Hospital Universitario de Móstoles",
+        "country_code": "ES",
+        "type": "healthcare",
+        "lineage": [
+          "https://openalex.org/I4210139293",
+          "https://openalex.org/I4210155931"
+        ]
+      },
+      "years": [
+        2008
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210158561",
+        "ror": "https://ror.org/04hya7017",
+        "display_name": "Centro de Investigación Biomédica en Red de Cáncer",
+        "country_code": "ES",
+        "type": "facility",
+        "lineage": [
+          "https://openalex.org/I4210158561"
+        ]
+      },
+      "years": [
+        2017
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210161556",
+        "ror": "https://ror.org/0583r7t67",
+        "display_name": "Public Risk Management Association",
+        "country_code": "US",
+        "type": "other",
+        "lineage": [
+          "https://openalex.org/I4210161556"
+        ]
+      },
+      "years": [
+        2008
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210163440",
+        "ror": "https://ror.org/05e56c835",
+        "display_name": "Medical Research Network",
+        "country_code": "US",
+        "type": "facility",
+        "lineage": [
+          "https://openalex.org/I4210163440"
+        ]
+      },
+      "years": [
+        2020,
+        2013
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210166842",
+        "ror": "https://ror.org/02pw9b361",
+        "display_name": "Francisco Muñoz Irles (Spain)",
+        "country_code": "ES",
+        "type": "company",
+        "lineage": [
+          "https://openalex.org/I4210166842"
+        ]
+      },
+      "years": [
+        2018
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I63634437",
+        "ror": "https://ror.org/01cby8j38",
+        "display_name": "Universidad Autónoma de Madrid",
+        "country_code": "ES",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I63634437"
+        ]
+      },
+      "years": [
+        2026,
+        2025,
+        2024,
+        2023,
+        2022,
+        2021,
+        2020,
+        2019,
+        2018,
+        2017,
+        2016,
+        2015,
+        2014,
+        2013,
+        2012,
+        2011,
+        2010,
+        2009,
+        2008,
+        2007,
+        2006,
+        2005,
+        2004,
+        2003
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I71999127",
+        "ror": "https://ror.org/021018s57",
+        "display_name": "Universitat de Barcelona",
+        "country_code": "ES",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I71999127"
+        ]
+      },
+      "years": [
+        2022,
+        2021
+      ]
+    }
+  ],
+  "last_known_institutions": [
+    {
+      "id": "https://openalex.org/I63634437",
+      "ror": "https://ror.org/01cby8j38",
+      "display_name": "Universidad Autónoma de Madrid",
+      "country_code": "ES",
+      "type": "education",
+      "lineage": [
+        "https://openalex.org/I63634437"
+      ]
+    }
+  ],
+  "topics": [
+    {
+      "id": "https://openalex.org/T10235",
+      "display_name": "Health disparities and outcomes",
+      "count": 109,
+      "subfield": {
+        "id": "https://openalex.org/subfields/3306",
+        "display_name": "Health"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/33",
+        "display_name": "Social Sciences"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/2",
+        "display_name": "Social Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T10272",
+      "display_name": "Mental Health Treatment and Access",
+      "count": 98,
+      "subfield": {
+        "id": "https://openalex.org/subfields/3207",
+        "display_name": "Social Psychology"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/32",
+        "display_name": "Psychology"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/2",
+        "display_name": "Social Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T10023",
+      "display_name": "Schizophrenia research and treatment",
+      "count": 81,
+      "subfield": {
+        "id": "https://openalex.org/subfields/2738",
+        "display_name": "Psychiatry and Mental health"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/27",
+        "display_name": "Medicine"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/4",
+        "display_name": "Health Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T10168",
+      "display_name": "COVID-19 and Mental Health",
+      "count": 54,
+      "subfield": {
+        "id": "https://openalex.org/subfields/3203",
+        "display_name": "Clinical Psychology"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/32",
+        "display_name": "Psychology"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/2",
+        "display_name": "Social Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T10854",
+      "display_name": "Bipolar Disorder and Treatment",
+      "count": 45,
+      "subfield": {
+        "id": "https://openalex.org/subfields/2738",
+        "display_name": "Psychiatry and Mental health"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/27",
+        "display_name": "Medicine"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/4",
+        "display_name": "Health Sciences"
+      }
+    }
+  ],
+  "topic_share": [
+    {
+      "id": "https://openalex.org/T10272",
+      "display_name": "Mental Health Treatment and Access",
+      "value": 0.000502,
+      "subfield": {
+        "id": "https://openalex.org/subfields/3207",
+        "display_name": "Social Psychology"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/32",
+        "display_name": "Psychology"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/2",
+        "display_name": "Social Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T10235",
+      "display_name": "Health disparities and outcomes",
+      "value": 0.0004709,
+      "subfield": {
+        "id": "https://openalex.org/subfields/3306",
+        "display_name": "Health"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/33",
+        "display_name": "Social Sciences"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/2",
+        "display_name": "Social Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T10854",
+      "display_name": "Bipolar Disorder and Treatment",
+      "value": 0.0003769,
+      "subfield": {
+        "id": "https://openalex.org/subfields/2738",
+        "display_name": "Psychiatry and Mental health"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/27",
+        "display_name": "Medicine"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/4",
+        "display_name": "Health Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T10023",
+      "display_name": "Schizophrenia research and treatment",
+      "value": 0.0003401,
+      "subfield": {
+        "id": "https://openalex.org/subfields/2738",
+        "display_name": "Psychiatry and Mental health"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/27",
+        "display_name": "Medicine"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/4",
+        "display_name": "Health Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T11071",
+      "display_name": "Treatment of Major Depression",
+      "value": 0.000335,
+      "subfield": {
+        "id": "https://openalex.org/subfields/2736",
+        "display_name": "Pharmacology"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/27",
+        "display_name": "Medicine"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/4",
+        "display_name": "Health Sciences"
+      }
+    }
+  ],
+  "x_concepts": [
+    {
+      "id": "71924100",
+      "wikidata": "https://www.wikidata.org/wiki/Q11190",
+      "display_name": "Medicine",
+      "score": 0.9700925350189209
+    },
+    {
+      "id": "15744967",
+      "wikidata": "https://www.wikidata.org/wiki/Q9418",
+      "display_name": "Psychology",
+      "score": 0.8099197149276733
+    },
+    {
+      "id": "118552586",
+      "wikidata": "https://www.wikidata.org/wiki/Q7867",
+      "display_name": "Psychiatry",
+      "score": 0.6841455101966858
+    },
+    {
+      "id": "70410870",
+      "wikidata": "https://www.wikidata.org/wiki/Q199906",
+      "display_name": "Clinical psychology",
+      "score": 0.6322779655456543
+    },
+    {
+      "id": "126322002",
+      "wikidata": "https://www.wikidata.org/wiki/Q11180",
+      "display_name": "Internal medicine",
+      "score": 0.6013418436050415
+    }
+  ],
+  "counts_by_year": [
+    {
+      "year": 1966,
+      "works_count": 1,
+      "oa_works_count": 0,
+      "cited_by_count": 0
+    },
+    {
+      "year": 1976,
+      "works_count": 1,
+      "oa_works_count": 0,
+      "cited_by_count": 0
+    },
+    {
+      "year": 1979,
+      "works_count": 1,
+      "oa_works_count": 0,
+      "cited_by_count": 0
+    },
+    {
+      "year": 1980,
+      "works_count": 1,
+      "oa_works_count": 0,
+      "cited_by_count": 0
+    },
+    {
+      "year": 1993,
+      "works_count": 1,
+      "oa_works_count": 0,
+      "cited_by_count": 0
+    },
+    {
+      "year": 1994,
+      "works_count": 2,
+      "oa_works_count": 0,
+      "cited_by_count": 21
+    },
+    {
+      "year": 1996,
+      "works_count": 3,
+      "oa_works_count": 0,
+      "cited_by_count": 7
+    },
+    {
+      "year": 1997,
+      "works_count": 3,
+      "oa_works_count": 0,
+      "cited_by_count": 37
+    },
+    {
+      "year": 1998,
+      "works_count": 1,
+      "oa_works_count": 1,
+      "cited_by_count": 1
+    },
+    {
+      "year": 1999,
+      "works_count": 10,
+      "oa_works_count": 1,
+      "cited_by_count": 235
+    },
+    {
+      "year": 2000,
+      "works_count": 10,
+      "oa_works_count": 3,
+      "cited_by_count": 690
+    },
+    {
+      "year": 2001,
+      "works_count": 1,
+      "oa_works_count": 0,
+      "cited_by_count": 563
+    },
+    {
+      "year": 2002,
+      "works_count": 1,
+      "oa_works_count": 0,
+      "cited_by_count": 8
+    },
+    {
+      "year": 2003,
+      "works_count": 4,
+      "oa_works_count": 1,
+      "cited_by_count": 446
+    },
+    {
+      "year": 2004,
+      "works_count": 9,
+      "oa_works_count": 3,
+      "cited_by_count": 2209
+    },
+    {
+      "year": 2005,
+      "works_count": 4,
+      "oa_works_count": 1,
+      "cited_by_count": 129
+    },
+    {
+      "year": 2006,
+      "works_count": 16,
+      "oa_works_count": 4,
+      "cited_by_count": 1264
+    },
+    {
+      "year": 2007,
+      "works_count": 7,
+      "oa_works_count": 2,
+      "cited_by_count": 1543
+    },
+    {
+      "year": 2008,
+      "works_count": 12,
+      "oa_works_count": 6,
+      "cited_by_count": 648
+    },
+    {
+      "year": 2009,
+      "works_count": 16,
+      "oa_works_count": 4,
+      "cited_by_count": 861
+    },
+    {
+      "year": 2010,
+      "works_count": 15,
+      "oa_works_count": 4,
+      "cited_by_count": 1594
+    },
+    {
+      "year": 2011,
+      "works_count": 19,
+      "oa_works_count": 7,
+      "cited_by_count": 1081
+    },
+    {
+      "year": 2012,
+      "works_count": 15,
+      "oa_works_count": 5,
+      "cited_by_count": 858
+    },
+    {
+      "year": 2013,
+      "works_count": 15,
+      "oa_works_count": 8,
+      "cited_by_count": 1312
+    },
+    {
+      "year": 2014,
+      "works_count": 24,
+      "oa_works_count": 15,
+      "cited_by_count": 1205
+    },
+    {
+      "year": 2015,
+      "works_count": 24,
+      "oa_works_count": 17,
+      "cited_by_count": 2323
+    },
+    {
+      "year": 2016,
+      "works_count": 20,
+      "oa_works_count": 14,
+      "cited_by_count": 1675
+    },
+    {
+      "year": 2017,
+      "works_count": 18,
+      "oa_works_count": 14,
+      "cited_by_count": 1202
+    },
+    {
+      "year": 2018,
+      "works_count": 31,
+      "oa_works_count": 20,
+      "cited_by_count": 1801
+    },
+    {
+      "year": 2019,
+      "works_count": 34,
+      "oa_works_count": 21,
+      "cited_by_count": 2019
+    },
+    {
+      "year": 2020,
+      "works_count": 30,
+      "oa_works_count": 18,
+      "cited_by_count": 666
+    },
+    {
+      "year": 2021,
+      "works_count": 47,
+      "oa_works_count": 32,
+      "cited_by_count": 682
+    },
+    {
+      "year": 2022,
+      "works_count": 37,
+      "oa_works_count": 32,
+      "cited_by_count": 6556
+    },
+    {
+      "year": 2023,
+      "works_count": 29,
+      "oa_works_count": 24,
+      "cited_by_count": 440
+    },
+    {
+      "year": 2024,
+      "works_count": 35,
+      "oa_works_count": 27,
+      "cited_by_count": 10977
+    },
+    {
+      "year": 2025,
+      "works_count": 20,
+      "oa_works_count": 16,
+      "cited_by_count": 31
+    },
+    {
+      "year": 2026,
+      "works_count": 3,
+      "oa_works_count": 3,
+      "cited_by_count": 0
+    }
+  ],
+  "display_name_alternatives": [
+    "Ayuso-Mateos, J. L.",
+    "Ayuso-Mateos, Jose Luis",
+    "J AYUSOMATEOS",
+    "J Ayuso-Mateos",
+    "J L Ayuso-Mateos",
+    "J. Ayuso-Mateos",
+    "J. L. AYUSO-MATEOS",
+    "J. L. Ayuso-Mateos",
+    "J. L. Ayuso‐Mateos",
+    "J.-L. Ayuso-Mateos",
+    "J.L Ayuso-Mateos",
+    "J.L. Ayuso-Mateos",
+    "J.L. AyusoMateos",
+    "J.L. Ayuso‐Mateos",
+    "JL Ayuso-Mateos",
+    "JL Ayuso‐Mateos",
+    "JOSE' L. AYUSO‐MATEOS",
+    "Jl Ayuso-Mateos",
+    "Jose  Luis Ayuso-Mateos",
+    "Jose Ayuso-Mateos",
+    "Jose L Ayuso Mateos",
+    "Jose L Ayuso-Mateos",
+    "Jose L. Ayuso Mateos",
+    "Jose L. Ayuso-Mateos",
+    "Jose L. Ayuso‐Mateos",
+    "Jose Luis Ayuso Mateos",
+    "Jose Luis Ayuso-Mateos",
+    "Jose Luis Ayuso‐Mateos",
+    "Jose-Luis Ayuso-Mateos",
+    "Josè Luis Ayuso‐Mateos",
+    "José Ayuso-Mateos",
+    "José L Ayuso-Mateos",
+    "José L Ayuso‐Mateos",
+    "José L. Ayuso-Mateos",
+    "José L. Ayuso‐Mateos",
+    "José L. Mateos",
+    "José Luis Ayuso Mateos",
+    "José Luis Ayuso-Mateos",
+    "José Luis Ayuso-Mateos PhD MD",
+    "José Luis Ayuso‐Mateos",
+    "José Luis Mateos",
+    "José Luís Ayuso-Mateos",
+    "José Luís Ayuso‐Mateos",
+    "José-Luis Ayuso-Mateos",
+    "Josó L. Ayuso-Mateos"
+  ],
+  "block_key": "j ayuso-mateos",
+  "works_api_url": "https://api.openalex.org/works?filter=author.id:A5079988139",
+  "updated_date": "2026-05-12T12:20:58",
+  "created_date": "2016-06-24T00:00:00"
+}

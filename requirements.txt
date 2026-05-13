@@ -29,3 +29,4 @@ python-multipart            # Uploads en FastAPI
 
 # --- Testing ---
 pytest>=8.0
+rank-bm25==0.2.2

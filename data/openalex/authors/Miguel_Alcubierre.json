@@ -1,0 +1,591 @@
+{
+  "id": "https://openalex.org/A5043129140",
+  "orcid": "https://orcid.org/0000-0003-3367-9868",
+  "display_name": "Miguel Alcubierre",
+  "raw_author_names": [
+    "Alcubierre, M.",
+    "Alcubierre, Miguel",
+    "M Alcubierre",
+    "M. Alcubierre",
+    "MIGUEL ALCUBIERRE",
+    "Miguel Alcubierre"
+  ],
+  "full_name": "Alcubierre, Miguel",
+  "relevance_score": 13440.217,
+  "works_count": 129,
+  "cited_by_count": 5057,
+  "summary_stats": {
+    "2yr_mean_citedness": 0.8947368421052632,
+    "h_index": 30,
+    "i10_index": 42
+  },
+  "ids": {
+    "openalex": "https://openalex.org/A5043129140",
+    "orcid": "https://orcid.org/0000-0003-3367-9868"
+  },
+  "affiliations": [
+    {
+      "institution": {
+        "id": "https://openalex.org/I149899117",
+        "ror": "https://ror.org/01hhn8329",
+        "display_name": "Max Planck Society",
+        "country_code": "DE",
+        "type": "funder",
+        "lineage": [
+          "https://openalex.org/I149899117"
+        ]
+      },
+      "years": [
+        2003,
+        2001,
+        1999,
+        1998
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I167724894",
+        "ror": "https://ror.org/04q0r6m34",
+        "display_name": "Universidad Autónoma de la Ciudad de México",
+        "country_code": "MX",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I167724894"
+        ]
+      },
+      "years": [
+        2025
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I2800593090",
+        "ror": "https://ror.org/03fdma228",
+        "display_name": "Fundación para las Relaciones Internacionales y el Diálogo Exterior",
+        "country_code": "ES",
+        "type": "nonprofit",
+        "lineage": [
+          "https://openalex.org/I2800593090"
+        ]
+      },
+      "years": [
+        2025
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210127646",
+        "ror": "https://ror.org/03sry2h30",
+        "display_name": "Max Planck Institute for Gravitational Physics",
+        "country_code": "DE",
+        "type": "facility",
+        "lineage": [
+          "https://openalex.org/I149899117",
+          "https://openalex.org/I4210127646"
+        ]
+      },
+      "years": [
+        2003,
+        2002,
+        2001,
+        2000,
+        1999,
+        1998
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210146865",
+        "ror": "https://ror.org/05eb21k90",
+        "display_name": "Clinical Research Consortium",
+        "country_code": "US",
+        "type": "other",
+        "lineage": [
+          "https://openalex.org/I4210146865"
+        ]
+      },
+      "years": [
+        2017
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I8961855",
+        "ror": "https://ror.org/01tmp8f25",
+        "display_name": "Universidad Nacional Autónoma de México",
+        "country_code": "MX",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I8961855"
+        ]
+      },
+      "years": [
+        2026,
+        2025,
+        2024,
+        2023,
+        2022,
+        2021,
+        2020,
+        2019,
+        2018,
+        2017,
+        2015,
+        2014,
+        2013,
+        2012,
+        2011,
+        2010,
+        2009,
+        2008,
+        2007,
+        2005,
+        2004,
+        2003,
+        2002
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I97429440",
+        "ror": "https://ror.org/01se4f844",
+        "display_name": "University of Wales",
+        "country_code": "GB",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I97429440"
+        ]
+      },
+      "years": [
+        2000,
+        1997,
+        1994,
+        1992
+      ]
+    }
+  ],
+  "last_known_institutions": [
+    {
+      "id": "https://openalex.org/I8961855",
+      "ror": "https://ror.org/01tmp8f25",
+      "display_name": "Universidad Nacional Autónoma de México",
+      "country_code": "MX",
+      "type": "education",
+      "lineage": [
+        "https://openalex.org/I8961855"
+      ]
+    }
+  ],
+  "topics": [
+    {
+      "id": "https://openalex.org/T10095",
+      "display_name": "Cosmology and Gravitation Theories",
+      "count": 68,
+      "subfield": {
+        "id": "https://openalex.org/subfields/3103",
+        "display_name": "Astronomy and Astrophysics"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/31",
+        "display_name": "Physics and Astronomy"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/3",
+        "display_name": "Physical Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T10463",
+      "display_name": "Pulsars and Gravitational Waves Research",
+      "count": 52,
+      "subfield": {
+        "id": "https://openalex.org/subfields/3103",
+        "display_name": "Astronomy and Astrophysics"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/31",
+        "display_name": "Physics and Astronomy"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/3",
+        "display_name": "Physical Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T10025",
+      "display_name": "Black Holes and Theoretical Physics",
+      "count": 49,
+      "subfield": {
+        "id": "https://openalex.org/subfields/3106",
+        "display_name": "Nuclear and High Energy Physics"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/31",
+        "display_name": "Physics and Astronomy"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/3",
+        "display_name": "Physical Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T11960",
+      "display_name": "Relativity and Gravitational Theory",
+      "count": 22,
+      "subfield": {
+        "id": "https://openalex.org/subfields/3103",
+        "display_name": "Astronomy and Astrophysics"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/31",
+        "display_name": "Physics and Astronomy"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/3",
+        "display_name": "Physical Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T10744",
+      "display_name": "Astrophysical Phenomena and Observations",
+      "count": 18,
+      "subfield": {
+        "id": "https://openalex.org/subfields/3103",
+        "display_name": "Astronomy and Astrophysics"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/31",
+        "display_name": "Physics and Astronomy"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/3",
+        "display_name": "Physical Sciences"
+      }
+    }
+  ],
+  "topic_share": [
+    {
+      "id": "https://openalex.org/T10463",
+      "display_name": "Pulsars and Gravitational Waves Research",
+      "value": 0.0002868,
+      "subfield": {
+        "id": "https://openalex.org/subfields/3103",
+        "display_name": "Astronomy and Astrophysics"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/31",
+        "display_name": "Physics and Astronomy"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/3",
+        "display_name": "Physical Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T10095",
+      "display_name": "Cosmology and Gravitation Theories",
+      "value": 0.000181,
+      "subfield": {
+        "id": "https://openalex.org/subfields/3103",
+        "display_name": "Astronomy and Astrophysics"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/31",
+        "display_name": "Physics and Astronomy"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/3",
+        "display_name": "Physical Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T10025",
+      "display_name": "Black Holes and Theoretical Physics",
+      "value": 0.0001613,
+      "subfield": {
+        "id": "https://openalex.org/subfields/3106",
+        "display_name": "Nuclear and High Energy Physics"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/31",
+        "display_name": "Physics and Astronomy"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/3",
+        "display_name": "Physical Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T11960",
+      "display_name": "Relativity and Gravitational Theory",
+      "value": 0.000132,
+      "subfield": {
+        "id": "https://openalex.org/subfields/3103",
+        "display_name": "Astronomy and Astrophysics"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/31",
+        "display_name": "Physics and Astronomy"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/3",
+        "display_name": "Physical Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T10744",
+      "display_name": "Astrophysical Phenomena and Observations",
+      "value": 0.0001045,
+      "subfield": {
+        "id": "https://openalex.org/subfields/3103",
+        "display_name": "Astronomy and Astrophysics"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/31",
+        "display_name": "Physics and Astronomy"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/3",
+        "display_name": "Physical Sciences"
+      }
+    }
+  ],
+  "x_concepts": [
+    {
+      "id": "121332964",
+      "wikidata": "https://www.wikidata.org/wiki/Q413",
+      "display_name": "Physics",
+      "score": 0.9826629161834717
+    },
+    {
+      "id": "74650414",
+      "wikidata": "https://www.wikidata.org/wiki/Q11397",
+      "display_name": "Classical mechanics",
+      "score": 0.6104758977890015
+    },
+    {
+      "id": "33332235",
+      "wikidata": "https://www.wikidata.org/wiki/Q18362",
+      "display_name": "Theoretical physics",
+      "score": 0.6072536110877991
+    },
+    {
+      "id": "33923547",
+      "wikidata": "https://www.wikidata.org/wiki/Q395",
+      "display_name": "Mathematics",
+      "score": 0.6046597361564636
+    },
+    {
+      "id": "62520636",
+      "wikidata": "https://www.wikidata.org/wiki/Q944",
+      "display_name": "Quantum mechanics",
+      "score": 0.4350994825363159
+    }
+  ],
+  "counts_by_year": [
+    {
+      "year": 1992,
+      "works_count": 3,
+      "oa_works_count": 1,
+      "cited_by_count": 2
+    },
+    {
+      "year": 1994,
+      "works_count": 2,
+      "oa_works_count": 2,
+      "cited_by_count": 562
+    },
+    {
+      "year": 1996,
+      "works_count": 3,
+      "oa_works_count": 0,
+      "cited_by_count": 0
+    },
+    {
+      "year": 1997,
+      "works_count": 2,
+      "oa_works_count": 2,
+      "cited_by_count": 80
+    },
+    {
+      "year": 1998,
+      "works_count": 2,
+      "oa_works_count": 1,
+      "cited_by_count": 49
+    },
+    {
+      "year": 1999,
+      "works_count": 2,
+      "oa_works_count": 1,
+      "cited_by_count": 38
+    },
+    {
+      "year": 2000,
+      "works_count": 6,
+      "oa_works_count": 6,
+      "cited_by_count": 415
+    },
+    {
+      "year": 2001,
+      "works_count": 5,
+      "oa_works_count": 5,
+      "cited_by_count": 528
+    },
+    {
+      "year": 2002,
+      "works_count": 5,
+      "oa_works_count": 3,
+      "cited_by_count": 127
+    },
+    {
+      "year": 2003,
+      "works_count": 8,
+      "oa_works_count": 7,
+      "cited_by_count": 830
+    },
+    {
+      "year": 2004,
+      "works_count": 5,
+      "oa_works_count": 4,
+      "cited_by_count": 31
+    },
+    {
+      "year": 2005,
+      "works_count": 10,
+      "oa_works_count": 6,
+      "cited_by_count": 129
+    },
+    {
+      "year": 2007,
+      "works_count": 5,
+      "oa_works_count": 4,
+      "cited_by_count": 28
+    },
+    {
+      "year": 2008,
+      "works_count": 13,
+      "oa_works_count": 2,
+      "cited_by_count": 835
+    },
+    {
+      "year": 2009,
+      "works_count": 1,
+      "oa_works_count": 1,
+      "cited_by_count": 46
+    },
+    {
+      "year": 2010,
+      "works_count": 1,
+      "oa_works_count": 1,
+      "cited_by_count": 32
+    },
+    {
+      "year": 2011,
+      "works_count": 1,
+      "oa_works_count": 1,
+      "cited_by_count": 93
+    },
+    {
+      "year": 2012,
+      "works_count": 4,
+      "oa_works_count": 3,
+      "cited_by_count": 143
+    },
+    {
+      "year": 2013,
+      "works_count": 4,
+      "oa_works_count": 2,
+      "cited_by_count": 723
+    },
+    {
+      "year": 2014,
+      "works_count": 2,
+      "oa_works_count": 2,
+      "cited_by_count": 66
+    },
+    {
+      "year": 2015,
+      "works_count": 3,
+      "oa_works_count": 2,
+      "cited_by_count": 20
+    },
+    {
+      "year": 2016,
+      "works_count": 5,
+      "oa_works_count": 2,
+      "cited_by_count": 5
+    },
+    {
+      "year": 2017,
+      "works_count": 4,
+      "oa_works_count": 3,
+      "cited_by_count": 43
+    },
+    {
+      "year": 2018,
+      "works_count": 1,
+      "oa_works_count": 1,
+      "cited_by_count": 81
+    },
+    {
+      "year": 2019,
+      "works_count": 2,
+      "oa_works_count": 2,
+      "cited_by_count": 49
+    },
+    {
+      "year": 2020,
+      "works_count": 1,
+      "oa_works_count": 1,
+      "cited_by_count": 9
+    },
+    {
+      "year": 2021,
+      "works_count": 3,
+      "oa_works_count": 3,
+      "cited_by_count": 8
+    },
+    {
+      "year": 2022,
+      "works_count": 4,
+      "oa_works_count": 3,
+      "cited_by_count": 36
+    },
+    {
+      "year": 2023,
+      "works_count": 3,
+      "oa_works_count": 2,
+      "cited_by_count": 32
+    },
+    {
+      "year": 2024,
+      "works_count": 6,
+      "oa_works_count": 6,
+      "cited_by_count": 9
+    },
+    {
+      "year": 2025,
+      "works_count": 8,
+      "oa_works_count": 6,
+      "cited_by_count": 7
+    },
+    {
+      "year": 2026,
+      "works_count": 5,
+      "oa_works_count": 5,
+      "cited_by_count": 1
+    }
+  ],
+  "display_name_alternatives": [
+    "Alcubierre, M.",
+    "Alcubierre, Miguel",
+    "M Alcubierre",
+    "M. Alcubierre",
+    "MIGUEL ALCUBIERRE",
+    "Miguel Alcubierre"
+  ],
+  "block_key": "m alcubierre",
+  "works_api_url": "https://api.openalex.org/works?filter=author.id:A5043129140",
+  "updated_date": "2026-05-12T12:20:58",
+  "created_date": "2016-06-24T00:00:00"
+}

@@ -10,5 +10,7 @@ Componentes:
 from .embedding_pipeline import EmbeddingPipeline
 from .faiss_store import FAISSStore
 from .basic_retriever import BasicRetriever
+from .hybrid_retriever import HybridRetriever
+from .graph_aware_retriever import GraphAwareRetriever
 
-__all__ = ["EmbeddingPipeline", "FAISSStore", "BasicRetriever"]
+__all__ = ["EmbeddingPipeline", "FAISSStore", "BasicRetriever", "HybridRetriever", "GraphAwareRetriever"]

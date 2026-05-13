@@ -94,7 +94,44 @@ def build_index(
         profiles,
         fields=["searchable_text", "disciplina"],
     )
-    logger.info(f"   Embeddings: {result['total']} x {result['dimension']}")
+    logger.info(f"   Embeddings perfiles: {result['total']} x {result['dimension']}")
+    
+    # NUEVO: Indexar Works/Papers de OpenAlex
+    try:
+        from api.openalex_data import get_all_works
+        works = get_all_works()
+        if works:
+            logger.info(f"   Indexando {len(works)} papers de OpenAlex...")
+            work_profiles = []
+            for w in works:
+                abstract = w.get("abstract", "")
+                title = w.get("title", "")
+                text = f"{title} {abstract}"
+                if text.strip():
+                    work_profiles.append({
+                        "id": f"work_{w.get('openalex_id', '').split('/')[-1]}",
+                        "searchable_text": text,
+                        "disciplina": " ".join([t.get("name", "") for t in w.get("topics", [])]),
+                        "nombre_completo": title,
+                        "institucion": "",
+                        "area": "",
+                        "area_nombre": "",
+                        "nivel": "",
+                        "nivel_nombre": "",
+                        "dependencia": ""
+                    })
+            if work_profiles:
+                work_result = pipeline.generate_embeddings(work_profiles, fields=["searchable_text"])
+                logger.info(f"   Embeddings papers: {work_result['total']} x {work_result['dimension']}")
+                # Mezclar resultados (simplificado para demostración)
+                import numpy as np
+                result["embeddings"] = np.vstack((result["embeddings"], work_result["embeddings"]))
+                result["profile_ids"].extend(work_result["profile_ids"])
+                result["metadata"].extend(work_result["metadata"])
+                result["total"] += work_result["total"]
+    except Exception as e:
+        logger.warning(f"   ⚠️ No se pudieron indexar papers OpenAlex: {e}")
+
     logger.info("")
 
     # ── Paso 3: Persistir embeddings ────────────────────────────────

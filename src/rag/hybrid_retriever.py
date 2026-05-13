@@ -31,15 +31,15 @@ import unicodedata
 from pathlib import Path
 from typing import Optional
 
-from config import BASE_DIR, PROCESSED_DATA_DIR
+from config import BASE_DIR, PROCESSED_DATA_DIR, HYBRID_SEMANTIC_WEIGHT, HYBRID_LEXICAL_WEIGHT
 
 logger = logging.getLogger(__name__)
 
 DEFAULT_STORE_DIR = BASE_DIR / "data" / "vector_store"
 
 # ─── Pesos por defecto ───────────────────────────────────────────────
-DEFAULT_SEMANTIC_WEIGHT = 0.65
-DEFAULT_LEXICAL_WEIGHT = 0.35
+DEFAULT_SEMANTIC_WEIGHT = HYBRID_SEMANTIC_WEIGHT
+DEFAULT_LEXICAL_WEIGHT = HYBRID_LEXICAL_WEIGHT
 
 # ─── Instituciones conocidas (para query understanding) ──────────────
 INSTITUTION_ALIASES = {
