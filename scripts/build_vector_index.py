@@ -29,7 +29,18 @@ import json
 import logging
 import sys
 import time
+import unicodedata
 from pathlib import Path
+
+def normalize_text(text: str) -> str:
+    """Normaliza texto para searchable_text."""
+    if not text: return ""
+    text = str(text).lower()
+    text = "".join(
+        c for c in unicodedata.normalize("NFKD", text)
+        if not unicodedata.combining(c)
+    )
+    return text
 
 # Ajustar PYTHONPATH
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -86,6 +97,15 @@ def build_index(
         
     with open(unam_authors_path, "r", encoding="utf-8") as f:
         profiles = json.load(f)
+    
+    # Asegurar que cada autor tenga searchable_text
+    for p in profiles:
+        if not p.get("searchable_text"):
+            title = p.get("nombre_completo", "")
+            abstract = p.get("abstract", "")
+            topics = " ".join(p.get("topics", []))
+            p["searchable_text"] = normalize_text(f"{title} {abstract} {topics}")
+            
     logger.info(f"   ✅ {len(profiles)} perfiles UNAM cargados")
     logger.info("")
 
@@ -98,7 +118,7 @@ def build_index(
 
     result = pipeline.generate_embeddings(
         profiles,
-        fields=["searchable_text", "disciplina"],
+        fields=["searchable_text"],
     )
     logger.info(f"   Embeddings perfiles: {result['total']} x {result['dimension']}")
     
@@ -112,17 +132,22 @@ def build_index(
             work_profiles = []
             for w in works:
                 title = w.get("title", "")
-                if title:
+                abstract = w.get("abstract", "")
+                topics = " ".join(w.get("topics", []))
+                
+                searchable_text = w.get("searchable_text")
+                if not searchable_text:
+                    searchable_text = normalize_text(f"{title} {abstract} {topics}")
+                
+                if searchable_text:
                     work_profiles.append({
                         "id": f"work_{w.get('id')}",
-                        "searchable_text": normalize_text(f"{title} UNAM"),
+                        "title": title,
+                        "abstract": abstract,
+                        "searchable_text": searchable_text,
                         "disciplina": "Investigación UNAM",
                         "nombre_completo": title,
                         "institucion": "UNAM",
-                        "area": "",
-                        "area_nombre": "",
-                        "nivel": "",
-                        "nivel_nombre": "",
                         "dependencia": "UNAM"
                     })
             if work_profiles:
@@ -149,12 +174,15 @@ def build_index(
 
     # ── Paso 4: Construir índice FAISS ──────────────────────────────
     logger.info("📊 PASO 4/5: Construcción de índice FAISS...")
-    store.build_index(
-        embeddings=result["embeddings"],
-        profile_ids=result["profile_ids"],
-        metadata=result["metadata"],
-    )
-    faiss_paths = store.save()
+    if result.get("embeddings") is not None and len(result["embeddings"]) > 0:
+        store.build_index(
+            embeddings=result["embeddings"],
+            profile_ids=result["profile_ids"],
+            metadata=result["metadata"],
+        )
+        faiss_paths = store.save()
+    else:
+        logger.error("❌ No se generaron embeddings, saltando construcción de índice FAISS.")
     logger.info("")
 
     # ── Paso 5: Construir índice BM25 ──────────────────────────────
