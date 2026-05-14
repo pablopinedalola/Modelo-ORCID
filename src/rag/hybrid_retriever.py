@@ -31,6 +31,7 @@ import unicodedata
 from pathlib import Path
 from typing import Optional
 
+from src.rag.query_interpreter import QueryInterpreter
 from config import BASE_DIR, PROCESSED_DATA_DIR, HYBRID_SEMANTIC_WEIGHT, HYBRID_LEXICAL_WEIGHT
 
 logger = logging.getLogger(__name__)
@@ -140,6 +141,7 @@ class HybridRetriever:
         self._profiles_by_id: dict[str, dict] = {}
         self._semantic_ready = False
         self._lexical_ready = False
+        self.interpreter = QueryInterpreter()
 
     def load(self) -> bool:
         """Carga todos los componentes del retriever híbrido.
@@ -147,18 +149,21 @@ class HybridRetriever:
         Returns:
             True si al menos un método de búsqueda está disponible.
         """
-        # 1. Perfiles
-        profiles_path = PROCESSED_DATA_DIR / "snii_profiles.json"
-        if profiles_path.exists():
-            with open(profiles_path, "r", encoding="utf-8") as f:
-                self.profiles = json.load(f)
+        # 1. Perfiles UNAM (Exclusivo)
+        self.profiles = []
+        unam_path = PROCESSED_DATA_DIR / "unam_authors.json"
+        if unam_path.exists():
+            with open(unam_path, "r", encoding="utf-8") as f:
+                self.profiles.extend(json.load(f))
+                
+        if self.profiles:
             self._profiles_by_id = {p["id"]: p for p in self.profiles}
-            logger.info(f"  📋 {len(self.profiles)} perfiles cargados")
+            logger.info(f"  📋 {len(self.profiles)} perfiles UNAM cargados")
         else:
-            logger.warning(f"  ⚠️  No se encontraron perfiles")
+            logger.warning(f"  ⚠️  No se encontró el corpus UNAM")
             return False
 
-        # 2. FAISS semantic
+        # 2. FAISS semantic (Opcional en modo local, intentamos cargar)
         try:
             from src.rag.faiss_store import FAISSStore
             from src.rag.embedding_pipeline import EmbeddingPipeline
@@ -168,27 +173,18 @@ class HybridRetriever:
                 self.embedding_pipeline = EmbeddingPipeline(store_dir=self.store_dir)
                 self._semantic_ready = True
                 logger.info("  ✅ Retrieval semántico (FAISS) listo")
-            else:
-                self.faiss_store = None
         except Exception as e:
             logger.warning(f"  ⚠️  FAISS no disponible: {e}")
 
-        # 3. BM25 lexical
+        # 3. BM25 lexical (Construcción forzada para el corpus local UNAM)
         try:
             from src.rag.bm25_retriever import BM25Retriever
-
             self.bm25_retriever = BM25Retriever(store_dir=self.store_dir)
-            if self.bm25_retriever.load():
-                self._lexical_ready = True
-                logger.info("  ✅ Retrieval léxico (BM25) listo")
-            else:
-                # Construir BM25 on-the-fly si no está persistido
-                if self.profiles:
-                    logger.info("  🔧 Construyendo índice BM25 en memoria...")
-                    self.bm25_retriever.build_index(self.profiles)
-                    self.bm25_retriever.save()
-                    self._lexical_ready = True
-                    logger.info("  ✅ BM25 construido y guardado")
+            
+            logger.info("  🔧 Construyendo índice BM25 desde corpus UNAM local...")
+            self.bm25_retriever.build_index(self.profiles)
+            self._lexical_ready = True
+            logger.info("  ✅ BM25 listo para corpus local")
         except Exception as e:
             logger.warning(f"  ⚠️  BM25 no disponible: {e}")
 
@@ -224,8 +220,25 @@ class HybridRetriever:
 
         query = query.strip()
 
-        # 1. Analizar consulta
+        # 1. Analizar consulta con Hybrid Analysis (metadata)
         analysis = self.analyze_query(query)
+
+        # 1.5 Analizar con QueryInterpreter (semantic expansions)
+        interp = self.interpreter.interpret(query)
+        expanded_query = interp["rewritten_query"]
+        if interp["institutions"]:
+            analysis.institution_filter = interp["institutions"][0]
+            analysis.detected_features.append(f"institución (QA): {interp['institutions'][0].upper()}")
+
+        print("\n" + "="*50)
+        print("🔍 RUNTIME LOG: QUERY INTERPRETER")
+        print("="*50)
+        print(f"[LOG] Original Query: '{query}'")
+        print(f"[LOG] Normalized Query: '{interp.get('normalized_query', query.lower())}'")
+        print(f"[LOG] Institution Detected: {interp['institutions']}")
+        print(f"[LOG] Semantic Expansions: {interp['expanded_concepts']}")
+        print(f"[LOG] Expanded Query (Dense): '{expanded_query}'")
+        print("="*50 + "\n")
 
         # 2. Merge filters from query analysis + explicit filters
         merged_filters = self._merge_filters(analysis, filters)
@@ -234,7 +247,9 @@ class HybridRetriever:
         semantic_results = {}
         lexical_results = {}
 
-        search_query = analysis.clean_query or query
+        search_query = expanded_query or analysis.clean_query or query
+
+        print(f"\n[LOG] Top-k Retrieval RAW:")
 
         # Semántico
         if self._semantic_ready:
@@ -265,6 +280,8 @@ class HybridRetriever:
         for rank, r in enumerate(fused, 1):
             enriched = self._enrich_result(r, rank, analysis, include_explanation)
             results.append(enriched)
+            
+        print(f"[LOG] Results AFTER institution filtering: {len(results)} autores válidos")
 
         return results
 
@@ -344,11 +361,13 @@ class HybridRetriever:
 
         Normaliza ambos scores a [0, 1] antes de combinar.
         """
-        all_ids = set(semantic.keys()) | set(lexical.keys())
+        # FILTRO ESTRICTO: Solo IDs presentes en el corpus local UNAM
+        all_ids = {pid for pid in (set(semantic.keys()) | set(lexical.keys()))
+                   if pid in self._profiles_by_id}
 
         # Normalizar scores
-        sem_scores = [r["score"] for r in semantic.values()] if semantic else [0]
-        lex_scores = [r["score"] for r in lexical.values()] if lexical else [0]
+        sem_scores = [r["score"] for pid, r in semantic.items() if pid in all_ids] if semantic else [0]
+        lex_scores = [r["score"] for pid, r in lexical.items() if pid in all_ids] if lexical else [0]
 
         sem_max = max(sem_scores) if sem_scores and max(sem_scores) > 0 else 1.0
         lex_max = max(lex_scores) if lex_scores and max(lex_scores) > 0 else 1.0
@@ -366,8 +385,8 @@ class HybridRetriever:
                 self.lexical_weight * lex_score
             )
 
-            # Metadata from whichever source has it
-            meta = (sem_result or lex_result or {}).copy()
+            # Metadata exclusiva de la fuente local
+            meta = self._profiles_by_id[pid]
 
             fused.append({
                 "profile_id": pid,
@@ -410,7 +429,8 @@ class HybridRetriever:
         for r in results:
             matches = True
             pid = r["profile_id"]
-            profile = self._profiles_by_id.get(pid, {})
+            # Priorizar metadata del resultado (viene del índice)
+            profile = self._profiles_by_id.get(pid, r)
 
             for field, value in filters.items():
                 if field == "institucion":
@@ -445,20 +465,40 @@ class HybridRetriever:
     @staticmethod
     def _apply_boosts(results: list[dict], analysis: QueryAnalysis) -> list[dict]:
         """Aplica boosts de score basados en features detectadas."""
+        from src.normalizer.name_normalizer import NameNormalizer
+        norm = NameNormalizer()
+        
+        query_norm = norm.normalize(analysis.raw_query)
+        
         for r in results:
             boost = 0.0
 
-            # Boost por institución match
+            # 1. Lexical Boosting fuerte por coincidencia exacta de alias
+            profile_aliases = r.get("aliases", [])
+            for alias in profile_aliases:
+                if query_norm == norm.normalize(alias):
+                    boost += 0.35  # Boost fuerte para encontrar por nombre exacto
+                    r["boost_reason"] = f"Match exacto de alias: {alias}"
+                    break
+            
+            if boost == 0 and len(query_norm.split()) >= 2:
+                # Intento de match parcial de nombre/apellido
+                full_name_norm = r.get("normalized_name", norm.normalize(r.get("nombre_completo", "")))
+                if query_norm in full_name_norm:
+                    boost += 0.2
+                    r["boost_reason"] = "Match parcial de nombre"
+
+            # 2. Boost por institución match
             if analysis.institution_filter and r.get("in_lexical"):
                 inst = r.get("institucion", "")
                 if analysis.institution_alias and analysis.institution_alias.upper() in inst.upper():
                     boost += 0.05
 
-            # Boost por alto overlap de tokens
+            # 3. Boost por alto overlap de tokens
             if r.get("token_overlap", 0) > 0.7:
                 boost += 0.03
 
-            # Boost por aparecer en ambos retrievers
+            # 4. Boost por aparecer en ambos retrievers
             if r.get("in_semantic") and r.get("in_lexical"):
                 boost += 0.05
 
@@ -541,6 +581,8 @@ class HybridRetriever:
         boost = r.get("boost", 0)
         if boost > 0:
             reasons = []
+            if r.get("boost_reason"):
+                reasons.append(r["boost_reason"])
             if r.get("in_semantic") and r.get("in_lexical"):
                 reasons.append("aparece en ambos métodos")
             if r.get("token_overlap", 0) > 0.7:

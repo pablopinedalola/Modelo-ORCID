@@ -51,9 +51,16 @@ class QueryInterpreter:
 
     @staticmethod
     def _normalize(text: str) -> str:
+        if not text: return ""
         text = text.lower().strip()
+        # Quitar acentos
         nfkd = unicodedata.normalize("NFKD", text)
-        return "".join(c for c in nfkd if not unicodedata.combining(c))
+        text = "".join(c for c in nfkd if not unicodedata.combining(c))
+        # Quitar caracteres especiales excepto espacios y letras/números
+        text = re.sub(r"[^a-z0-9\s]", " ", text)
+        # Quitar dobles espacios
+        text = re.sub(r"\s+", " ", text).strip()
+        return text
 
     def interpret(self, raw_query: str) -> Dict[str, Any]:
         """

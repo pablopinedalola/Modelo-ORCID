@@ -39,25 +39,25 @@
                 <div class="card-title" style="font-size:14px; text-transform:uppercase;">▤ Métricas</div>
                 <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
                     <div style="text-align:center; padding:12px; background:var(--surface2); border-radius:8px;">
-                        <div style="font-size:28px; font-weight:700; color:var(--accent);">{{ author.works_count }}</div>
+                        <div style="font-size:28px; font-weight:700; color:var(--accent);">{{ author.works_count or 0 }}</div>
                         <div style="font-size:10px; color:var(--text-3); margin-top:2px;">PUBLICACIONES</div>
                     </div>
                     <div style="text-align:center; padding:12px; background:var(--surface2); border-radius:8px;">
-                        <div style="font-size:28px; font-weight:700; color:var(--cyan);">{{ "{:,}".format(author.cited_by_count) }}</div>
+                        <div style="font-size:28px; font-weight:700; color:var(--cyan);">{{ "{:,}".format(author.cited_by_count or 0) }}</div>
                         <div style="font-size:10px; color:var(--text-3); margin-top:2px;">CITAS</div>
                     </div>
                     <div style="text-align:center; padding:12px; background:var(--surface2); border-radius:8px;">
-                        <div style="font-size:28px; font-weight:700; color:var(--purple);">{{ author.summary_stats.h_index }}</div>
+                        <div style="font-size:28px; font-weight:700; color:var(--purple);">{{ (author.summary_stats.h_index if author.summary_stats else 0) or 0 }}</div>
                         <div style="font-size:10px; color:var(--text-3); margin-top:2px;">H-INDEX</div>
                     </div>
                 </div>
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px;">
                     <div style="text-align:center; padding:10px; background:var(--surface2); border-radius:8px;">
-                        <div style="font-size:22px; font-weight:700; color:var(--orange);">{{ author.summary_stats.i10_index }}</div>
+                        <div style="font-size:22px; font-weight:700; color:var(--orange);">{{ (author.summary_stats.i10_index if author.summary_stats else 0) or 0 }}</div>
                         <div style="font-size:10px; color:var(--text-3); margin-top:2px;">i10-INDEX</div>
                     </div>
                     <div style="text-align:center; padding:10px; background:var(--surface2); border-radius:8px;">
-                        <div style="font-size:22px; font-weight:700; color:var(--green);">{{ "%.2f"|format(author.summary_stats.get('2yr_mean_citedness', 0)) }}</div>
+                        <div style="font-size:22px; font-weight:700; color:var(--green);">{{ "%.2f"|format(author.summary_stats.get('2yr_mean_citedness', 0) if author.summary_stats else 0) }}</div>
                         <div style="font-size:10px; color:var(--text-3); margin-top:2px;">2YR MEAN CIT.</div>
                     </div>
                 </div>
@@ -91,6 +91,22 @@
                 </div>
                 {% endfor %}
             </div>
+
+            <!-- Extra Sources -->
+            {% if extra_sources %}
+            <div class="card" style="border-left:4px solid var(--green);">
+                <div class="card-title" style="color:var(--green);">🔗 También aparece en:</div>
+                <div style="display:flex; flex-direction:column; gap:10px;">
+                    {% for source in extra_sources %}
+                    <div style="padding:8px; background:var(--surface2); border-radius:6px; font-size:13px;">
+                        <div style="font-weight:600; color:var(--text-1);">{{ source.name }}</div>
+                        <div style="color:var(--text-3); font-size:11px; margin:2px 0 6px 0;">{{ source.info }}</div>
+                        <a href="{{ source.url }}" target="_blank" class="btn-sm" style="display:inline-block; padding:4px 8px; background:var(--bg); border:1px solid var(--border); border-radius:4px; text-decoration:none; color:var(--accent); font-size:11px;">Ver fuente ↗</a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
         </div>
 
         <!-- Main Content -->
@@ -104,12 +120,16 @@
                     {% for t in author.topics %}
                     <div style="display:flex; align-items:center; gap:12px; padding:10px; background:var(--surface2); border-radius:6px;">
                         <div style="flex:1;">
-                            <div style="font-weight:600; font-size:14px;">{{ t.display_name }}</div>
+                            <div style="font-weight:600; font-size:14px;">{{ t if t is string else t.display_name }}</div>
                             <div style="font-size:11px; color:var(--text-3); margin-top:2px;">
+                                {% if t is not string %}
                                 {{ t.subfield.display_name if t.subfield else '' }} · {{ t.field.display_name if t.field else '' }}
+                                {% else %}
+                                Área de investigación UNAM
+                                {% endif %}
                             </div>
                         </div>
-                        <div style="font-weight:700; font-size:18px; color:var(--accent); font-family:'JetBrains Mono',monospace;">{{ t.count }}</div>
+                        <div style="font-weight:700; font-size:18px; color:var(--accent); font-family:'JetBrains Mono',monospace;">{{ (t.count if t is not string else '-') }}</div>
                         <div style="font-size:10px; color:var(--text-3);">papers</div>
                     </div>
                     {% endfor %}
@@ -132,7 +152,7 @@
             <!-- Publications -->
             {% if works %}
             <div class="card full">
-                <div class="card-title">📄 Publicaciones ({{ total_works_loaded }} cargadas)</div>
+                <div class="card-title">📄 Publicaciones ({{ total_works_loaded or 0 }} cargadas)</div>
                 <table class="data-table">
                     <thead><tr><th>Título</th><th>Año</th><th>Citas</th><th>Topics</th><th>DOI</th></tr></thead>
                     <tbody>
@@ -153,7 +173,7 @@
                         <td style="font-weight:700; color:var(--accent); font-family:'JetBrains Mono',monospace;">{{ "{:,}".format(w.cited_by_count or 0) }}</td>
                         <td style="font-size:11px;">
                             {% for t in (w.topics or [])[:2] %}
-                            <span class="tag" style="font-size:9px; padding:1px 6px;">{{ t.name }}</span>
+                            <span class="tag" style="font-size:9px; padding:1px 6px;">{{ t if t is string else t.name }}</span>
                             {% endfor %}
                         </td>
                         <td>{% if w.doi %}<a href="{{ w.doi }}" target="_blank">DOI↗</a>{% endif %}</td>

@@ -16,7 +16,7 @@ import numpy as np
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 
-from src.rag.query_interpreter import QueryInterpreter
+from src.rag.query_interpreter import QueryInterpreter, INSTITUTIONS
 from src.rag.embedding_pipeline import EmbeddingPipeline
 from src.rag.faiss_store import FAISSStore
 from src.rag.bm25_retriever import BM25Retriever
@@ -35,6 +35,7 @@ class MultiVectorRetriever:
         self.authors = []
         self._authors_by_id = {}
         self.works = []
+        self.snii_profiles = {}
         self.ready = False
 
     def load(self) -> bool:
@@ -48,6 +49,10 @@ class MultiVectorRetriever:
             self.authors = get_authors()
             self._authors_by_id = {a.get("_slug", ""): a for a in self.authors}
             self.works = get_all_works()
+            
+            # Cargar SNII profiles from metadata in FAISS
+            if self.faiss_store.metadata:
+                self.snii_profiles = {self.faiss_store.profile_ids[i]: meta for i, meta in enumerate(self.faiss_store.metadata)}
             
             if faiss_ok or bm25_ok:
                 self.ready = True
@@ -72,6 +77,16 @@ class MultiVectorRetriever:
         target_institutions = interpretation["institutions"]
         expanded_concepts = interpretation["expanded_concepts"]
         
+        print("\n" + "="*50)
+        print("🔍 RUNTIME LOG: QUERY INTERPRETER")
+        print("="*50)
+        print(f"[LOG] Original Query: '{query}'")
+        print(f"[LOG] Normalized Query: '{interpretation.get('normalized_query', query.lower())}'")
+        print(f"[LOG] Institution Detected: {target_institutions}")
+        print(f"[LOG] Semantic Expansions: {expanded_concepts}")
+        print(f"[LOG] Expanded Query (Dense): '{rewritten_query}'")
+        print("="*50 + "\n")
+        
         logger.info(f"Natural Language Query: '{query}'")
         logger.info(f" -> Intent: {intent}")
         logger.info(f" -> Institutions: {target_institutions}")
@@ -94,6 +109,8 @@ class MultiVectorRetriever:
         fused_scores = {}
         all_candidate_ids = set(semantic_results.keys()) | set(lexical_results.keys())
         
+        print(f"\n[LOG] Top-k Retrieval RAW: {len(all_candidate_ids)} candidatos encontrados (Semantic + Lexical)")
+
         # Add matches based on OpenAlex explicit topics matching the expanded concepts
         for concept in expanded_concepts:
             topics = search_topics(concept)
@@ -144,17 +161,20 @@ class MultiVectorRetriever:
                 })
                 continue
                 
-            # It's an author
-            author_data = self._authors_by_id.get(cid, {})
+            # It's an author (SNII Profile)
+            author_data = self.snii_profiles.get(cid, {})
             if not author_data: continue
             
             # 5. Institution Filtering
-            inst_name = author_data.get("last_known_institutions", [{}])[0].get("display_name", "").lower()
+            inst_name = author_data.get("institucion", "").lower()
+            import unicodedata
+            inst_name_norm = "".join(c for c in unicodedata.normalize("NFKD", inst_name) if not unicodedata.combining(c))
             inst_pass = True
             if target_institutions:
                 inst_pass = False
                 for target_inst in target_institutions:
-                    if target_inst in inst_name or target_inst == "unam" and "autonoma de mexico" in inst_name:
+                    aliases = INSTITUTIONS.get(target_inst, [target_inst])
+                    if any(alias in inst_name_norm for alias in aliases) or (target_inst == "unam" and "autonoma de mexico" in inst_name_norm):
                         inst_pass = True
                         break
                         
@@ -164,7 +184,7 @@ class MultiVectorRetriever:
             # Feature: Topic Overlap
             topic_overlap_score = 0.0
             matched_topics = []
-            a_topics = [at.get("display_name", "").lower() for at in author_data.get("topics", [])]
+            a_topics = [author_data.get("disciplina", "").lower()]
             for ext in expanded_concepts:
                 for at in a_topics:
                     if ext in at or at in ext:
@@ -181,14 +201,14 @@ class MultiVectorRetriever:
             reasons = []
             match_types = []
             
-            if s_score > 0.5:
+            if s_score > 0.4:
                 reasons.append(f"Similitud semántica densa ({s_score:.2f})")
                 match_types.append("semantic")
             if l_score > 0:
-                reasons.append("Coincidencia de palabras clave (BM25)")
+                reasons.append(f"Coincidencia de palabras clave BM25 ({l_score_norm:.2f})")
                 match_types.append("lexical")
             if matched_topics:
-                reasons.append(f"Match en temas OpenAlex: {', '.join(set(matched_topics))}")
+                reasons.append(f"Match en disciplina: {', '.join(set(matched_topics))}")
                 match_types.append("topic")
             if target_institutions and inst_pass:
                 reasons.append(f"Filtro institucional aplicado: {target_institutions[0].upper()}")
@@ -203,8 +223,8 @@ class MultiVectorRetriever:
             results.append({
                 "profile_id": cid,
                 "slug": cid,
-                "display_name": author_data.get("display_name", cid),
-                "institution": author_data.get("last_known_institutions", [{}])[0].get("display_name", "") if author_data.get("last_known_institutions") else "",
+                "display_name": author_data.get("nombre_completo", cid),
+                "institution": author_data.get("institucion", ""),
                 "score": final_score,
                 "match_types": match_types,
                 "explanation": " | ".join(reasons),
@@ -212,5 +232,8 @@ class MultiVectorRetriever:
             })
 
         results.sort(key=lambda x: x["score"], reverse=True)
+        
+        print(f"[LOG] Results AFTER institution filtering: {len([r for r in results if not r['profile_id'].startswith('work_')])} autores válidos")
+        
         return results[:top_k]
 

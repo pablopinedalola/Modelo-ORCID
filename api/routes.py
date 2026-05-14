@@ -32,6 +32,7 @@ _refinement_path = OUTPUT_DIR / "refinement_results.json"
 _profiles_cache: dict[str, dict] = {}
 _graph_cache: Optional[dict] = None
 _refinement_cache: list[dict] = []
+_unam_directory_cache: dict[str, dict] = {}
 _retriever = None
 
 
@@ -39,16 +40,22 @@ def _load_profiles() -> dict[str, dict]:
     global _profiles_cache
     if _profiles_cache:
         return _profiles_cache
+    
     _profiles_cache = {}
-    if _profiles_dir.exists():
-        for f in _profiles_dir.glob("*.json"):
-            try:
-                with open(f, "r", encoding="utf-8") as fh:
-                    data = json.load(fh)
-                    pid = data.get("id", f.stem)
-                    _profiles_cache[pid] = data
-            except Exception as e:
-                logger.warning(f"Error loading profile {f}: {e}")
+    from config import PROCESSED_DATA_DIR
+    unam_path = PROCESSED_DATA_DIR / "unam_authors.json"
+    
+    if unam_path.exists():
+        try:
+            with open(unam_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                for profile in data:
+                    pid = profile.get("id")
+                    if pid:
+                        _profiles_cache[pid] = profile
+        except Exception as e:
+            logger.warning(f"Error loading UNAM profiles for cache: {e}")
+            
     return _profiles_cache
 
 
@@ -72,6 +79,21 @@ def _load_refinement() -> list[dict]:
         with open(_refinement_path, "r", encoding="utf-8") as f:
             _refinement_cache = json.load(f)
     return _refinement_cache
+
+def _load_unam_directory() -> dict[str, dict]:
+    global _unam_directory_cache
+    if _unam_directory_cache:
+        return _unam_directory_cache
+    
+    from config import PROCESSED_DATA_DIR
+    unam_path = PROCESSED_DATA_DIR / "unam_directory.json"
+    if unam_path.exists():
+        try:
+            with open(unam_path, "r", encoding="utf-8") as f:
+                _unam_directory_cache = json.load(f)
+        except Exception as e:
+            logger.warning(f"Error loading UNAM directory: {e}")
+    return _unam_directory_cache
 
 
 def _load_retriever():
@@ -99,13 +121,15 @@ def _load_retriever():
 
 
 def reload_data():
-    global _profiles_cache, _graph_cache, _refinement_cache
+    global _profiles_cache, _graph_cache, _refinement_cache, _unam_directory_cache
     _profiles_cache = {}
     _graph_cache = None
     _refinement_cache = []
+    _unam_directory_cache = {}
     _load_profiles()
     _load_graph()
     _load_refinement()
+    _load_unam_directory()
     _load_retriever()
 
 
@@ -174,7 +198,7 @@ async def home(request: Request):
             "works_count": a.get("works_count", 0),
             "cited_by_count": a.get("cited_by_count", 0),
             "h_index": a.get("summary_stats", {}).get("h_index", 0),
-            "topics": [t.get("display_name", t.get("name", "")) for t in a.get("topics", [])[:3]],
+            "topics": [t if isinstance(t, str) else t.get("display_name", t.get("name", "")) for t in a.get("topics", [])[:3]],
             "orcid": a.get("orcid", ""),
         })
 
@@ -186,12 +210,68 @@ async def home(request: Request):
 
 @app.get("/search", response_class=HTMLResponse)
 async def search_page(request: Request, q: str = Query("", min_length=0)):
-    """Pagina de busqueda con datos reales OpenAlex."""
+    """Pagina de busqueda con motor de retrieval."""
     from api.openalex_data import search_openalex
 
     results = {"authors": [], "papers": [], "topics": [], "institutions": []}
     if q:
-        results = search_openalex(q)
+        if _retriever:
+            # Flujo REAL: request -> routes.py -> retriever -> query interpreter -> FAISS/BM25
+            raw_results = _retriever.search(q, top_k=20)
+            print(f"\n[ROUTES] _retriever.search returned: type={type(raw_results)}, len={len(raw_results)}")
+            if raw_results:
+                print(f"[ROUTES] raw_results[0].keys() = {raw_results[0].keys()}")
+                print(f"[ROUTES] raw_results[0] = {raw_results[0]}")
+            for r in raw_results:
+                node_type = r.get("node_type")
+                is_paper = r.get("id", "").startswith("work_")
+                
+                if node_type == "paper" or is_paper:
+                    results["papers"].append({
+                        "title": r.get("nombre_completo", r.get("display_name", "")),
+                        "year": r.get("year", ""),
+                        "citations": r.get("citations", 0),
+                        "doi": r.get("doi", ""),
+                        "venue": r.get("venue", ""),
+                        "author": r.get("author", ""),
+                        "institutions": r.get("institutions", []),
+                        "topics": r.get("topics", []),
+                        "concepts": r.get("concepts", []),
+                        "score": r.get("score"),
+                        "explanation": r.get("explanation", ""),
+                    })
+                elif node_type == "researcher" or not is_paper:
+                    author_dict = {
+                        "slug": r.get("id"),
+                        "display_name": r.get("nombre_completo", r.get("display_name", "")),
+                        "works_count": r.get("works_count", 0),
+                        "cited_by_count": r.get("cited_by_count", 0),
+                        "h_index": r.get("h_index", 0),
+                        "institution": r.get("institucion", r.get("institution", "")),
+                        "topics": [r.get("disciplina", "")] if r.get("disciplina") else r.get("topics", []),
+                        "orcid": r.get("orcid", ""),
+                        "score": r.get("score"),
+                        "explanation": r.get("explanation", ""),
+                    }
+                    
+                    import unicodedata
+                    n_raw = author_dict["display_name"].strip().lower()
+                    nfkd = unicodedata.normalize("NFKD", n_raw)
+                    norm_name = "".join(c for c in nfkd if not unicodedata.combining(c))
+                    
+                    _load_unam_directory()
+                    if norm_name in _unam_directory_cache:
+                        author_dict["unam_source"] = _unam_directory_cache[norm_name]
+                        
+                    results["authors"].append(author_dict)
+                elif node_type == "topic":
+                    results["topics"].append(r)
+                elif node_type == "institution":
+                    results["institutions"].append(r)
+            print(f"[ROUTES] mapped: authors={len(results['authors'])}, papers={len(results['papers'])}, topics={len(results['topics'])}, institutions={len(results['institutions'])}")
+        else:
+            # Fallback a OpenAlex in-memory si el retriever falló al cargar
+            results = search_openalex(q)
 
     return _render(request, "search.html", {
         "query": q,
@@ -215,7 +295,22 @@ async def researcher_profile(request: Request, researcher_slug: str):
             "message": f"Investigador '{researcher_slug}' no encontrado",
         }, status_code=404)
 
+    # 🚀 ENRIQUECIMIENTO BAJO DEMANDA (OpenAlex)
     works = get_works_for_author(researcher_slug)
+    
+    if author.get("openalex_id"):
+        try:
+            from src.enrichment.openalex_enricher import OpenAlexEnricher
+            enricher = OpenAlexEnricher()
+            # Esto enriquecerá author con metrics, topics y works si están en cache o via API
+            author = enricher.enrich_profile(author)
+            
+            # Si el enriquecedor trajo nuevos trabajos, usarlos
+            if "works" in author and author["works"]:
+                works = author["works"]
+                logger.info(f"✨ Perfil enriquecido para {researcher_slug} ({len(works)} trabajos)")
+        except Exception as e:
+            logger.warning(f"⚠️ Error enriqueciendo perfil {researcher_slug}: {e}")
 
     # Sort works by citations
     works_sorted = sorted(works, key=lambda w: w.get("cited_by_count", 0), reverse=True)
@@ -224,7 +319,7 @@ async def researcher_profile(request: Request, researcher_slug: str):
     work_topics: dict[str, int] = {}
     for w in works:
         for t in w.get("topics", []):
-            tname = t.get("name", "")
+            tname = t if isinstance(t, str) else t.get("name", "")
             if tname:
                 work_topics[tname] = work_topics.get(tname, 0) + 1
 
@@ -232,7 +327,7 @@ async def researcher_profile(request: Request, researcher_slug: str):
     work_concepts: dict[str, int] = {}
     for w in works:
         for c in w.get("concepts", []):
-            cname = c.get("name", "")
+            cname = c if isinstance(c, str) else c.get("name", "")
             if cname:
                 work_concepts[cname] = work_concepts.get(cname, 0) + 1
 
@@ -260,6 +355,32 @@ async def researcher_profile(request: Request, researcher_slug: str):
     if lki and isinstance(lki, list) and lki:
         last_inst = lki[0].get("display_name", "")
 
+    # Check for extra sources (UNAM, etc)
+    unam_dir = _load_unam_directory()
+    # Normalize name to match
+    import unicodedata
+    def _norm(text):
+        if not text: return ""
+        nfkd = unicodedata.normalize("NFKD", text.lower().strip())
+        return "".join(c for c in nfkd if not unicodedata.combining(c))
+    
+    author_name_norm = _norm(author.get("display_name", ""))
+    extra_sources = []
+    if author_name_norm in unam_dir:
+        extra_sources.append({
+            "name": "Directorio UNAM",
+            "url": unam_dir[author_name_norm].get("url_fuente", "#"),
+            "info": unam_dir[author_name_norm].get("departamento", "UNAM")
+        })
+    
+    # Check for ORCID as an extra source too if present
+    if author.get("orcid"):
+        extra_sources.append({
+            "name": "ORCID Public Profile",
+            "url": author["orcid"],
+            "info": author["orcid"].split('/')[-1]
+        })
+
     return _render(request, "profile.html", {
         "author": author,
         "works": works_sorted[:50],
@@ -269,6 +390,7 @@ async def researcher_profile(request: Request, researcher_slug: str):
         "affiliations": affiliations,
         "counts_by_year": json.dumps(counts_by_year),
         "last_institution": last_inst,
+        "extra_sources": extra_sources,
     })
 
 
@@ -330,6 +452,8 @@ async def api_stats():
 @app.get("/api/search")
 async def api_search(q: str = Query("", min_length=1), top_k: int = Query(10, ge=1, le=50)):
     from api.openalex_data import search_openalex
+    if _retriever:
+        return _retriever.search(q, top_k=top_k)
     return search_openalex(q)
 
 

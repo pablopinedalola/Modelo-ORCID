@@ -1,0 +1,7 @@
+INFO:__main__:Cargados 2 perfiles UNAM desde /home/pablo/Modelo-ORCID/data/processed/unam_directory.json
+INFO:__main__:Buscando perfil UNAM para: Humberto Carrillo Calvet
+WARNING:__main__:  No se encontraron resultados válidos para: Humberto Carrillo Calvet
+INFO:__main__:Guardados 2 perfiles en /home/pablo/Modelo-ORCID/data/processed/unam_directory.json
+INFO:__main__:Buscando perfil UNAM para: Miguel Alcubierre
+WARNING:__main__:  No se encontraron resultados válidos para: Miguel Alcubierre
+INFO:__main__:Guardados 2 perfiles en /home/pablo/Modelo-ORCID/data/processed/unam_directory.json

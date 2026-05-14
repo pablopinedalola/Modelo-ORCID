@@ -57,14 +57,30 @@ class GraphAwareRetriever:
         # 1. Retrieval Inicial Híbrido (sobre investigadores)
         initial_results = self.hybrid_retriever.search(query, top_k=top_k*3, filters=filters, include_explanation=True)
         
+        print(f"[GRAPH-AWARE] hybrid_retriever returned {len(initial_results)} results")
+        
         # 2. Preparar initial scores para propagación
         initial_scores = {}
         profile_map = {}
         if initial_results:
             for r in initial_results:
-                pid = f"snii:{r['id']}"
+                raw_id = r.get("id", "")
+                if raw_id.startswith("work_"):
+                    # Es un paper de OpenAlex
+                    pid = f"paper:{raw_id.replace('work_', '')}"
+                else:
+                    # Es un perfil SNII
+                    pid = f"snii:{raw_id}"
+                    
                 initial_scores[pid] = r["score"]
                 profile_map[pid] = r
+                
+        print(f"[GRAPH-AWARE] initial_scores: {len(initial_scores)} nodes")
+        print(f"[GRAPH-AWARE] graph has {self.graph_builder.graph.G.number_of_nodes()} nodes")
+        
+        # Check how many initial_scores nodes exist in graph
+        in_graph = sum(1 for k in initial_scores if k in self.graph_builder.graph.G)
+        print(f"[GRAPH-AWARE] initial_scores nodes IN graph: {in_graph}/{len(initial_scores)}")
                 
         # Buscar coincidencias léxicas simples en otros nodos del grafo (Topics, Papers)
         query_lower = query.lower()
@@ -72,10 +88,10 @@ class GraphAwareRetriever:
             ntype = data.get("type")
             text_to_match = data.get("label", "") or data.get("title", "")
             if text_to_match and query_lower in text_to_match.lower():
-                # Dar un score inicial a estos nodos para que propaguen hacia sus autores
                 initial_scores[nid] = initial_scores.get(nid, 0) + 0.8
                 
         if not initial_scores:
+            print("[GRAPH-AWARE] No initial_scores -> returning []")
             return []
 
         # 3. Propagar Evidencia
@@ -84,11 +100,18 @@ class GraphAwareRetriever:
             iterations=propagation_iterations,
             decay_factor=0.3
         )
+        
+        print(f"[GRAPH-AWARE] After propagation: {len(refined_scores)} scored nodes")
 
-        # 4. Consolidar Resultados (Devolver investigadores, papers, topicos, etc)
+        # 4. Consolidar Resultados
         final_results = []
+        skipped_not_in_graph = 0
         
         for node_id, score in refined_scores.items():
+            if node_id not in self.graph_builder.graph.G:
+                skipped_not_in_graph += 1
+                continue
+                
             ntype = self.graph_builder.graph.G.nodes[node_id].get("type")
             
             if node_id.startswith("snii:"):
@@ -129,7 +152,6 @@ class GraphAwareRetriever:
                             "explanation": explanation
                         })
             elif ntype in [NodeType.PAPER.value, NodeType.TOPIC.value, NodeType.INSTITUTION.value]:
-                # Devolver estos nodos tambien!
                 data = self.graph_builder.graph.G.nodes[node_id]
                 title = data.get("title") or data.get("label") or node_id
                 
@@ -155,21 +177,29 @@ class GraphAwareRetriever:
                     "explanation": explanation
                 })
 
+        # Fallback si no hay resultados en el grafo o falló la propagación
+        if not final_results:
+            print("[GRAPH-AWARE] No results from graph propagation -> falling back to initial_results")
+            return initial_results[:top_k]
+
         # 5. Ordenar, filtrar y aplicar metadata filters si es nuevo
-        if filters:
-            # filters apply mostly to researchers
-            filtered_results = []
-            for r in final_results:
-                if r.get("node_type") != "researcher":
-                    filtered_results.append(r)
-                    continue
-                # For researchers, apply logic
-                if "institution" in filters and filters["institution"].lower() not in str(r.get("institucion", "")).lower():
-                    continue
-                filtered_results.append(r)
-            final_results = filtered_results
-            
+        # FILTRO ESTRICTO UNAM: Solo investigadores presentes en el corpus local
+        strict_unam_results = []
+        for r in final_results:
+            if r.get("node_type") == "researcher":
+                base_id = r.get("id", "").replace("snii:", "")
+                if base_id in self.hybrid_retriever._profiles_by_id:
+                    strict_unam_results.append(r)
+        
+        final_results = strict_unam_results
         final_results.sort(key=lambda x: x["score"], reverse=True)
+        
+        # Fallback final si los filtros eliminaron todo
+        if not final_results:
+            # Aun en fallback, solo permitimos lo que HybridRetriever (que ya está filtrado) devuelva
+            return initial_results[:top_k]
+        
+        print(f"[GRAPH-AWARE] returning {min(len(final_results), top_k)} results (STRICT UNAM)")
         
         return final_results[:top_k]
 

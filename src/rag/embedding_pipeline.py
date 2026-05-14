@@ -210,17 +210,12 @@ class EmbeddingPipeline:
 
     @staticmethod
     def _extract_metadata(profile: dict) -> dict:
-        """Extrae metadata compacta de un perfil para almacenar junto al embedding.
-
-        Args:
-            profile: Diccionario del perfil.
-
-        Returns:
-            Dict con los campos esenciales para recuperación.
-        """
+        """Extrae metadata compacta de un perfil para almacenar junto al embedding."""
         return {
             "id": profile.get("id", ""),
             "nombre_completo": profile.get("nombre_completo", ""),
+            "normalized_name": profile.get("normalized_name", ""),
+            "aliases": profile.get("aliases", []),
             "institucion": profile.get("institucion", ""),
             "area": profile.get("area", ""),
             "area_nombre": profile.get("area_nombre", ""),

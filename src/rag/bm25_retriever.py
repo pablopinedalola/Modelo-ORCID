@@ -203,9 +203,18 @@ class BM25Retriever:
 
         Duplica campos importantes para darles más peso en BM25.
         """
+        aliases = " ".join(profile.get("aliases", []))
+        publications = " ".join(profile.get("publications", []))
+        topics = " ".join(profile.get("topics", []))
+        
         parts = [
             # searchable_text ya tiene todo normalizado
             profile.get("searchable_text", ""),
+            # Aliases para matching exacto
+            aliases,
+            # Publicaciones y Topics (NUEVO)
+            publications,
+            topics,
             # Duplicar campos clave para más peso
             profile.get("nombre_completo", ""),
             profile.get("disciplina", ""),
@@ -222,6 +231,8 @@ class BM25Retriever:
         return {
             "id": profile.get("id", ""),
             "nombre_completo": profile.get("nombre_completo", ""),
+            "normalized_name": profile.get("normalized_name", ""),
+            "aliases": profile.get("aliases", []),
             "institucion": profile.get("institucion", ""),
             "area": profile.get("area", ""),
             "area_nombre": profile.get("area_nombre", ""),

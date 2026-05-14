@@ -1,0 +1,16 @@
+{
+  "humbertocarrillocalvet": {
+    "nombre": "Humberto Carrillo Calvet",
+    "afiliacion": "Universidad Nacional Autónoma de México",
+    "departamento": "Facultad de Ciencias",
+    "lineas_de_investigacion": "Sistemas Dinámicos Computacionales, Modelación Matemática",
+    "url_fuente": "http://www.fciencias.unam.mx/directorio/34213"
+  },
+  "miguelalcubierre": {
+    "nombre": "Miguel Alcubierre",
+    "afiliacion": "Universidad Nacional Autónoma de México",
+    "departamento": "Instituto de Ciencias Nucleares",
+    "lineas_de_investigacion": "Relatividad Numérica, Física Teórica",
+    "url_fuente": "https://www.nucleares.unam.mx/miguel.alcubierre"
+  }
+}

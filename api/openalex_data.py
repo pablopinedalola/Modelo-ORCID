@@ -38,40 +38,62 @@ def _load_all():
     if _authors:
         return  # already loaded
 
-    authors_dir = OPENALEX_DIR / "authors"
-    works_dir = OPENALEX_DIR / "works"
-
-    # ── Load authors ─────────────────────────────────────────────────
-    if authors_dir.exists():
-        for fp in sorted(authors_dir.glob("*.json")):
-            try:
-                with open(fp, "r", encoding="utf-8") as f:
-                    author = json.load(f)
-                    # Create a stable slug-id from the filename
-                    author["_slug"] = fp.stem  # e.g. "Miguel_Alcubierre"
-                    _authors.append(author)
-            except Exception as e:
-                logger.warning(f"Error loading author {fp}: {e}")
+    # ── Load UNAM authors ───────────────────────────────────────────
+    from config import PROCESSED_DATA_DIR
+    unam_path = PROCESSED_DATA_DIR / "unam_authors.json"
+    if unam_path.exists():
+        try:
+            with open(unam_path, "r", encoding="utf-8") as f:
+                unam_authors = json.load(f)
+                for a in unam_authors:
+                    a["_slug"] = a.get("id", "")
+                _authors.extend(unam_authors)
+                logger.info(f"Loaded {len(unam_authors)} UNAM authors")
+        except Exception as e:
+            logger.warning(f"Error loading UNAM authors: {e}")
 
     # ── Load works ───────────────────────────────────────────────────
-    if works_dir.exists():
-        for fp in sorted(works_dir.glob("*.json")):
-            try:
-                with open(fp, "r", encoding="utf-8") as f:
-                    works_list = json.load(f)
-                    # Author name from filename: "Miguel_Alcubierre_works.json" -> "Miguel_Alcubierre"
-                    author_key = fp.stem.replace("_works", "")
-                    _works_by_author[author_key] = works_list
-                    for w in works_list:
-                        w["_author_key"] = author_key
-                    _works.extend(works_list)
-            except Exception as e:
-                logger.warning(f"Error loading works {fp}: {e}")
+    # ── Load UNAM works ──────────────────────────────────────────────
+    unam_works_path = PROCESSED_DATA_DIR / "unam_works.json"
+    if unam_works_path.exists():
+        try:
+            with open(unam_works_path, "r", encoding="utf-8") as f:
+                unam_works = json.load(f)
+                for w in unam_works:
+                    auth_key = w.get("author_id", "")
+                    if auth_key not in _works_by_author:
+                        _works_by_author[auth_key] = []
+                    _works_by_author[auth_key].append(w)
+                    w["_author_key"] = auth_key
+                _works.extend(unam_works)
+                logger.info(f"Loaded {len(unam_works)} UNAM works")
+        except Exception as e:
+            logger.warning(f"Error loading UNAM works: {e}")
 
     # ── Build topics index ───────────────────────────────────────────
     seen_topic_ids = set()
+
     for a in _authors:
         for t in a.get("topics", []):
+            # soportar strings simples
+            if isinstance(t, str):
+                tid = t.lower().strip()
+                if tid and tid not in seen_topic_ids:
+                    seen_topic_ids.add(tid)
+                    _all_topics.append({
+                        "id": tid,
+                        "name": t,
+                        "count": 1,
+                        "subfield": "",
+                        "field": "",
+                        "domain": "",
+                    })
+                continue
+
+            # ignorar formatos inválidos
+            if not isinstance(t, dict):
+                continue
+
             tid = t.get("id", "")
             if tid and tid not in seen_topic_ids:
                 seen_topic_ids.add(tid)
@@ -87,17 +109,37 @@ def _load_all():
     # Also collect topics from works
     for w in _works:
         for t in w.get("topics", []):
+            # Soportar strings
+            if isinstance(t, str):
+                tid = t.lower().strip()
+                if tid and tid not in seen_topic_ids:
+                    seen_topic_ids.add(tid)
+                    _all_topics.append({
+                        "id": tid,
+                        "name": t,
+                        "count": 1,
+                        "subfield": "",
+                        "field": "",
+                        "domain": "",
+                    })
+                continue
+
+            # Soportar diccionarios
+            if not isinstance(t, dict):
+                continue
+
             tid = t.get("id", "")
             if tid and tid not in seen_topic_ids:
                 seen_topic_ids.add(tid)
                 _all_topics.append({
                     "id": tid,
-                    "name": t.get("name", ""),
+                    "name": t.get("display_name", t.get("name", "")),
                     "count": 1,
                     "subfield": "",
                     "field": "",
                     "domain": "",
                 })
+
 
     # ── Build institutions index ─────────────────────────────────────
     seen_inst = set()
@@ -240,9 +282,20 @@ def get_real_stats() -> dict:
 
     # Top topics
     topic_counter: Counter = Counter()
+
     for w in _works:
         for t in w.get("topics", []):
-            topic_counter[t.get("name", "")] += 1
+
+            # soportar strings simples
+            if isinstance(t, str):
+                topic_counter[t] += 1
+                continue
+
+            # ignorar basura inválida
+            if not isinstance(t, dict):
+                continue
+
+            topic_counter[t.get("name", t.get("display_name", ""))] += 1
 
     top_topics = [
         {"name": name, "count": count}

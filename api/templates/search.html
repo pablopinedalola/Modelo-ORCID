@@ -44,6 +44,16 @@
                 {% endif %}
             </div>
 
+            {% if a.unam_source %}
+            <div style="margin-top:8px; padding:8px 12px; background:rgba(16,185,129,0.05); border:1px solid rgba(16,185,129,0.2); border-radius:6px; font-size:12px;">
+                <span style="font-weight:600; color:#10b981;">También aparece en:</span> 
+                <a href="{{ a.unam_source.url_fuente }}" target="_blank" style="color:var(--accent); text-decoration:none; font-weight:500;">Directorio UNAM ({{ a.unam_source.departamento }})</a>
+                {% if a.unam_source.lineas_de_investigacion %}
+                <div style="color:var(--text-2); margin-top:4px; font-style:italic;">"{{ a.unam_source.lineas_de_investigacion[:120] }}..."</div>
+                {% endif %}
+            </div>
+            {% endif %}
+
             {% if a.match_types %}
             <div style="margin-top:10px; display:flex; gap:6px; flex-wrap:wrap;">
                 {% if 'semantic' in a.match_types %}
