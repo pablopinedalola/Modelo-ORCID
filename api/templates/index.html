@@ -4,72 +4,92 @@
 
 {% block content %}
 <div class="hero">
-    <h1>Academic Identity Explorer</h1>
+    <h1>Academic Explorer</h1>
     <p class="subtitle">
-        Desambiguación de identidad para investigadores del SNII de México
-        mediante ORCID, OpenAlex y análisis semántico
+        Explorador de ciencia real con datos OpenAlex: papers, autores, instituciones, topics y grafos académicos
     </p>
 
     <form class="search-box" action="/search" method="get">
         <span class="search-icon">⌕</span>
-        <input type="text" name="q" placeholder="Buscar investigador, institución, disciplina..."
+        <input type="text" name="q" placeholder="Buscar: relativity, complex networks, UNAM, quantum gravity..."
                autocomplete="off" autofocus>
     </form>
 </div>
 
 <div class="container">
-    <!-- Stats -->
+    <!-- Real Stats -->
     <div class="stats-grid">
         <div class="stat-card">
-            <div class="num">{{ stats.researchers }}</div>
-            <div class="label">Investigadores</div>
+            <div class="num">{{ stats.total_authors }}</div>
+            <div class="label">Autores</div>
         </div>
         <div class="stat-card">
-            <div class="num">{{ stats.with_orcid }}</div>
-            <div class="label">ORCID Resueltos</div>
+            <div class="num">{{ stats.total_works }}</div>
+            <div class="label">Papers Cargados</div>
         </div>
         <div class="stat-card">
-            <div class="num">{{ stats.graph_nodes }}</div>
-            <div class="label">Nodos en Grafo</div>
+            <div class="num">{{ stats.total_topics }}</div>
+            <div class="label">Topics</div>
         </div>
         <div class="stat-card">
-            <div class="num">{{ stats.graph_edges }}</div>
-            <div class="label">Relaciones</div>
+            <div class="num">{{ stats.total_institutions }}</div>
+            <div class="label">Instituciones</div>
+        </div>
+        <div class="stat-card">
+            <div class="num">{{ "{:,}".format(stats.total_citations) }}</div>
+            <div class="label">Citas Totales</div>
+        </div>
+        <div class="stat-card">
+            <div class="num">{{ "{:,}".format(stats.total_works_count) }}</div>
+            <div class="label">Works (OpenAlex)</div>
         </div>
     </div>
 
-    <!-- Recent Profiles -->
-    {% if profiles %}
+    <!-- Researchers -->
     <h2 class="section-title">Investigadores</h2>
-    <p class="section-sub">Perfiles enriquecidos con identidad resuelta</p>
+    <p class="section-sub">Perfiles reales cargados desde OpenAlex</p>
 
     <div class="profiles-grid">
-        {% for p in profiles %}
-        <a href="/researcher/{{ p.id }}" class="profile-card" style="text-decoration:none;">
+        {% for a in authors %}
+        <a href="/researcher/{{ a.slug }}" class="profile-card" style="text-decoration:none;">
             <div style="display:flex; justify-content:space-between; align-items:start;">
-                <div class="name">{{ p.full_name }}</div>
-                <span class="badge {% if p.confidence >= 0.5 %}badge-green{% elif p.confidence >= 0.3 %}badge-orange{% else %}badge-red{% endif %}">
-                    {{ "%.0f"|format(p.confidence * 100) }}%
-                </span>
+                <div class="name">{{ a.display_name }}</div>
+                <span class="badge badge-accent" style="font-size:12px; font-weight:700;">h={{ a.h_index }}</span>
             </div>
             <div class="meta">
-                <span>🏛 {{ p.institution or 'Sin institución' }}</span>
-                <span>📚 {{ p.discipline or p.area or 'Sin área' }}</span>
-                {% if p.orcid_id %}
-                <span style="color:var(--green)">✓ ORCID: {{ p.orcid_id }}</span>
+                <span>🏛 {{ a.institution or 'Sin institución' }}</span>
+                <span>📚 {{ a.works_count }} publicaciones · {{ "{:,}".format(a.cited_by_count) }} citas</span>
+                {% if a.topics %}
+                <span style="color:var(--accent);">🔬 {{ a.topics[:2]|join(', ') }}</span>
                 {% endif %}
-            </div>
-            <div class="conf-bar" style="height:6px;">
-                <div class="conf-fill {% if p.confidence >= 0.5 %}conf-high{% elif p.confidence >= 0.3 %}conf-med{% else %}conf-low{% endif %}"
-                     style="width:{{ (p.confidence * 100)|int }}%"></div>
+                {% if a.orcid %}
+                <span style="color:var(--green)">✓ ORCID</span>
+                {% endif %}
             </div>
         </a>
         {% endfor %}
     </div>
-    {% else %}
-    <div style="text-align:center; padding:60px; color:var(--text-3);">
-        <p style="font-size:18px;">No hay perfiles disponibles</p>
-        <p style="margin-top:8px;">Ejecuta el pipeline: <code>python main.py --save</code></p>
+
+    <!-- Top Cited Papers -->
+    {% if stats.top_cited_papers %}
+    <h2 class="section-title" style="margin-top:48px;">Papers Más Citados</h2>
+    <p class="section-sub">De los datos OpenAlex descargados</p>
+
+    <div class="card" style="overflow-x:auto;">
+        <table class="data-table">
+            <thead><tr><th>Título</th><th>Autor</th><th>Año</th><th>Citas</th><th>DOI</th></tr></thead>
+            <tbody>
+            {% for p in stats.top_cited_papers[:8] %}
+            <tr>
+                <td class="title-cell">{{ p.title }}</td>
+                <td style="white-space:nowrap;">{{ p.author }}</td>
+                <td>{{ p.year }}</td>
+                <td style="font-weight:700; color:var(--accent);">{{ "{:,}".format(p.citations) }}</td>
+                <td>{% if p.doi %}<a href="{{ p.doi }}" target="_blank">DOI↗</a>{% endif %}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
     {% endif %}
 </div>

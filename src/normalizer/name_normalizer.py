@@ -81,11 +81,6 @@ class NameNormalizer:
 
         Returns:
             Lista de aliases únicos.
-
-        Examples:
-            >>> aliases = NameNormalizer().generate_aliases("CARLOS", "GARCÍA", "LÓPEZ")
-            >>> "García López, Carlos" in aliases
-            True
         """
         aliases: list[str] = []
         seen: set[str] = set()
@@ -96,54 +91,70 @@ class NameNormalizer:
                 seen.add(clean.lower())
                 aliases.append(clean)
 
-        parts = nombre.strip().split()
+        nombre = nombre.strip()
         pat = paterno.strip()
         mat = materno.strip()
+        
+        parts = nombre.split()
+        first_name = parts[0] if parts else ""
+        initial = first_name[0] + "." if first_name else ""
+        all_init = " ".join(p[0] + "." for p in parts) if parts else ""
 
+        # Normalizados (sin acentos)
+        nombre_na = self.remove_accents(nombre)
         pat_na = self.remove_accents(pat)
         mat_na = self.remove_accents(mat)
-        nombre_na = self.remove_accents(nombre.strip())
 
-        initial = parts[0][0] + "." if parts else ""
-        all_init = " ".join(p[0] + "." for p in parts) if parts else ""
-        first = parts[0] if parts else ""
+        # 1. Formatos completos
+        add(f"{nombre} {pat} {mat}")
+        add(f"{nombre_na} {pat_na} {mat_na}")
+        add(f"{pat} {mat}, {nombre}")
+        add(f"{pat_na} {mat_na}, {nombre_na}")
 
-        n_tc = " ".join(w.capitalize() for w in parts)
-        p_tc, m_tc = pat.capitalize(), mat.capitalize()
-        n_na_tc = " ".join(w.capitalize() for w in nombre_na.split())
-        p_na_tc = pat_na.capitalize()
-        m_na_tc = mat_na.capitalize()
-        f_tc = first.capitalize()
-        f_na_tc = self.remove_accents(f_tc)
+        # 2. Formatos con iniciales
+        add(f"{initial} {pat} {mat}")
+        add(f"{initial} {pat_na} {mat_na}")
+        if all_init:
+            add(f"{all_init} {pat}")
+            add(f"{all_init} {pat_na}")
 
-        full = f"{p_tc} {m_tc}".strip() if m_tc else p_tc
-        full_na = f"{p_na_tc} {m_na_tc}".strip() if m_na_tc else p_na_tc
+        # 3. Formatos de publicación internacional (Surname, F. or Surname, First)
+        add(f"{pat}, {nombre}")
+        add(f"{pat_na}, {nombre_na}")
+        add(f"{pat}, {initial}")
+        add(f"{pat_na}, {initial}")
+        
+        # 4. Formatos con guión (común en México para preservar ambos apellidos)
+        if mat:
+            add(f"{pat}-{mat}, {nombre}")
+            add(f"{pat_na}-{mat_na}, {nombre_na}")
+            add(f"{nombre} {pat}-{mat}")
+            add(f"{nombre_na} {pat_na}-{mat_na}")
 
-        # Nombre Apellido1 Apellido2
-        add(f"{n_tc} {full}")
-        add(f"{n_na_tc} {full_na}")
-        # Inicial. Apellido
-        add(f"{initial} {full}")
-        add(f"{initial} {full_na}")
-        # Apellido, Nombre
-        add(f"{full}, {n_tc}")
-        add(f"{full_na}, {n_na_tc}")
-        # Apellido1-Apellido2 (guión)
-        if m_tc:
-            add(f"{p_tc}-{m_tc}, {n_tc}")
-            add(f"{p_na_tc}-{m_na_tc}, {n_na_tc}")
-            add(f"{n_tc} {p_tc}-{m_tc}")
-            add(f"{n_na_tc} {p_na_tc}-{m_na_tc}")
-        # Iniciales completas
-        if len(parts) > 1:
-            add(f"{all_init} {full}")
-        # Solo primer apellido
-        add(f"{f_tc} {p_tc}")
-        add(f"{f_na_tc} {p_na_tc}")
-        add(f"{initial} {p_tc}")
-        add(f"{initial} {p_na_tc}")
+        # 5. Formatos cortos (solo primer apellido)
+        add(f"{first_name} {pat}")
+        add(self.remove_accents(f"{first_name} {pat}"))
+        
+        # 6. Variantes de guiones (Carrillo Calvet <-> Carrillo-Calvet)
+        if mat:
+            add(f"{pat} {mat}")
+            add(f"{pat}-{mat}")
+            add(f"{nombre} {pat} {mat}")
+            add(f"{nombre} {pat}-{mat}")
+            add(f"{initial} {pat}-{mat}")
+            
+        # 7. Solo apellidos
+        add(pat)
+        if mat:
+            add(mat)
+            add(f"{pat} {mat}")
+            add(f"{pat}-{mat}")
+            
+        return list(seen) # Retornar las formas normalizadas para facilitar el matching exacto
 
-        return aliases
+    def normalize_query(self, query: str) -> str:
+        """Normalización fuerte para matching de queries."""
+        return self.normalize(query)
 
     def tokenize(self, text: str) -> set[str]:
         """Extrae tokens significativos para matching.

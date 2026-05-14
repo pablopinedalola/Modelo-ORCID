@@ -7,3 +7,6 @@ venv/
 node_modules/
 data/raw/
 data/outputs/
+data/vector_store/*.npy
+data/vector_store/*.pkl
+data/vector_store/*.index

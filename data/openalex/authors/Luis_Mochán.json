@@ -1,0 +1,863 @@
+{
+  "id": "https://openalex.org/A5083646281",
+  "orcid": "https://orcid.org/0000-0003-0418-5375",
+  "display_name": "W. Luis Mochán",
+  "raw_author_names": [
+    "Luis Mochán",
+    "Mochan, W. L.",
+    "Mochan, W. Luis",
+    "Mochán, W. Luis",
+    "W L Mochan",
+    "W L Mochán",
+    "W Luis Mochán",
+    "W. L. Mochan",
+    "W. L. Mochán",
+    "W. L. Mochán",
+    "W. LUIS MOCHÁN",
+    "W. Luis Mochan",
+    "W. Luis Mochán",
+    "W. Luis Mochán",
+    "W. Luis Mochán Backal",
+    "W. Mochán",
+    "W.L. Mochan",
+    "W.L. Mochán",
+    "W.Luis Mochán",
+    "Wolf Luis Mochán"
+  ],
+  "full_name": "Mochán, W. Luis",
+  "relevance_score": 10133.651,
+  "works_count": 184,
+  "cited_by_count": 2541,
+  "summary_stats": {
+    "2yr_mean_citedness": 0.5,
+    "h_index": 29,
+    "i10_index": 66
+  },
+  "ids": {
+    "openalex": "https://openalex.org/A5083646281",
+    "orcid": "https://orcid.org/0000-0003-0418-5375"
+  },
+  "affiliations": [
+    {
+      "institution": {
+        "id": "https://openalex.org/I116067653",
+        "ror": "https://ror.org/02p77k626",
+        "display_name": "University of Rome Tor Vergata",
+        "country_code": "IT",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I116067653"
+        ]
+      },
+      "years": [
+        1991
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I171892758",
+        "ror": "https://ror.org/02nv7yv05",
+        "display_name": "Forschungszentrum Jülich",
+        "country_code": "DE",
+        "type": "facility",
+        "lineage": [
+          "https://openalex.org/I1305996414",
+          "https://openalex.org/I171892758"
+        ]
+      },
+      "years": [
+        2001
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I173911158",
+        "ror": "https://ror.org/04rswrd78",
+        "display_name": "Iowa State University",
+        "country_code": "US",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I173911158"
+        ]
+      },
+      "years": [
+        1983
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I204250578",
+        "ror": "https://ror.org/04gyf1771",
+        "display_name": "University of California, Irvine",
+        "country_code": "US",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I204250578"
+        ]
+      },
+      "years": [
+        1992
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I2799391333",
+        "ror": "https://ror.org/00q8h8k29",
+        "display_name": "Centro de Investigaciones en Optica",
+        "country_code": "MX",
+        "type": "facility",
+        "lineage": [
+          "https://openalex.org/I2799391333"
+        ]
+      },
+      "years": [
+        2019,
+        2016,
+        2012,
+        2010,
+        2008,
+        1999,
+        1997,
+        1996
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I2802789608",
+        "ror": "https://ror.org/041m9xr71",
+        "display_name": "Ames National Laboratory",
+        "country_code": "US",
+        "type": "facility",
+        "lineage": [
+          "https://openalex.org/I1330989302",
+          "https://openalex.org/I173911158",
+          "https://openalex.org/I2802789608",
+          "https://openalex.org/I39565521"
+        ]
+      },
+      "years": [
+        1983
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I36243813",
+        "ror": "https://ror.org/059yx9a68",
+        "display_name": "Universidad Nacional de Colombia",
+        "country_code": "CO",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I36243813"
+        ]
+      },
+      "years": [
+        1988
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I39804081",
+        "ror": "https://ror.org/02en5vm52",
+        "display_name": "Sorbonne Université",
+        "country_code": "FR",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I39804081"
+        ]
+      },
+      "years": [
+        1993
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4061448",
+        "ror": "https://ror.org/00c32gy34",
+        "display_name": "Universidad de Sonora",
+        "country_code": "MX",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I4061448"
+        ]
+      },
+      "years": [
+        1990
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210105205",
+        "ror": "https://ror.org/01deq2m43",
+        "display_name": "Universidad Del Valle De Cuernavaca",
+        "country_code": "MX",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I4210105205"
+        ]
+      },
+      "years": [
+        2020,
+        1991
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210106879",
+        "ror": "https://ror.org/01jr3y717",
+        "display_name": "Ohio University",
+        "country_code": "US",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I4210106879"
+        ]
+      },
+      "years": [
+        1992,
+        1991
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210116760",
+        "ror": "https://ror.org/02cf9zs75",
+        "display_name": "Universidad Americana de Morelos",
+        "country_code": "MX",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I4210116760"
+        ]
+      },
+      "years": [
+        1991
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I59361560",
+        "ror": "https://ror.org/059sp8j34",
+        "display_name": "Instituto Politécnico Nacional",
+        "country_code": "MX",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I59361560"
+        ]
+      },
+      "years": [
+        1989,
+        1988
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I68368234",
+        "ror": "https://ror.org/009eqmr18",
+        "display_name": "Center for Research and Advanced Studies of the National Polytechnic Institute",
+        "country_code": "MX",
+        "type": "facility",
+        "lineage": [
+          "https://openalex.org/I59361560",
+          "https://openalex.org/I68368234"
+        ]
+      },
+      "years": [
+        1989
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I721619",
+        "ror": "https://ror.org/03p2z7827",
+        "display_name": "Benemérita Universidad Autónoma de Puebla",
+        "country_code": "MX",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I721619"
+        ]
+      },
+      "years": [
+        1991,
+        1989
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I884181516",
+        "ror": "https://ror.org/03rzb4f20",
+        "display_name": "Universidad Autónoma del Estado de Morelos",
+        "country_code": "MX",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I884181516"
+        ]
+      },
+      "years": [
+        2026,
+        2024,
+        2021,
+        2020,
+        2018,
+        2002,
+        2000,
+        1999,
+        1998,
+        1995,
+        1993,
+        1992
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I8961855",
+        "ror": "https://ror.org/01tmp8f25",
+        "display_name": "Universidad Nacional Autónoma de México",
+        "country_code": "MX",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I8961855"
+        ]
+      },
+      "years": [
+        2026,
+        2024,
+        2023,
+        2021,
+        2020,
+        2019,
+        2018,
+        2017,
+        2016,
+        2014,
+        2013,
+        2010,
+        2009,
+        2008,
+        2007,
+        2006,
+        2005,
+        2004,
+        2003,
+        2002,
+        2001,
+        2000,
+        1999,
+        1998,
+        1997,
+        1996,
+        1994,
+        1993,
+        1992,
+        1991,
+        1990,
+        1989,
+        1988,
+        1987,
+        1986,
+        1985,
+        1984,
+        1981
+      ]
+    }
+  ],
+  "last_known_institutions": [
+    {
+      "id": "https://openalex.org/I884181516",
+      "ror": "https://ror.org/03rzb4f20",
+      "display_name": "Universidad Autónoma del Estado de Morelos",
+      "country_code": "MX",
+      "type": "education",
+      "lineage": [
+        "https://openalex.org/I884181516"
+      ]
+    },
+    {
+      "id": "https://openalex.org/I8961855",
+      "ror": "https://ror.org/01tmp8f25",
+      "display_name": "Universidad Nacional Autónoma de México",
+      "country_code": "MX",
+      "type": "education",
+      "lineage": [
+        "https://openalex.org/I8961855"
+      ]
+    }
+  ],
+  "topics": [
+    {
+      "id": "https://openalex.org/T11177",
+      "display_name": "Spectroscopy and Quantum Chemical Studies",
+      "count": 38,
+      "subfield": {
+        "id": "https://openalex.org/subfields/3107",
+        "display_name": "Atomic and Molecular Physics, and Optics"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/31",
+        "display_name": "Physics and Astronomy"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/3",
+        "display_name": "Physical Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T10666",
+      "display_name": "Photonic Crystals and Applications",
+      "count": 30,
+      "subfield": {
+        "id": "https://openalex.org/subfields/3107",
+        "display_name": "Atomic and Molecular Physics, and Optics"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/31",
+        "display_name": "Physics and Astronomy"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/3",
+        "display_name": "Physical Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T13531",
+      "display_name": "Surface and Thin Film Phenomena",
+      "count": 22,
+      "subfield": {
+        "id": "https://openalex.org/subfields/3107",
+        "display_name": "Atomic and Molecular Physics, and Optics"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/31",
+        "display_name": "Physics and Astronomy"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/3",
+        "display_name": "Physical Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T10002",
+      "display_name": "Advanced Chemical Physics Studies",
+      "count": 20,
+      "subfield": {
+        "id": "https://openalex.org/subfields/3107",
+        "display_name": "Atomic and Molecular Physics, and Optics"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/31",
+        "display_name": "Physics and Astronomy"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/3",
+        "display_name": "Physical Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T11449",
+      "display_name": "Mechanical and Optical Resonators",
+      "count": 19,
+      "subfield": {
+        "id": "https://openalex.org/subfields/3107",
+        "display_name": "Atomic and Molecular Physics, and Optics"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/31",
+        "display_name": "Physics and Astronomy"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/3",
+        "display_name": "Physical Sciences"
+      }
+    }
+  ],
+  "topic_share": [
+    {
+      "id": "https://openalex.org/T12466",
+      "display_name": "Near-Field Optical Microscopy",
+      "value": 0.0002191,
+      "subfield": {
+        "id": "https://openalex.org/subfields/2204",
+        "display_name": "Biomedical Engineering"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/22",
+        "display_name": "Engineering"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/3",
+        "display_name": "Physical Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T12220",
+      "display_name": "Quantum Electrodynamics and Casimir Effect",
+      "value": 0.0002167,
+      "subfield": {
+        "id": "https://openalex.org/subfields/3107",
+        "display_name": "Atomic and Molecular Physics, and Optics"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/31",
+        "display_name": "Physics and Astronomy"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/3",
+        "display_name": "Physical Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T10666",
+      "display_name": "Photonic Crystals and Applications",
+      "value": 0.0001652,
+      "subfield": {
+        "id": "https://openalex.org/subfields/3107",
+        "display_name": "Atomic and Molecular Physics, and Optics"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/31",
+        "display_name": "Physics and Astronomy"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/3",
+        "display_name": "Physical Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T12612",
+      "display_name": "Strong Light-Matter Interactions",
+      "value": 0.000141,
+      "subfield": {
+        "id": "https://openalex.org/subfields/3107",
+        "display_name": "Atomic and Molecular Physics, and Optics"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/31",
+        "display_name": "Physics and Astronomy"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/3",
+        "display_name": "Physical Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T13531",
+      "display_name": "Surface and Thin Film Phenomena",
+      "value": 0.0001394,
+      "subfield": {
+        "id": "https://openalex.org/subfields/3107",
+        "display_name": "Atomic and Molecular Physics, and Optics"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/31",
+        "display_name": "Physics and Astronomy"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/3",
+        "display_name": "Physical Sciences"
+      }
+    }
+  ],
+  "x_concepts": [
+    {
+      "id": "121332964",
+      "wikidata": "https://www.wikidata.org/wiki/Q413",
+      "display_name": "Physics",
+      "score": 0.9416710138320923
+    },
+    {
+      "id": "192562407",
+      "wikidata": "https://www.wikidata.org/wiki/Q228736",
+      "display_name": "Materials science",
+      "score": 0.9177141189575195
+    },
+    {
+      "id": "120665830",
+      "wikidata": "https://www.wikidata.org/wiki/Q14620",
+      "display_name": "Optics",
+      "score": 0.8043109178543091
+    },
+    {
+      "id": "62520636",
+      "wikidata": "https://www.wikidata.org/wiki/Q944",
+      "display_name": "Quantum mechanics",
+      "score": 0.49161773920059204
+    },
+    {
+      "id": "33923547",
+      "wikidata": "https://www.wikidata.org/wiki/Q395",
+      "display_name": "Mathematics",
+      "score": 0.47227510809898376
+    }
+  ],
+  "counts_by_year": [
+    {
+      "year": 1981,
+      "works_count": 1,
+      "oa_works_count": 0,
+      "cited_by_count": 7
+    },
+    {
+      "year": 1983,
+      "works_count": 1,
+      "oa_works_count": 0,
+      "cited_by_count": 55
+    },
+    {
+      "year": 1984,
+      "works_count": 2,
+      "oa_works_count": 2,
+      "cited_by_count": 12
+    },
+    {
+      "year": 1985,
+      "works_count": 4,
+      "oa_works_count": 1,
+      "cited_by_count": 262
+    },
+    {
+      "year": 1986,
+      "works_count": 2,
+      "oa_works_count": 0,
+      "cited_by_count": 56
+    },
+    {
+      "year": 1987,
+      "works_count": 4,
+      "oa_works_count": 0,
+      "cited_by_count": 95
+    },
+    {
+      "year": 1988,
+      "works_count": 5,
+      "oa_works_count": 0,
+      "cited_by_count": 123
+    },
+    {
+      "year": 1989,
+      "works_count": 10,
+      "oa_works_count": 2,
+      "cited_by_count": 109
+    },
+    {
+      "year": 1990,
+      "works_count": 2,
+      "oa_works_count": 0,
+      "cited_by_count": 31
+    },
+    {
+      "year": 1991,
+      "works_count": 6,
+      "oa_works_count": 0,
+      "cited_by_count": 166
+    },
+    {
+      "year": 1992,
+      "works_count": 3,
+      "oa_works_count": 0,
+      "cited_by_count": 55
+    },
+    {
+      "year": 1993,
+      "works_count": 8,
+      "oa_works_count": 0,
+      "cited_by_count": 135
+    },
+    {
+      "year": 1994,
+      "works_count": 1,
+      "oa_works_count": 0,
+      "cited_by_count": 35
+    },
+    {
+      "year": 1995,
+      "works_count": 2,
+      "oa_works_count": 0,
+      "cited_by_count": 35
+    },
+    {
+      "year": 1996,
+      "works_count": 7,
+      "oa_works_count": 0,
+      "cited_by_count": 108
+    },
+    {
+      "year": 1997,
+      "works_count": 5,
+      "oa_works_count": 0,
+      "cited_by_count": 79
+    },
+    {
+      "year": 1998,
+      "works_count": 15,
+      "oa_works_count": 2,
+      "cited_by_count": 120
+    },
+    {
+      "year": 1999,
+      "works_count": 3,
+      "oa_works_count": 0,
+      "cited_by_count": 32
+    },
+    {
+      "year": 2000,
+      "works_count": 2,
+      "oa_works_count": 1,
+      "cited_by_count": 90
+    },
+    {
+      "year": 2001,
+      "works_count": 6,
+      "oa_works_count": 1,
+      "cited_by_count": 35
+    },
+    {
+      "year": 2002,
+      "works_count": 4,
+      "oa_works_count": 1,
+      "cited_by_count": 40
+    },
+    {
+      "year": 2003,
+      "works_count": 9,
+      "oa_works_count": 2,
+      "cited_by_count": 238
+    },
+    {
+      "year": 2004,
+      "works_count": 3,
+      "oa_works_count": 0,
+      "cited_by_count": 3
+    },
+    {
+      "year": 2005,
+      "works_count": 14,
+      "oa_works_count": 3,
+      "cited_by_count": 211
+    },
+    {
+      "year": 2006,
+      "works_count": 10,
+      "oa_works_count": 4,
+      "cited_by_count": 106
+    },
+    {
+      "year": 2007,
+      "works_count": 3,
+      "oa_works_count": 1,
+      "cited_by_count": 35
+    },
+    {
+      "year": 2008,
+      "works_count": 7,
+      "oa_works_count": 2,
+      "cited_by_count": 0
+    },
+    {
+      "year": 2009,
+      "works_count": 3,
+      "oa_works_count": 1,
+      "cited_by_count": 34
+    },
+    {
+      "year": 2010,
+      "works_count": 5,
+      "oa_works_count": 2,
+      "cited_by_count": 49
+    },
+    {
+      "year": 2012,
+      "works_count": 1,
+      "oa_works_count": 0,
+      "cited_by_count": 8
+    },
+    {
+      "year": 2013,
+      "works_count": 3,
+      "oa_works_count": 3,
+      "cited_by_count": 24
+    },
+    {
+      "year": 2014,
+      "works_count": 1,
+      "oa_works_count": 0,
+      "cited_by_count": 1
+    },
+    {
+      "year": 2016,
+      "works_count": 2,
+      "oa_works_count": 1,
+      "cited_by_count": 7
+    },
+    {
+      "year": 2017,
+      "works_count": 3,
+      "oa_works_count": 1,
+      "cited_by_count": 10
+    },
+    {
+      "year": 2018,
+      "works_count": 6,
+      "oa_works_count": 3,
+      "cited_by_count": 44
+    },
+    {
+      "year": 2019,
+      "works_count": 4,
+      "oa_works_count": 3,
+      "cited_by_count": 20
+    },
+    {
+      "year": 2020,
+      "works_count": 3,
+      "oa_works_count": 3,
+      "cited_by_count": 44
+    },
+    {
+      "year": 2021,
+      "works_count": 6,
+      "oa_works_count": 4,
+      "cited_by_count": 25
+    },
+    {
+      "year": 2023,
+      "works_count": 4,
+      "oa_works_count": 4,
+      "cited_by_count": 0
+    },
+    {
+      "year": 2024,
+      "works_count": 3,
+      "oa_works_count": 2,
+      "cited_by_count": 2
+    },
+    {
+      "year": 2026,
+      "works_count": 1,
+      "oa_works_count": 0,
+      "cited_by_count": 0
+    }
+  ],
+  "display_name_alternatives": [
+    "Luis Mochán",
+    "Mochan, W. L.",
+    "Mochan, W. Luis",
+    "Mochán, W. Luis",
+    "W L Mochan",
+    "W L Mochán",
+    "W Luis Mochán",
+    "W. L. Mochan",
+    "W. L. Mochán",
+    "W. L. Mochán",
+    "W. LUIS MOCHÁN",
+    "W. Luis Mochan",
+    "W. Luis Mochán",
+    "W. Luis Mochán",
+    "W. Luis Mochán Backal",
+    "W. Mochán",
+    "W.L. Mochan",
+    "W.L. Mochán",
+    "W.Luis Mochán",
+    "Wolf Luis Mochán"
+  ],
+  "block_key": "w mochan",
+  "works_api_url": "https://api.openalex.org/works?filter=author.id:A5083646281",
+  "updated_date": "2026-05-08T12:23:59",
+  "created_date": "2016-06-24T00:00:00"
+}

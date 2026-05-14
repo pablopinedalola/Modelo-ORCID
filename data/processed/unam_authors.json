@@ -1,0 +1,32 @@
+[
+  {
+    "id": "unam_universidad_nacional_autonoma_de_mexico",
+    "nombre_completo": "Universidad Nacional Autónoma de México",
+    "normalized_name": "universidad nacional autonoma de mexico",
+    "institucion": "Universidad Nacional Autónoma de México",
+    "topics": [
+      "Ciencias Físico Matemáticas",
+      "UNAM Repository"
+    ],
+    "publications": [
+      "Fundamentos matemáticos de la teoría cuántica de campos",
+      "El laboratorio de matematicas un lugar para vincular la matematica, la fisica y la ingenieria ",
+      "Física matemática y análisis semiclásico",
+      "La educación en ingeniería en el contexto global: propuesta para la formación de ingenieros en el primer cuarto del Siglo XXI",
+      "Guia del examen general para el egreso de la licenciatura en ingenieria industrial : conceptos y aplicaciones en el area de ingenieria mecanica y procesos de manufactura",
+      "Estado del arte de la investigación en verificación formal",
+      "Ondas viajeras en ciencias químico-biológicas I: motivación y trabajos pioneros",
+      "Fitoquímica y actividades biológicas de plantas de importancia en la medicina tradicional del Valle de Tehuacán-Cuicatlán",
+      "El origen geológico de la vida: una perspectiva desde la meteorítica",
+      "Lógicas modales para la computación y las ciencias",
+      "Programa de estudios diplomado en computacion",
+      "Gestión de riesgos para la adopción de la computación en nube en entidades financieras de la República Argentina",
+      "Algunos aspectos de la lógica matemática en la topología, la computación y los fundamentos de la matemática",
+      "¿Qué tan matemática es la lógica matemática?",
+      "En busca del nacimiento de las galaxias",
+      "Aplicaciones instrumentales para la astronomia en el mediano infrarrojo",
+      "HII regions in NGC 5055. II. Physical Properties"
+    ],
+    "years": []
+  }
+]

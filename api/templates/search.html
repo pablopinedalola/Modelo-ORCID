@@ -4,49 +4,170 @@
 
 {% block content %}
 <div class="container">
-    <h1 class="section-title" style="margin-top:16px;">Buscar Investigadores</h1>
-    <p class="section-sub">Busca por nombre, institución, disciplina u ORCID</p>
+    <h1 class="section-title" style="margin-top:16px;">Explorador Científico</h1>
+    <p class="section-sub">Busca autores, papers, topics o instituciones en los datos reales de OpenAlex</p>
 
     <form class="search-box" action="/search" method="get" style="max-width:100%; margin-bottom:32px;">
         <span class="search-icon">⌕</span>
         <input type="text" name="q" value="{{ query }}"
-               placeholder="Ejemplo: García, UNAM, Matemáticas, 0000-0002..." autofocus>
+               placeholder="Ejemplo: relativity, complex networks, UNAM, quantum gravity, wormhole..." autofocus>
     </form>
 
     {% if query %}
-    <p style="color:var(--text-3); margin-bottom:20px;">
-        {{ total }} resultado{{ 's' if total != 1 else '' }} para "<strong style="color:var(--text)">{{ query }}</strong>"
-    </p>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+        <p style="color:var(--text-3);">
+            {{ total }} resultado{{ 's' if total != 1 else '' }} para "<strong style="color:var(--text)">{{ query }}</strong>"
+        </p>
+        <span style="background:rgba(16,185,129,0.12); color:#10b981; padding:3px 10px; border-radius:12px; font-size:11px; font-weight:600;">
+            🔬 OpenAlex Real Data
+        </span>
+    </div>
     {% endif %}
 
-    {% if results %}
-    <div class="profiles-grid">
-        {% for p in results %}
-        <a href="/researcher/{{ p.id }}" class="profile-card" style="text-decoration:none;">
+    {% if results.authors %}
+    <!-- ═══ AUTHORS ═══ -->
+    <h2 class="section-title" style="font-size:18px; margin-top:8px;">
+        👤 Investigadores <span style="color:var(--text-3); font-weight:400; font-size:14px;">({{ results.authors|length }})</span>
+    </h2>
+    <div class="profiles-grid" style="margin-bottom:36px;">
+        {% for a in results.authors %}
+        <a href="/researcher/{{ a.slug }}" class="profile-card" style="text-decoration:none;">
             <div style="display:flex; justify-content:space-between; align-items:start;">
-                <div class="name">{{ p.full_name }}</div>
-                <span class="badge {% if p.confidence >= 0.5 %}badge-green{% elif p.confidence >= 0.3 %}badge-orange{% else %}badge-red{% endif %}">
-                    {{ "%.0f"|format(p.confidence * 100) }}%
-                </span>
+                <div class="name">{{ a.display_name }}</div>
+                <span class="badge badge-accent">h={{ a.h_index }}</span>
             </div>
             <div class="meta">
-                <span>🏛 {{ p.institution }}</span>
-                <span>📚 {{ p.discipline or p.area }}</span>
-                {% if p.orcid_id %}
-                <span style="color:var(--green)">✓ ORCID: {{ p.orcid_id }}</span>
+                <span>🏛 {{ a.institution or 'Sin institución' }}</span>
+                <span>📚 {{ a.works_count }} works · {{ "{:,}".format(a.cited_by_count) }} citas</span>
+                {% if a.topics %}
+                <span style="color:var(--accent);">🔬 {{ a.topics[:3]|join(', ') }}</span>
                 {% endif %}
             </div>
-            <div class="conf-bar" style="height:6px;">
-                <div class="conf-fill {% if p.confidence >= 0.5 %}conf-high{% elif p.confidence >= 0.3 %}conf-med{% else %}conf-low{% endif %}"
-                     style="width:{{ (p.confidence * 100)|int }}%"></div>
+
+            {% if a.unam_source %}
+            <div style="margin-top:8px; padding:8px 12px; background:rgba(16,185,129,0.05); border:1px solid rgba(16,185,129,0.2); border-radius:6px; font-size:12px;">
+                <span style="font-weight:600; color:#10b981;">También aparece en:</span> 
+                <a href="{{ a.unam_source.url_fuente }}" target="_blank" style="color:var(--accent); text-decoration:none; font-weight:500;">Directorio UNAM ({{ a.unam_source.departamento }})</a>
+                {% if a.unam_source.lineas_de_investigacion %}
+                <div style="color:var(--text-2); margin-top:4px; font-style:italic;">"{{ a.unam_source.lineas_de_investigacion[:120] }}..."</div>
+                {% endif %}
             </div>
+            {% endif %}
+
+            {% if a.match_types %}
+            <div style="margin-top:10px; display:flex; gap:6px; flex-wrap:wrap;">
+                {% if 'semantic' in a.match_types %}
+                <span style="background:rgba(59,130,246,0.1); color:#3b82f6; padding:2px 8px; border-radius:12px; font-size:10px; font-weight:600;">🧠 Semantic Match</span>
+                {% endif %}
+                {% if 'lexical' in a.match_types %}
+                <span style="background:rgba(245,158,11,0.1); color:#f59e0b; padding:2px 8px; border-radius:12px; font-size:10px; font-weight:600;">📝 Lexical BM25</span>
+                {% endif %}
+                {% if 'topic' in a.match_types %}
+                <span style="background:rgba(139,92,246,0.1); color:#8b5cf6; padding:2px 8px; border-radius:12px; font-size:10px; font-weight:600;">🔬 Topic Overlap</span>
+                {% endif %}
+                {% if 'concept' in a.match_types %}
+                <span style="background:rgba(16,185,129,0.1); color:#10b981; padding:2px 8px; border-radius:12px; font-size:10px; font-weight:600;">💡 Concept Match</span>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            {% if a.explanation %}
+            <div style="margin-top:10px; font-size:11px; color:var(--text-2); font-style:italic; padding:8px; background:var(--surface2); border-radius:6px; border:1px solid var(--border);">
+                <strong>Explicación del retrieval:</strong> {{ a.explanation }}
+            </div>
+            {% endif %}
         </a>
         {% endfor %}
     </div>
-    {% elif query %}
+    {% endif %}
+
+    {% if results.papers %}
+    <!-- ═══ PAPERS ═══ -->
+    <h2 class="section-title" style="font-size:18px;">
+        📄 Papers Relacionados <span style="color:var(--text-3); font-weight:400; font-size:14px;">({{ results.papers|length }})</span>
+    </h2>
+    <div class="card" style="margin-bottom:36px; overflow-x:auto;">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Autor</th>
+                    <th>Año</th>
+                    <th>Citas</th>
+                    <th>Topics</th>
+                    <th>DOI</th>
+                    <th>Explicación</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for p in results.papers %}
+            <tr>
+                <td class="title-cell" style="max-width:300px;">
+                    <div style="font-weight:500;">{{ p.title[:100] }}{% if p.title|length > 100 %}...{% endif %}</div>
+                    {% if p.venue %}
+                    <div style="font-size:11px; color:var(--text-3); margin-top:2px;">{{ p.venue[:60] }}</div>
+                    {% endif %}
+                </td>
+                <td style="white-space:nowrap; font-size:13px;">{{ p.author }}</td>
+                <td style="font-family:'JetBrains Mono',monospace;">{{ p.year }}</td>
+                <td style="font-weight:700; color:var(--accent); font-family:'JetBrains Mono',monospace;">{{ "{:,}".format(p.citations) }}</td>
+                <td style="font-size:11px;">
+                    {% for t in p.topics[:2] %}
+                    <span class="tag" style="font-size:10px; padding:2px 8px;">{{ t }}</span>
+                    {% endfor %}
+                </td>
+                <td>{% if p.doi %}<a href="{{ p.doi }}" target="_blank">DOI↗</a>{% endif %}</td>
+                <td style="font-size:11px; color:var(--green); font-style:italic;">{{ p.explanation }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+    {% if results.topics %}
+    <!-- ═══ TOPICS ═══ -->
+    <h2 class="section-title" style="font-size:18px;">
+        🔬 Topics Relacionados <span style="color:var(--text-3); font-weight:400; font-size:14px;">({{ results.topics|length }})</span>
+    </h2>
+    <div class="card" style="margin-bottom:36px;">
+        <div class="tags" style="gap:10px;">
+            {% for t in results.topics %}
+            <div style="background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:12px 16px; flex:0 0 auto;">
+                <div style="font-weight:600; font-size:14px; color:var(--text); margin-bottom:4px;">{{ t.name }}</div>
+                {% if t.subfield %}
+                <div style="font-size:11px; color:var(--text-3);">{{ t.subfield }}</div>
+                {% endif %}
+                {% if t.field %}
+                <div style="font-size:11px; color:var(--accent);">{{ t.field }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if results.institutions %}
+    <!-- ═══ INSTITUTIONS ═══ -->
+    <h2 class="section-title" style="font-size:18px;">
+        🏛 Instituciones <span style="color:var(--text-3); font-weight:400; font-size:14px;">({{ results.institutions|length }})</span>
+    </h2>
+    <div class="card" style="margin-bottom:36px;">
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+            {% for inst in results.institutions %}
+            <span class="tag" style="padding:6px 14px;">
+                {{ inst.name }}
+                {% if inst.country %}<span style="color:var(--text-3); font-size:10px; margin-left:4px;">({{ inst.country }})</span>{% endif %}
+            </span>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if query and total == 0 %}
     <div style="text-align:center; padding:60px; color:var(--text-3);">
         <p style="font-size:18px;">Sin resultados</p>
-        <p style="margin-top:8px;">Intenta con otro término de búsqueda</p>
+        <p style="margin-top:8px;">Intenta con otro término: relativity, UNAM, quantum, networks...</p>
     </div>
     {% endif %}
 </div>

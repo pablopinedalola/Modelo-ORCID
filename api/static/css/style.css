@@ -265,6 +265,36 @@ img { max-width: 100%; display: block; }
 }
 .profile-grid .full { grid-column: 1 / -1; }
 
+/* ── Profile Layout (Sidebar + Main) ── */
+.profile-layout {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 24px;
+    align-items: start;
+}
+.profile-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: sticky;
+    top: 72px;
+}
+.profile-main {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.profile-main .full { width: 100%; }
+
+@media (max-width: 900px) {
+    .profile-layout {
+        grid-template-columns: 1fr;
+    }
+    .profile-sidebar {
+        position: static;
+    }
+}
+
 /* ── Evidence Radar ── */
 .evidence-grid {
     display: grid; grid-template-columns: 1fr 1fr; gap: 10px;

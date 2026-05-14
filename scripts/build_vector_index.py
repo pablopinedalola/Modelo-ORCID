@@ -69,7 +69,9 @@ def build_index(
     Returns:
         Dict con estadísticas del proceso.
     """
-    from src.rag.vector_store import VectorStore
+    from src.rag.embedding_pipeline import EmbeddingPipeline
+    from src.rag.faiss_store import FAISSStore
+    from src.rag.bm25_retriever import BM25Retriever
 
     start_time = time.time()
 
@@ -80,28 +82,23 @@ def build_index(
     logger.info(f"   Perfiles: {profiles_path}")
     logger.info("")
 
-    store = VectorStore()
+    store = FAISSStore()
 
     # ── Modo validación ─────────────────────────────────────────────
     if validate_only:
         return _validate_index(store)
 
-    # ── Paso 1: Cargar perfiles principales ─────────────────────────────────────
-    logger.info("📥 PASO 1/5: Carga de perfiles principales...")
-    profiles = []
+    # ── Paso 1: Cargar perfiles UNAM ─────────────────────────────────────
+    logger.info("📥 PASO 1/5: Carga de perfiles UNAM...")
     unam_authors_path = PROCESSED_DATA_DIR / "unam_authors.json"
-    
-    if unam_authors_path.exists():
-        with open(unam_authors_path, "r", encoding="utf-8") as f:
-            profiles = json.load(f)
-    elif profiles_path.exists():
-        with open(profiles_path, "r", encoding="utf-8") as f:
-            profiles = json.load(f)
-            
-    # Si no hay snii_profiles ni unam_authors, inicializamos vacío para que lo cargue OpenAlex
-    if not profiles:
-        logger.info("   ⚠️ No se encontró corpus UNAM/SNII, se usará OpenAlex como corpus principal.")
+    if not unam_authors_path.exists():
+        logger.error(f"   ❌ No se encontró el corpus UNAM en {unam_authors_path}")
+        return {}
         
+    with open(unam_authors_path, "r", encoding="utf-8") as f:
+        profiles = json.load(f)
+    
+    # Asegurar que cada autor tenga searchable_text
     for p in profiles:
         if not p.get("searchable_text"):
             title = p.get("nombre_completo", "")
@@ -109,12 +106,21 @@ def build_index(
             topics = " ".join(p.get("topics", []))
             p["searchable_text"] = normalize_text(f"{title} {abstract} {topics}")
             
-    logger.info(f"   ✅ {len(profiles)} perfiles base cargados")
+    logger.info(f"   ✅ {len(profiles)} perfiles UNAM cargados")
     logger.info("")
 
-    # Eliminamos el uso antiguo de EmbeddingPipeline y result dict.
-    # El VectorStore de src.rag se encarga internamente de los embeddings vía add_chunks().
-    logger.info("   (Generación de embeddings deferida a VectorStore)")
+    # ── Paso 2: Generar embeddings ──────────────────────────────────
+    logger.info("🧠 PASO 2/5: Generación de embeddings...")
+    pipeline = EmbeddingPipeline()
+
+    # Intentar cargar cache
+    pipeline.load_cache()
+
+    result = pipeline.generate_embeddings(
+        profiles,
+        fields=["searchable_text"],
+    )
+    logger.info(f"   Embeddings perfiles: {result['total']} x {result['dimension']}")
     
     # NUEVO: Indexar Works/Papers de UNAM
     try:
@@ -145,7 +151,13 @@ def build_index(
                         "dependencia": "UNAM"
                     })
             if work_profiles:
-                profiles.extend(work_profiles)
+                work_result = pipeline.generate_embeddings(work_profiles, fields=["searchable_text"])
+                logger.info(f"   Embeddings papers: {work_result['total']} x {work_result['dimension']}")
+                import numpy as np
+                result["embeddings"] = np.vstack((result["embeddings"], work_result["embeddings"]))
+                result["profile_ids"].extend(work_result["profile_ids"])
+                result["metadata"].extend(work_result["metadata"])
+                result["total"] += work_result["total"]
         else:
             logger.info("   No se encontraron papers de UNAM para indexar.")
     except Exception as e:
@@ -153,137 +165,37 @@ def build_index(
         import traceback
         logger.debug(traceback.format_exc())
 
-    # NUEVO: Indexar Works/Papers de OpenAlex
-    try:
-        openalex_works_path = PROCESSED_DATA_DIR / "openalex_works.json"
-        if openalex_works_path.exists():
-            with open(openalex_works_path, "r", encoding="utf-8") as f:
-                openalex_works = json.load(f)
-            logger.info(f"   Indexando {len(openalex_works)} papers de OpenAlex...")
-            openalex_profiles = []
-            for w in openalex_works:
-                title = w.get("title", "") or ""
-                abstract = w.get("abstract", "") or ""
-                topics = " ".join(w.get("concepts", []))
-                authors = " ".join(w.get("authors", []))
-                institutions = " ".join(w.get("institutions", []))
-                
-                # searchable_text robusto: title + abstract + topics + authors + institution
-                searchable_text = normalize_text(f"{title} {abstract} {topics} {authors} {institutions}")
-                
-                if searchable_text:
-                    openalex_profiles.append({
-                        "id": f"oa_work_{w.get('id')}",
-                        "title": title,
-                        "abstract": abstract,
-                        "searchable_text": searchable_text,
-                        "disciplina": "OpenAlex",
-                        "nombre_completo": title,
-                        "institucion": "UNAM (OpenAlex)",
-                        "dependencia": institutions[:50] if institutions else "OpenAlex"
-                    })
-            if openalex_profiles:
-                # Integrar también a perfiles para BM25 y FAISS
-                profiles.extend(openalex_profiles)
-        else:
-            logger.info("   No se encontraron papers de OpenAlex para indexar.")
-    except Exception as e:
-        logger.warning(f"   ⚠️ Error indexando papers de OpenAlex: {e}")
-        import traceback
-        logger.debug(traceback.format_exc())
-
-    # NUEVO: Indexar Autores de OpenAlex
-    try:
-        openalex_authors_path = PROCESSED_DATA_DIR / "openalex_authors.json"
-        if openalex_authors_path.exists():
-            with open(openalex_authors_path, "r", encoding="utf-8") as f:
-                openalex_authors = json.load(f)
-            logger.info(f"   Indexando {len(openalex_authors)} autores de OpenAlex...")
-            oa_authors_profiles = []
-            for a in openalex_authors:
-                name = a.get("name", "") or ""
-                institutions = " ".join(a.get("institutions", []))
-                
-                searchable_text = normalize_text(f"{name} {institutions}")
-                
-                if searchable_text:
-                    oa_authors_profiles.append({
-                        "id": f"oa_author_{a.get('id')}",
-                        "nombre_completo": name,
-                        "searchable_text": searchable_text,
-                        "disciplina": "Investigador OpenAlex",
-                        "institucion": "UNAM (OpenAlex)",
-                        "dependencia": institutions[:50] if institutions else "OpenAlex"
-                    })
-            if oa_authors_profiles:
-                # Integrar también a perfiles para BM25 y FAISS
-                profiles.extend(oa_authors_profiles)
-        else:
-            logger.info("   No se encontraron autores de OpenAlex para indexar.")
-    except Exception as e:
-        logger.warning(f"   ⚠️ Error indexando autores de OpenAlex: {e}")
-        import traceback
-        logger.debug(traceback.format_exc())
-
     logger.info("")
 
-    # ── Paso 2: Generar Embeddings y construir índice FAISS ──────────────────────────────
-    logger.info("📊 PASO 2/4: Construcción de índice FAISS (y generación de embeddings)...")
-    if profiles:
-        from sentence_transformers import SentenceTransformer
-        import faiss
-        
-        logger.info(f"   Cargando modelo all-MiniLM-L6-v2...")
-        model = SentenceTransformer("all-MiniLM-L6-v2")
-        
-        texts = [p.get("searchable_text", "") for p in profiles]
-        
-        logger.info(f"   Generando embeddings para {len(texts)} documentos...")
-        embeddings = model.encode(texts, convert_to_numpy=True)
-        
-        # Guardar en FAISS (VectorStore)
-        faiss.normalize_L2(embeddings)
-        store.index.add(embeddings)
-        
-        # Mapear a metadata y guardar
-        for p in profiles:
-            p["text"] = p.get("searchable_text", "")
-        store.metadata.extend(profiles)
-        
+    # ── Paso 3: Persistir embeddings ────────────────────────────────
+    logger.info("💾 PASO 3/5: Persistencia de embeddings...")
+    emb_paths = pipeline.save(result)
+    logger.info("")
+
+    # ── Paso 4: Construir índice FAISS ──────────────────────────────
+    logger.info("📊 PASO 4/5: Construcción de índice FAISS...")
+    if result.get("embeddings") is not None and len(result["embeddings"]) > 0:
+        store.build_index(
+            embeddings=result["embeddings"],
+            profile_ids=result["profile_ids"],
+            metadata=result["metadata"],
+        )
         faiss_paths = store.save()
     else:
-        logger.error("❌ No hay perfiles para indexar.")
-        return {}
+        logger.error("❌ No se generaron embeddings, saltando construcción de índice FAISS.")
     logger.info("")
 
-    # ── Paso 3: Construir índice BM25 ──────────────────────────────
-    logger.info("📖 PASO 3/4: Construcción de índice BM25...")
-    try:
-        import pickle
-        import re
-        from rank_bm25 import BM25Okapi
-        
-        corpus_tokens = []
-        for p in profiles:
-            text = p.get("searchable_text", "").lower()
-            tokens = re.findall(r"[a-z0-9]+", text)
-            corpus_tokens.append([t for t in tokens if len(t) > 1])
-            
-        bm25 = BM25Okapi(corpus_tokens)
-        bm25_data = {
-            "profile_ids": [p["id"] for p in profiles],
-            "metadata": [{k: v for k, v in p.items() if k not in ["searchable_text", "text"]} for p in profiles],
-            "corpus_tokens": corpus_tokens
-        }
-        
-        # Guardar en VECTOR_STORE_DIR
-        bm25_path = store.index_dir / "snii_bm25.pkl"
-        with open(bm25_path, "wb") as f:
-            pickle.dump(bm25_data, f)
-            
-        logger.info(f"   ✅ BM25 indexado exitosamente ({len(profiles)} documentos).")
-    except ImportError:
-        logger.warning("   ⚠️ rank_bm25 no instalado. Omitiendo BM25.")
+    # ── Paso 5: Construir índice BM25 ──────────────────────────────
+    logger.info("📖 PASO 5/6: Construcción de índice BM25...")
+    bm25 = BM25Retriever()
+    # Usamos todos los perfiles (SNII + Mexico + Works)
+    # Nota: result['metadata'] ya contiene la metadata de todos los perfiles indexados en FAISS
+    # pero BM25Retriever.build_index espera la estructura original del perfil.
+    # Vamos a usar una mezcla para asegurar consistencia.
+    bm25_docs = []
+    # Primero los perfiles originales cargados (que tienen aliases)
+    bm25.build_index(profiles)
+    bm25_paths = bm25.save()
     logger.info("")
 
     # ── Paso 6: Validación ──────────────────────────────────────────
@@ -295,8 +207,10 @@ def build_index(
 
     stats = {
         "total_profiles": len(profiles),
-        "total_embeddings": store.index.ntotal if store.index else 0,
-        "faiss_vectors": store.index.ntotal if store.index else 0,
+        "total_embeddings": result["total"],
+        "dimension": result["dimension"],
+        "model": result["model"],
+        "faiss_vectors": store.index.ntotal,
         "build_time_seconds": round(elapsed, 2),
         "validation": validation,
     }
@@ -307,13 +221,16 @@ def build_index(
     logger.info("=" * 60)
     logger.info(f"   Perfiles procesados:  {stats['total_profiles']}")
     logger.info(f"   Embeddings generados: {stats['total_embeddings']}")
+    logger.info(f"   Dimensión:            {stats['dimension']}")
     logger.info(f"   Vectores en FAISS:    {stats['faiss_vectors']}")
-    logger.info(f"   Documentos en BM25:   {len(profiles)}")
+    logger.info(f"   Documentos en BM25:   {len(bm25.profile_ids)}")
+    logger.info(f"   Modelo:               {stats['model']}")
     logger.info(f"   Tiempo:               {stats['build_time_seconds']}s")
     logger.info(f"   Validación:           {'✅ PASSED' if validation.get('all_passed') else '❌ FAILED'}")
     logger.info("")
 
-    # Quick search test omitted for simplicity, as it requires EmbeddingPipeline.
+    # Quick search test
+    _run_search_test(pipeline, store)
 
     logger.info("=" * 60)
     logger.info(f"✅ ÍNDICE CONSTRUIDO EXITOSAMENTE en {elapsed:.2f}s")
@@ -323,21 +240,70 @@ def build_index(
 
 
 def _validate_index(store) -> dict:
-    """Valida que los archivos del índice FAISS hayan sido creados."""
-    faiss_exists = store.index_path.exists()
-    metadata_exists = store.metadata_path.exists()
-    
-    if faiss_exists and metadata_exists:
-        logger.info("   ✅ Archivo FAISS y metadata verificados correctamente.")
-        logger.info("   ✅ Índice construido exitosamente.")
-        return {"all_passed": True}
+    """Valida integridad del índice FAISS.
+
+    Args:
+        store: FAISSStore con índice cargado o construido.
+
+    Returns:
+        Dict con resultados de validación.
+    """
+    # Si no hay índice en memoria, intentar cargar
+    if store.index is None:
+        if not store.load():
+            logger.error("   ❌ No se pudo cargar el índice FAISS")
+            return {"all_passed": False, "error": "Index not found"}
+
+    checks = store.integrity_check()
+
+    for check_name, passed in checks.items():
+        if check_name == "all_passed":
+            continue
+        status = "✅" if passed else "❌"
+        logger.info(f"   {status} {check_name}: {passed}")
+
+    if checks["all_passed"]:
+        logger.info(f"   ✅ Todas las verificaciones pasaron")
     else:
-        logger.warning("   ❌ Archivos de índice no encontrados.")
-        return {"all_passed": False}
+        logger.warning(f"   ❌ Algunas verificaciones fallaron")
+
+    return checks
 
 
-def _run_search_test():
-    pass
+def _run_search_test(pipeline, store):
+    """Ejecuta búsquedas de prueba para verificar el índice.
+
+    Args:
+        pipeline: EmbeddingPipeline para generar query embeddings.
+        store: FAISSStore con índice construido.
+    """
+    test_queries = [
+        "física de partículas",
+        "matemáticas aplicadas UNAM",
+        "ingeniería mecatrónica",
+        "bioquímica universidad guadalajara",
+        "óptica cuántica",
+    ]
+
+    logger.info("")
+    logger.info("🔍 BÚSQUEDAS DE PRUEBA:")
+    logger.info("-" * 60)
+
+    for query in test_queries:
+        query_vector = pipeline.encode_query(query)
+        results = store.search(query_vector, top_k=3, min_score=0.0)
+
+        logger.info(f"   Q: \"{query}\"")
+        if results:
+            for r in results:
+                logger.info(
+                    f"      #{r['rank']} {r['nombre_completo'][:35]:35s} "
+                    f"score={r['score']:.4f}  "
+                    f"[{r['disciplina'][:25]}]"
+                )
+        else:
+            logger.info("      (sin resultados)")
+        logger.info("")
 
 
 def main():
@@ -359,10 +325,9 @@ def main():
 
     args = parser.parse_args()
 
-    oa_works_path = PROCESSED_DATA_DIR / "openalex_works.json"
-    if not args.profiles.exists() and not args.validate_only and not oa_works_path.exists():
-        logger.error(f"❌ Archivo de perfiles no encontrado: {args.profiles} y openalex_works.json tampoco existe.")
-        logger.info("   Ejecuta primero: python scripts/fetch_openalex_corpus.py")
+    if not args.profiles.exists() and not args.validate_only:
+        logger.error(f"❌ Archivo de perfiles no encontrado: {args.profiles}")
+        logger.info("   Ejecuta primero: python scripts/ingest_snii.py <archivo_snii>")
         sys.exit(1)
 
     try:

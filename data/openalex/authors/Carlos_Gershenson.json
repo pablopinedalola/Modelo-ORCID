@@ -1,0 +1,909 @@
+{
+  "id": "https://openalex.org/A5020377067",
+  "orcid": "https://orcid.org/0000-0003-0193-3067",
+  "display_name": "Carlos Gershenson",
+  "raw_author_names": [
+    "C. Gershenson",
+    "CARLOS GERSHENSON",
+    "Carlos Gershenson",
+    "Carlos Gershenson Garcia",
+    "Carlos Gershenson García",
+    "Carlos Gershenson-García",
+    "García, Carlos Gershenson",
+    "Gershenson, C.",
+    "Gershenson, Carlos",
+    "Maria Pinninghoff"
+  ],
+  "full_name": "Carlos Gershenson-García",
+  "relevance_score": 14047.846,
+  "works_count": 316,
+  "cited_by_count": 5282,
+  "summary_stats": {
+    "2yr_mean_citedness": 1.4838709677419355,
+    "h_index": 38,
+    "i10_index": 97
+  },
+  "ids": {
+    "openalex": "https://openalex.org/A5020377067",
+    "orcid": "https://orcid.org/0000-0003-0193-3067"
+  },
+  "affiliations": [
+    {
+      "institution": {
+        "id": "https://openalex.org/I111088046",
+        "ror": "https://ror.org/05qwgg493",
+        "display_name": "Boston University",
+        "country_code": "US",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I111088046"
+        ]
+      },
+      "years": [
+        2016
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I119664326",
+        "ror": "https://ror.org/01k2y1055",
+        "display_name": "University of Wolverhampton",
+        "country_code": "GB",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I119664326"
+        ]
+      },
+      "years": [
+        2025
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I123946342",
+        "ror": "https://ror.org/008rmbt77",
+        "display_name": "Binghamton University",
+        "country_code": "US",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I123946342"
+        ]
+      },
+      "years": [
+        2025,
+        2024,
+        2023
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I12912129",
+        "ror": "https://ror.org/04t5xt781",
+        "display_name": "Northeastern University",
+        "country_code": "US",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I12912129"
+        ]
+      },
+      "years": [
+        2022,
+        2021,
+        2017,
+        2016,
+        2015
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I1308548392",
+        "ror": "https://ror.org/01arysc35",
+        "display_name": "Santa Fe Institute",
+        "country_code": "US",
+        "type": "funder",
+        "lineage": [
+          "https://openalex.org/I1308548392"
+        ]
+      },
+      "years": [
+        2024,
+        2023,
+        2022
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I13469542",
+        "ror": "https://ror.org/006e5kg04",
+        "display_name": "Vrije Universiteit Brussel",
+        "country_code": "BE",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I13469542"
+        ]
+      },
+      "years": [
+        2013,
+        2012,
+        2011,
+        2010,
+        2008,
+        2007,
+        2006,
+        2005,
+        2004,
+        2003,
+        2002
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I162608824",
+        "ror": "https://ror.org/00ayhx656",
+        "display_name": "University of Sussex",
+        "country_code": "GB",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I162608824"
+        ]
+      },
+      "years": [
+        2008,
+        2003,
+        2002,
+        2001
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I167724894",
+        "ror": "https://ror.org/04q0r6m34",
+        "display_name": "Universidad Autónoma de la Ciudad de México",
+        "country_code": "MX",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I167724894"
+        ]
+      },
+      "years": [
+        2025,
+        2023,
+        2022,
+        2021,
+        2019,
+        2017,
+        2016,
+        2015,
+        2014,
+        2009
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I173089394",
+        "ror": "https://ror.org/04txgxn49",
+        "display_name": "ITMO University",
+        "country_code": "RU",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I173089394"
+        ]
+      },
+      "years": [
+        2021,
+        2020,
+        2019,
+        2018,
+        2017,
+        2016,
+        2015
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I234019344",
+        "ror": "https://ror.org/007fpb915",
+        "display_name": "Universidad Católica Andrés Bello",
+        "country_code": "VE",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I234019344"
+        ]
+      },
+      "years": [
+        2014
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I27639287",
+        "ror": "https://ror.org/04edns687",
+        "display_name": "Northeastern Illinois University",
+        "country_code": "US",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I27639287"
+        ]
+      },
+      "years": [
+        2016
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I2800403580",
+        "ror": "https://ror.org/03grvy078",
+        "display_name": "University of Minnesota System",
+        "country_code": "US",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I2800403580"
+        ]
+      },
+      "years": [
+        2002
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I2802948906",
+        "ror": "https://ror.org/03nzj6y61",
+        "display_name": "Health Net",
+        "country_code": "US",
+        "type": "nonprofit",
+        "lineage": [
+          "https://openalex.org/I2802948906"
+        ]
+      },
+      "years": [
+        2023
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210090306",
+        "ror": "https://ror.org/00drdr242",
+        "display_name": "AnywherEnergy (United States)",
+        "country_code": "US",
+        "type": "company",
+        "lineage": [
+          "https://openalex.org/I4210090306"
+        ]
+      },
+      "years": [
+        2021
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210093685",
+        "ror": "https://ror.org/00k7h5c65",
+        "display_name": "Instituto Nacional de Investigaciones Nucleares",
+        "country_code": "MX",
+        "type": "facility",
+        "lineage": [
+          "https://openalex.org/I4210093685"
+        ]
+      },
+      "years": [
+        2016
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210107358",
+        "ror": "https://ror.org/01w08b546",
+        "display_name": "Lakeside Labs",
+        "country_code": "AT",
+        "type": "nonprofit",
+        "lineage": [
+          "https://openalex.org/I4210107358"
+        ]
+      },
+      "years": [
+        2025,
+        2023,
+        2022,
+        2021
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210107806",
+        "ror": "https://ror.org/02g9gg448",
+        "display_name": "École Nationale de Management et de l'Administration de la Santé",
+        "country_code": "DZ",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I4210107631",
+          "https://openalex.org/I4210107806"
+        ]
+      },
+      "years": [
+        2016
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210130290",
+        "ror": "https://ror.org/03hp7bq97",
+        "display_name": "Laboratoire d’Économie d’Orléans",
+        "country_code": "FR",
+        "type": "facility",
+        "lineage": [
+          "https://openalex.org/I110017253",
+          "https://openalex.org/I12449238",
+          "https://openalex.org/I1294671590",
+          "https://openalex.org/I4210113334",
+          "https://openalex.org/I4210130290",
+          "https://openalex.org/I4210139971"
+        ]
+      },
+      "years": [
+        2017
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210143748",
+        "ror": "https://ror.org/03br5r234",
+        "display_name": "Mexfam",
+        "country_code": "MX",
+        "type": "other",
+        "lineage": [
+          "https://openalex.org/I4210143748"
+        ]
+      },
+      "years": [
+        2003
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210145958",
+        "ror": "https://ror.org/0447jv934",
+        "display_name": "Instituto de Filosofía y Ciencias de la Complejidad",
+        "country_code": "CL",
+        "type": "facility",
+        "lineage": [
+          "https://openalex.org/I4210145958"
+        ]
+      },
+      "years": [
+        2016
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4210157032",
+        "ror": "https://ror.org/05e9bn444",
+        "display_name": "Institute of Mathematical Sciences",
+        "country_code": "ES",
+        "type": "facility",
+        "lineage": [
+          "https://openalex.org/I4210157032"
+        ]
+      },
+      "years": [
+        2023
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I4693666",
+        "ror": "https://ror.org/03end3932",
+        "display_name": "GGG (France)",
+        "country_code": "FR",
+        "type": "company",
+        "lineage": [
+          "https://openalex.org/I4693666"
+        ]
+      },
+      "years": [
+        2024
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I63966007",
+        "ror": "https://ror.org/042nb2s44",
+        "display_name": "Massachusetts Institute of Technology",
+        "country_code": "US",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I63966007"
+        ]
+      },
+      "years": [
+        2021,
+        2019,
+        2018,
+        2017,
+        2016,
+        2015
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I80397470",
+        "ror": "https://ror.org/053bg5z25",
+        "display_name": "New England Complex Systems Institute",
+        "country_code": "US",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I80397470"
+        ]
+      },
+      "years": [
+        2012,
+        2010,
+        2008,
+        2007
+      ]
+    },
+    {
+      "institution": {
+        "id": "https://openalex.org/I8961855",
+        "ror": "https://ror.org/01tmp8f25",
+        "display_name": "Universidad Nacional Autónoma de México",
+        "country_code": "MX",
+        "type": "education",
+        "lineage": [
+          "https://openalex.org/I8961855"
+        ]
+      },
+      "years": [
+        2025,
+        2024,
+        2023,
+        2022,
+        2021,
+        2020,
+        2019,
+        2018,
+        2017,
+        2016,
+        2015,
+        2014,
+        2013,
+        2012,
+        2011,
+        2010,
+        2009,
+        2007
+      ]
+    }
+  ],
+  "last_known_institutions": [
+    {
+      "id": "https://openalex.org/I119664326",
+      "ror": "https://ror.org/01k2y1055",
+      "display_name": "University of Wolverhampton",
+      "country_code": "GB",
+      "type": "education",
+      "lineage": [
+        "https://openalex.org/I119664326"
+      ]
+    },
+    {
+      "id": "https://openalex.org/I123946342",
+      "ror": "https://ror.org/008rmbt77",
+      "display_name": "Binghamton University",
+      "country_code": "US",
+      "type": "education",
+      "lineage": [
+        "https://openalex.org/I123946342"
+      ]
+    },
+    {
+      "id": "https://openalex.org/I167724894",
+      "ror": "https://ror.org/04q0r6m34",
+      "display_name": "Universidad Autónoma de la Ciudad de México",
+      "country_code": "MX",
+      "type": "education",
+      "lineage": [
+        "https://openalex.org/I167724894"
+      ]
+    },
+    {
+      "id": "https://openalex.org/I4210107358",
+      "ror": "https://ror.org/01w08b546",
+      "display_name": "Lakeside Labs",
+      "country_code": "AT",
+      "type": "nonprofit",
+      "lineage": [
+        "https://openalex.org/I4210107358"
+      ]
+    },
+    {
+      "id": "https://openalex.org/I8961855",
+      "ror": "https://ror.org/01tmp8f25",
+      "display_name": "Universidad Nacional Autónoma de México",
+      "country_code": "MX",
+      "type": "education",
+      "lineage": [
+        "https://openalex.org/I8961855"
+      ]
+    }
+  ],
+  "topics": [
+    {
+      "id": "https://openalex.org/T11252",
+      "display_name": "Evolutionary Game Theory and Cooperation",
+      "count": 34,
+      "subfield": {
+        "id": "https://openalex.org/subfields/3312",
+        "display_name": "Sociology and Political Science"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/33",
+        "display_name": "Social Sciences"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/2",
+        "display_name": "Social Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T10064",
+      "display_name": "Complex Network Analysis Techniques",
+      "count": 31,
+      "subfield": {
+        "id": "https://openalex.org/subfields/3109",
+        "display_name": "Statistical and Nonlinear Physics"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/31",
+        "display_name": "Physics and Astronomy"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/3",
+        "display_name": "Physical Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T10621",
+      "display_name": "Gene Regulatory Network Analysis",
+      "count": 31,
+      "subfield": {
+        "id": "https://openalex.org/subfields/1312",
+        "display_name": "Molecular Biology"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/13",
+        "display_name": "Biochemistry, Genetics and Molecular Biology"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/1",
+        "display_name": "Life Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T11810",
+      "display_name": "Complex Systems and Decision Making",
+      "count": 29,
+      "subfield": {
+        "id": "https://openalex.org/subfields/1803",
+        "display_name": "Management Science and Operations Research"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/18",
+        "display_name": "Decision Sciences"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/2",
+        "display_name": "Social Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T10524",
+      "display_name": "Traffic control and management",
+      "count": 25,
+      "subfield": {
+        "id": "https://openalex.org/subfields/2207",
+        "display_name": "Control and Systems Engineering"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/22",
+        "display_name": "Engineering"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/3",
+        "display_name": "Physical Sciences"
+      }
+    }
+  ],
+  "topic_share": [
+    {
+      "id": "https://openalex.org/T12643",
+      "display_name": "Sustainability and Ecological Systems Analysis",
+      "value": 0.0003479,
+      "subfield": {
+        "id": "https://openalex.org/subfields/2305",
+        "display_name": "Environmental Engineering"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/23",
+        "display_name": "Environmental Science"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/3",
+        "display_name": "Physical Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T13362",
+      "display_name": "Slime Mold and Myxomycetes Research",
+      "value": 0.0002875,
+      "subfield": {
+        "id": "https://openalex.org/subfields/2204",
+        "display_name": "Biomedical Engineering"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/22",
+        "display_name": "Engineering"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/3",
+        "display_name": "Physical Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T11252",
+      "display_name": "Evolutionary Game Theory and Cooperation",
+      "value": 0.0002629,
+      "subfield": {
+        "id": "https://openalex.org/subfields/3312",
+        "display_name": "Sociology and Political Science"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/33",
+        "display_name": "Social Sciences"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/2",
+        "display_name": "Social Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T10621",
+      "display_name": "Gene Regulatory Network Analysis",
+      "value": 0.0002525,
+      "subfield": {
+        "id": "https://openalex.org/subfields/1312",
+        "display_name": "Molecular Biology"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/13",
+        "display_name": "Biochemistry, Genetics and Molecular Biology"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/1",
+        "display_name": "Life Sciences"
+      }
+    },
+    {
+      "id": "https://openalex.org/T11883",
+      "display_name": "Embodied and Extended Cognition",
+      "value": 0.0002354,
+      "subfield": {
+        "id": "https://openalex.org/subfields/2805",
+        "display_name": "Cognitive Neuroscience"
+      },
+      "field": {
+        "id": "https://openalex.org/fields/28",
+        "display_name": "Neuroscience"
+      },
+      "domain": {
+        "id": "https://openalex.org/domains/1",
+        "display_name": "Life Sciences"
+      }
+    }
+  ],
+  "x_concepts": [
+    {
+      "id": "41008148",
+      "wikidata": "https://www.wikidata.org/wiki/Q21198",
+      "display_name": "Computer science",
+      "score": 0.8542889952659607
+    },
+    {
+      "id": "154945302",
+      "wikidata": "https://www.wikidata.org/wiki/Q11660",
+      "display_name": "Artificial intelligence",
+      "score": 0.628471314907074
+    },
+    {
+      "id": "138885662",
+      "wikidata": "https://www.wikidata.org/wiki/Q5891",
+      "display_name": "Philosophy",
+      "score": 0.5563023686408997
+    },
+    {
+      "id": "33923547",
+      "wikidata": "https://www.wikidata.org/wiki/Q395",
+      "display_name": "Mathematics",
+      "score": 0.5495249629020691
+    },
+    {
+      "id": "121332964",
+      "wikidata": "https://www.wikidata.org/wiki/Q413",
+      "display_name": "Physics",
+      "score": 0.4417341649532318
+    }
+  ],
+  "counts_by_year": [
+    {
+      "year": 2000,
+      "works_count": 3,
+      "oa_works_count": 1,
+      "cited_by_count": 19
+    },
+    {
+      "year": 2001,
+      "works_count": 3,
+      "oa_works_count": 3,
+      "cited_by_count": 31
+    },
+    {
+      "year": 2002,
+      "works_count": 16,
+      "oa_works_count": 14,
+      "cited_by_count": 211
+    },
+    {
+      "year": 2003,
+      "works_count": 16,
+      "oa_works_count": 11,
+      "cited_by_count": 705
+    },
+    {
+      "year": 2004,
+      "works_count": 8,
+      "oa_works_count": 6,
+      "cited_by_count": 393
+    },
+    {
+      "year": 2005,
+      "works_count": 3,
+      "oa_works_count": 2,
+      "cited_by_count": 79
+    },
+    {
+      "year": 2006,
+      "works_count": 4,
+      "oa_works_count": 3,
+      "cited_by_count": 176
+    },
+    {
+      "year": 2007,
+      "works_count": 7,
+      "oa_works_count": 3,
+      "cited_by_count": 329
+    },
+    {
+      "year": 2008,
+      "works_count": 3,
+      "oa_works_count": 1,
+      "cited_by_count": 34
+    },
+    {
+      "year": 2009,
+      "works_count": 5,
+      "oa_works_count": 4,
+      "cited_by_count": 107
+    },
+    {
+      "year": 2010,
+      "works_count": 10,
+      "oa_works_count": 5,
+      "cited_by_count": 81
+    },
+    {
+      "year": 2011,
+      "works_count": 27,
+      "oa_works_count": 17,
+      "cited_by_count": 241
+    },
+    {
+      "year": 2012,
+      "works_count": 17,
+      "oa_works_count": 9,
+      "cited_by_count": 102
+    },
+    {
+      "year": 2013,
+      "works_count": 28,
+      "oa_works_count": 16,
+      "cited_by_count": 653
+    },
+    {
+      "year": 2014,
+      "works_count": 18,
+      "oa_works_count": 11,
+      "cited_by_count": 231
+    },
+    {
+      "year": 2015,
+      "works_count": 13,
+      "oa_works_count": 6,
+      "cited_by_count": 607
+    },
+    {
+      "year": 2016,
+      "works_count": 18,
+      "oa_works_count": 12,
+      "cited_by_count": 144
+    },
+    {
+      "year": 2017,
+      "works_count": 9,
+      "oa_works_count": 6,
+      "cited_by_count": 170
+    },
+    {
+      "year": 2018,
+      "works_count": 10,
+      "oa_works_count": 6,
+      "cited_by_count": 58
+    },
+    {
+      "year": 2019,
+      "works_count": 10,
+      "oa_works_count": 10,
+      "cited_by_count": 139
+    },
+    {
+      "year": 2020,
+      "works_count": 8,
+      "oa_works_count": 8,
+      "cited_by_count": 145
+    },
+    {
+      "year": 2021,
+      "works_count": 21,
+      "oa_works_count": 18,
+      "cited_by_count": 74
+    },
+    {
+      "year": 2022,
+      "works_count": 9,
+      "oa_works_count": 9,
+      "cited_by_count": 315
+    },
+    {
+      "year": 2023,
+      "works_count": 19,
+      "oa_works_count": 11,
+      "cited_by_count": 192
+    },
+    {
+      "year": 2024,
+      "works_count": 15,
+      "oa_works_count": 13,
+      "cited_by_count": 28
+    },
+    {
+      "year": 2025,
+      "works_count": 16,
+      "oa_works_count": 12,
+      "cited_by_count": 18
+    }
+  ],
+  "display_name_alternatives": [
+    "C. Gershenson",
+    "CARLOS GERSHENSON",
+    "Carlos Gershenson",
+    "Carlos Gershenson Garcia",
+    "Carlos Gershenson García",
+    "Carlos Gershenson-García",
+    "García, Carlos Gershenson",
+    "Gershenson, C.",
+    "Gershenson, Carlos",
+    "Maria Pinninghoff"
+  ],
+  "block_key": "c gershenson-garcia",
+  "works_api_url": "https://api.openalex.org/works?filter=author.id:A5020377067",
+  "updated_date": "2026-05-12T03:55:24",
+  "created_date": "2016-06-24T00:00:00"
+}

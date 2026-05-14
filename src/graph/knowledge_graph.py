@@ -440,6 +440,9 @@ class AcademicKnowledgeGraph:
             NodeType.INSTITUTION.value: "#9C27B0",   # Morado
             NodeType.DISCIPLINE.value: "#F44336",    # Rojo
             NodeType.ORCID.value: "#A5D6A7",         # Verde claro
+            NodeType.TOPIC.value: "#FFC107",         # Ambar
+            NodeType.CONCEPT.value: "#795548",       # Cafe
+            NodeType.VENUE.value: "#607D8B",         # Azul grisaceo
         }
 
         nodes = []
@@ -477,6 +480,32 @@ class AcademicKnowledgeGraph:
         with open(filepath, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
         logger.info(f"  Graph exported: {filepath}")
+
+    def save_pickle(self, filepath: str) -> None:
+        """Persiste el grafo en formato binario (pickle)."""
+        import pickle
+        with open(filepath, "wb") as f:
+            pickle.dump(self.G, f, protocol=pickle.HIGHEST_PROTOCOL)
+        logger.info(f"  Graph pickled: {filepath}")
+
+    @classmethod
+    def load_pickle(cls, filepath: str) -> 'AcademicKnowledgeGraph':
+        """Carga el grafo desde un archivo pickle."""
+        import pickle
+        with open(filepath, "rb") as f:
+            G = pickle.load(f)
+        
+        graph = cls()
+        graph.G = G
+        
+        # Reconstruir node_counter
+        for _, data in G.nodes(data=True):
+            t = data.get("type", "unknown")
+            if t in graph._node_counter:
+                graph._node_counter[t] += 1
+                
+        logger.info(f"  Graph loaded from pickle: {filepath} ({G.number_of_nodes()} nodes)")
+        return graph
 
     # ==================================================================
     # ESTADISTICAS

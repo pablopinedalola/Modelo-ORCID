@@ -16,7 +16,25 @@ from __future__ import annotations
 import logging
 from typing import Optional
 
-from rapidfuzz import fuzz
+logger = logging.getLogger(__name__)
+
+try:
+    from rapidfuzz import fuzz
+except ImportError:
+    logger.warning("rapidfuzz not installed. Using basic difflib fallback.")
+    import difflib
+    class MockFuzz:
+        def ratio(self, s1, s2):
+            return difflib.SequenceMatcher(None, s1, s2).ratio() * 100
+        def partial_ratio(self, s1, s2):
+            # Very basic fallback
+            if s1 in s2 or s2 in s1: return 100
+            return self.ratio(s1, s2)
+        def token_sort_ratio(self, s1, s2):
+            return self.ratio(" ".join(sorted(s1.split())), " ".join(sorted(s2.split())))
+        def token_set_ratio(self, s1, s2):
+            return self.ratio(s1, s2) # simple fallback
+    fuzz = MockFuzz()
 
 from src.models.schemas import (
     Candidate,
@@ -26,8 +44,6 @@ from src.models.schemas import (
     CandidateSource,
 )
 from src.normalizer.name_normalizer import NameNormalizer
-
-logger = logging.getLogger(__name__)
 
 # Instancia compartida para normalizar nombres de candidatos
 _name_normalizer = NameNormalizer()
