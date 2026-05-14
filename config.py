@@ -17,9 +17,10 @@ DATA_DIR = BASE_DIR / "data"
 RAW_DATA_DIR = DATA_DIR / "raw"
 PROCESSED_DATA_DIR = DATA_DIR / "processed"
 OUTPUT_DIR = DATA_DIR / "outputs"
+VECTOR_STORE_DIR = OUTPUT_DIR / "vector_store"
 
 # Crear directorios si no existen
-for d in [RAW_DATA_DIR, PROCESSED_DATA_DIR, OUTPUT_DIR]:
+for d in [RAW_DATA_DIR, PROCESSED_DATA_DIR, OUTPUT_DIR, VECTOR_STORE_DIR]:
     d.mkdir(parents=True, exist_ok=True)
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -39,11 +40,22 @@ OPENALEX_API_BASE = "https://api.openalex.org"
 # ROR — No requiere autenticación
 ROR_API_BASE = "https://api.ror.org/v2/organizations"
 
+# OpenAI — API Key
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # MODELO DE EMBEDDINGS
 # ═══════════════════════════════════════════════════════════════════════════════
 
 EMBEDDING_MODEL = "all-MiniLM-L6-v2"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# PARÁMETROS DEL RAG
+# ═══════════════════════════════════════════════════════════════════════════════
+
+RAG_CHUNK_SIZE = 512
+RAG_TOP_K = 5
+CHAT_MAX_TOKENS = 4000
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # PARÁMETROS DEL REFINEMENT ENGINE

@@ -16,8 +16,14 @@ from fastapi import FastAPI, Request, Query
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from pydantic import BaseModel
 
 from config import OUTPUT_DIR, BASE_DIR
+
+# Import Chat & RAG modules
+from src.chat.chat_engine import AcademicChatEngine
+from src.rag.chunker import AcademicChunker
+from src.rag.vector_store import VectorStore
 
 logger = logging.getLogger(__name__)
 
@@ -126,6 +132,10 @@ async def startup():
     """Carga datos al iniciar."""
     reload_data()
     logger.info(f"Loaded {len(_profiles_cache)} profiles")
+    
+    # Init Chat Engine
+    global chat_engine
+    chat_engine = AcademicChatEngine()
 
 
 # =====================================================================
@@ -509,4 +519,49 @@ async def interpretability_page(request: Request, researcher_id: str):
         "dynamics": dynamics,
         "math_mapping": interp.get("verifications", []),
     })
+
+# =====================================================================
+# FASE 8: CONVERSATIONAL CHAT & RAG
+# =====================================================================
+
+class ChatMessage(BaseModel):
+    message: str
+
+@app.get("/chat", response_class=HTMLResponse)
+async def chat_page(request: Request):
+    """Interfaz del Asistente Conversacional."""
+    return _render(request, "chat.html", {})
+
+@app.post("/api/chat")
+async def api_chat(data: ChatMessage):
+    """Procesa un mensaje de chat usando el AcademicChatEngine (Ollama)."""
+    global chat_engine
+    if not chat_engine:
+        chat_engine = AcademicChatEngine()
+        
+    response, sources = chat_engine.process_message(data.message)
+    return {"response": response, "sources": sources}
+
+@app.post("/api/rag/index")
+async def api_rag_index():
+    """Re-indexa los perfiles actuales en el Vector Store (FAISS)."""
+    profiles = _load_profiles()
+    chunker = AcademicChunker()
+    vector_store = VectorStore()
+    
+    all_chunks = []
+    for pid, p in profiles.items():
+        all_chunks.extend(chunker.chunk_profile(p))
+        
+        # Opcional: chunk de explainability si existe
+        trace = _load_trace(pid)
+        if trace:
+            # Simplificamos para no complicar el payload
+            exp_dict = {"confidence_score": p.get("confidence", 0)}
+            all_chunks.extend(chunker.chunk_explanation(pid, p.get("full_name", ""), exp_dict))
+            
+    vector_store.add_chunks(all_chunks)
+    vector_store.save()
+    
+    return {"status": "ok", "chunks_indexed": len(all_chunks)}
 

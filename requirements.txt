@@ -26,5 +26,10 @@ uvicorn>=0.29
 jinja2>=3.1
 python-multipart            # Uploads en FastAPI
 
+# --- Fase 6: RAG & Chat ---
+openai>=1.0.0               # LLM Client & Tool Calling
+faiss-cpu>=1.7.4            # Vector Store local rápido
+tiktoken>=0.5.0             # Tokenizer para control de contexto
+
 # --- Testing ---
 pytest>=8.0

@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% set active_page = "chat" %}
+{% block title %}Asistente de IA{% endblock %}
+
+{% block head %}
+<!-- Marked.js para renderizar markdown en los mensajes -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="chat-container">
+    <div class="chat-header">
+        <div class="chat-header-title">
+            <span class="icon">💬</span>
+            <h2>Asistente Académico</h2>
+        </div>
+        <p>Explora el grafo de conocimiento, busca investigadores, o analiza las justificaciones de orcid.</p>
+    </div>
+
+    <div class="chat-box" id="chat-box">
+        <div class="message assistant">
+            <div class="avatar">M</div>
+            <div class="bubble">
+                <p>¡Hola! Soy el asistente académico de Modelo-ORCID. Puedes preguntarme sobre investigadores, explorar relaciones en el grafo o pedirme que explique por qué se asignó un ORCID. ¿En qué te puedo ayudar?</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="chat-input-area">
+        <form id="chat-form" class="chat-form">
+            <textarea id="chat-input" placeholder="Pregunta algo al sistema (ej. 'Busca expertos en biología molecular' o '¿Con quién publica más Pablo Pineda?')" rows="1"></textarea>
+            <button type="submit" id="chat-submit" class="chat-btn">Enviar <span>↗</span></button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const chatBox = document.getElementById('chat-box');
+    const chatForm = document.getElementById('chat-form');
+    const chatInput = document.getElementById('chat-input');
+    const chatSubmit = document.getElementById('chat-submit');
+    
+    // Generar un session_id simple
+    const sessionId = 'sess_' + Math.random().toString(36).substr(2, 9);
+
+    // Ajustar altura de textarea automáticamente
+    chatInput.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight < 150 ? this.scrollHeight : 150) + 'px';
+    });
+
+    chatInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            chatForm.dispatchEvent(new Event('submit'));
+        }
+    });
+
+    function appendMessage(role, content) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `message ${role}`;
+        
+        let avatarHTML = '';
+        if (role === 'assistant') {
+            avatarHTML = `<div class="avatar">M</div>`;
+        } else if (role === 'user') {
+            avatarHTML = `<div class="avatar user-avatar">U</div>`;
+        }
+
+        const bubbleDiv = document.createElement('div');
+        bubbleDiv.className = 'bubble';
+        
+        // Render markdown for assistant
+        if (role === 'assistant') {
+            bubbleDiv.innerHTML = marked.parse(content);
+        } else {
+            bubbleDiv.textContent = content;
+        }
+
+        msgDiv.innerHTML = avatarHTML;
+        msgDiv.appendChild(bubbleDiv);
+        
+        // Remover loader si existe
+        const loader = document.getElementById('typing-indicator');
+        if (loader) loader.remove();
+
+        chatBox.appendChild(msgDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function showLoader() {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `message assistant`;
+        msgDiv.id = 'typing-indicator';
+        msgDiv.innerHTML = `
+            <div class="avatar">M</div>
+            <div class="bubble typing">
+                <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+            </div>
+        `;
+        chatBox.appendChild(msgDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    chatForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const text = chatInput.value.trim();
+        if (!text) return;
+
+        // Limpiar input
+        chatInput.value = '';
+        chatInput.style.height = 'auto';
+
+        // Mostrar mensaje usuario
+        appendMessage('user', text);
+        showLoader();
+
+        try {
+            const res = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: text })
+            });
+            const data = await res.json();
+            
+            if (data.response) {
+                let msgContent = data.response;
+                
+                // Mostrar sources si existen
+                if (data.sources && data.sources.length > 0) {
+                    msgContent += '\n\n---\n**Fuentes utilizadas:**\n';
+                    data.sources.forEach(s => {
+                        const title = s.title || s.nombre_completo || s.id || 'Documento';
+                        const autor = s.authors ? s.authors : (s.nombre_completo ? s.nombre_completo : '');
+                        const inst = s.institutions ? s.institutions : (s.institucion || s.dependencia || '');
+                        
+                        msgContent += `- **${title}**\n`;
+                        if (autor) msgContent += `  - *Autor(es)*: ${autor}\n`;
+                        if (inst) msgContent += `  - *Institución*: ${inst}\n`;
+                    });
+                }
+                
+                appendMessage('assistant', msgContent);
+            } else {
+                appendMessage('assistant', 'Error: No se recibió respuesta.');
+            }
+        } catch (err) {
+            appendMessage('assistant', 'Hubo un error de conexión con el servidor.');
+            console.error(err);
+        }
+    });
+</script>
+{% endblock %}
